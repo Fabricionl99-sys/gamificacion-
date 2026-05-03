@@ -1,8 +1,14 @@
 import { motion } from 'framer-motion';
 import { Star } from 'lucide-react';
+import { Button } from '../../ui/Button';
 
-export function OpeningAnimation() {
+interface OpeningAnimationProps {
+  onCollect: () => void;
+}
+
+export function OpeningAnimation({ onCollect }: OpeningAnimationProps) {
   return (
+    <div className="space-y-4">
     <div className="relative grid min-h-[280px] place-items-center overflow-hidden rounded-lg bg-[radial-gradient(circle,rgba(255,176,32,0.24),transparent_60%)]">
       <motion.div
         className="absolute h-28 w-28 rounded-full bg-warning/20 blur-2xl"
@@ -27,6 +33,10 @@ export function OpeningAnimation() {
           <Star className="h-10 w-10 fill-warning text-warning" />
         </motion.div>
       </motion.div>
+    </div>
+      <Button className="w-full" variant="primary" onClick={onCollect}>
+        apreta para recoger
+      </Button>
     </div>
   );
 }

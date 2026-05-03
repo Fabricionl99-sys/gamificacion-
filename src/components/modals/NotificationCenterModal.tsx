@@ -10,7 +10,7 @@ import { Button } from '../ui/Button';
 
 export default function NotificationCenterModal() {
   const { activeModal, closeModal } = useModalsStore();
-  const markAllAsRead = useNotificationsStore((state) => state.markAllAsRead);
+  const markAllRead = useNotificationsStore((state) => state.markAllRead);
   const unreadCount = mockNotifications.filter((item) => !item.read).length;
 
   return (
@@ -22,7 +22,7 @@ export default function NotificationCenterModal() {
       className="md:mr-8 md:mt-20 md:self-start"
     >
       <div className="mb-4 flex justify-end">
-        <Button variant="ghost" size="sm" onClick={markAllAsRead} leftIcon={<CheckCheck className="h-4 w-4" />}>
+        <Button variant="ghost" size="sm" onClick={markAllRead} leftIcon={<CheckCheck className="h-4 w-4" />}>
           marcar leidas
         </Button>
       </div>

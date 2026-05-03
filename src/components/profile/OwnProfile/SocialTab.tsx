@@ -1,3 +1,5 @@
+import { Users } from 'lucide-react';
+
 import { Card } from '../../ui/Card';
 import { EmptyState } from '../../ui/EmptyState';
 
@@ -12,6 +14,7 @@ export function SocialTab() {
         ))}
       </div>
       <EmptyState
+        icon={<Users className="h-8 w-8" />}
         title="buscador social listo"
         description="cuando el backend este conectado vas a gestionar seguidores, siguiendo y bloqueados desde aca."
       />

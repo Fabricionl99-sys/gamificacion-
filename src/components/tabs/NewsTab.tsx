@@ -32,7 +32,7 @@ export default function NewsTab() {
       {mockNews.length > 0 ? (
         <div className="space-y-3">
           {mockNews.map((item) => (
-            <NewsCard key={item.id} item={item} />
+            <NewsCard key={item.id} news={item} />
           ))}
         </div>
       ) : (

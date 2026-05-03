@@ -7,10 +7,10 @@ import { ProfileShell } from './ProfileShell';
 
 export default function PrivateProfile() {
   return (
-    <ProfileShell title="perfil privado">
+    <ProfileShell>
       <Card variant="glass" className="text-center">
         <div className="relative mx-auto mb-4 h-20 w-20">
-          <Avatar initials="LV" size="lg" className="h-20 w-20 text-lg" />
+          <Avatar initials="LV" label="Perfil privado de Luna Vegas" size="lg" className="h-20 w-20 text-lg" />
           <div className="absolute -bottom-1 -right-1 grid h-8 w-8 place-items-center rounded-full bg-bg-elevated text-text-secondary">
             <Lock className="h-4 w-4" />
           </div>

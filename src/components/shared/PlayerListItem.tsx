@@ -1,4 +1,5 @@
 import { Crown } from 'lucide-react';
+import type { ReactNode } from 'react';
 import { Avatar } from '../ui/Avatar';
 import { Badge } from '../ui/Badge';
 import { cn } from '../../utils/classnames';
@@ -7,9 +8,10 @@ import type { PublicPlayer } from '../../types/player';
 
 interface PlayerListItemProps {
   player: PublicPlayer;
+  rightSlot?: ReactNode;
 }
 
-export function PlayerListItem({ player }: PlayerListItemProps) {
+export function PlayerListItem({ player, rightSlot }: PlayerListItemProps) {
   return (
     <div
       className={cn(
@@ -19,7 +21,7 @@ export function PlayerListItem({ player }: PlayerListItemProps) {
       )}
     >
       <span className="w-7 text-center text-sm font-semibold text-text-tertiary">#{player.position}</span>
-      <Avatar initials={player.avatar} size="sm" />
+      <Avatar initials={player.avatar} label={player.name} size="sm" />
       <div className="min-w-0 flex-1">
         <div className="flex items-center gap-2">
           <p className="truncate text-sm font-semibold text-text-primary">{player.isAnonymous ? 'anonimo' : player.name}</p>
@@ -28,7 +30,7 @@ export function PlayerListItem({ player }: PlayerListItemProps) {
         </div>
         <p className="text-xs text-text-tertiary">nivel {player.level} · VIP {player.vipTier}</p>
       </div>
-      <p className="text-sm font-semibold text-text-primary">{formatNumber(player.weeklyXP ?? 0)} XP</p>
+      {rightSlot ?? <p className="text-sm font-semibold text-text-primary">{formatNumber(player.weeklyXP ?? 0)} XP</p>}
     </div>
   );
 }

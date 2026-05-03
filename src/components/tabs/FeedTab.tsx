@@ -7,7 +7,7 @@ import { Avatar } from '../ui/Avatar';
 import { Button } from '../ui/Button';
 import { Card } from '../ui/Card';
 import { Tabs } from '../ui/Tabs';
-import { PostCard } from '../shared/PostCard';
+import PostCard from '../shared/PostCard';
 
 export default function FeedTab() {
   const openModal = useModalsStore((state) => state.openModal);

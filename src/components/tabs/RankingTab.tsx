@@ -1,4 +1,4 @@
-import { Crown, ShieldCheck, TrendingDown, TrendingUp, Trophy } from 'lucide-react';
+import { ShieldCheck, TrendingDown, TrendingUp, Trophy } from 'lucide-react';
 import { Badge } from '../ui/Badge';
 import { Button } from '../ui/Button';
 import { Card } from '../ui/Card';
@@ -54,11 +54,7 @@ export default function RankingTab() {
       <SectionHeader title="top 5" actionLabel="ver los 50 jugadores" onAction={() => openModal('divisionPrizes')} />
       <div className="space-y-2">
         {mockRanking.slice(0, 5).map((player) => (
-          <PlayerListItem
-            key={player.id}
-            player={player}
-            rightSlot={player.position === 1 ? <Crown className="h-5 w-5 text-coins" /> : null}
-          />
+          <PlayerListItem key={player.id} player={player} />
         ))}
       </div>
 

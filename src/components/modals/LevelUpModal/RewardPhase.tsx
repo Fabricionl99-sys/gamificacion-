@@ -1,5 +1,6 @@
 import { Gift, Sparkles, Zap } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { Button } from '../../ui/Button';
 
 const rewards = [
   { label: '+300 XP', icon: Zap },
@@ -7,7 +8,11 @@ const rewards = [
   { label: 'Caja premium', icon: Gift },
 ];
 
-export function RewardPhase() {
+interface RewardPhaseProps {
+  onCollect: () => void;
+}
+
+export function RewardPhase({ onCollect }: RewardPhaseProps) {
   return (
     <div className="space-y-4 text-center">
       <p className="text-lg font-semibold text-text-primary">recompensas desbloqueadas</p>
@@ -28,6 +33,9 @@ export function RewardPhase() {
           );
         })}
       </div>
+      <Button variant="primary" className="w-full" onClick={onCollect}>
+        apreta para recoger
+      </Button>
     </div>
   );
 }

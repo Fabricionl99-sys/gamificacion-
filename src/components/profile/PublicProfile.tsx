@@ -2,7 +2,7 @@ import { Badge } from '../ui/Badge';
 import { Button } from '../ui/Button';
 import { Card } from '../ui/Card';
 import { Avatar } from '../ui/Avatar';
-import { PostCard } from '../shared/PostCard';
+import PostCard from '../shared/PostCard';
 import { mockPosts, mockRanking } from '../../mocks';
 import { useUiStore } from '../../store/uiStore';
 import { formatNumber } from '../../utils/format';

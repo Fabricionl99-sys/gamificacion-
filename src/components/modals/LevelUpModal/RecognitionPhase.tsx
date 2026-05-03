@@ -13,7 +13,7 @@ export function RecognitionPhase() {
           animate={{ scale: 1 }}
           transition={{ duration: 0.5 }}
         >
-          19 -> 20
+          19 a 20
         </motion.p>
       </div>
       <ProgressBar value={100} ariaLabel="barra de XP completa" />

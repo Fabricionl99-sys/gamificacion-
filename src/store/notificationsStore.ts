@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { mockNotifications } from '../mocks';
 
-interface NotificationsState {
+export interface NotificationsState {
   unreadCount: number;
   markAllRead: () => void;
 }

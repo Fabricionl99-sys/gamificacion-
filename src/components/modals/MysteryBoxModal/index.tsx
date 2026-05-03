@@ -21,7 +21,9 @@ export default function MysteryBoxModal() {
   return (
     <Modal isOpen={isOpen} onClose={handleClose} title="Caja misteriosa" description="El server ya determino el premio; la animacion es cosmetica.">
       {phase === 'pre' ? <PreOpenView onOpen={() => setPhase('animation')} /> : null}
-      {phase === 'animation' ? <AnimationView onComplete={() => setPhase('result')} /> : null}
+      {phase === 'animation' ? (
+        <AnimationView onComplete={() => setPhase('result')} onSkip={() => setPhase('result')} />
+      ) : null}
       {phase === 'result' ? <ResultView onCollect={handleClose} /> : null}
     </Modal>
   );
