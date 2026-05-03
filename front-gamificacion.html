@@ -1,0 +1,1066 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Front Gamificación · Checkpoint Visual del Jugador</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg-primary: #FFFFFF;
+  --bg-secondary: #F5F4F0;
+  --bg-tertiary: #E8E5DD;
+  --bg-info: #E8F0FA;
+  --border-tertiary: #E0DCD0;
+  --border-secondary: #C9C4B5;
+  --text-primary: #1A1815;
+  --text-secondary: #5C5851;
+  --text-tertiary: #8E897F;
+  --text-info: #3859A5;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+}
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  background: #F0EDE5;
+  color: var(--text-primary);
+  display: flex;
+  min-height: 100vh;
+}
+
+.sidebar {
+  width: 260px;
+  background: var(--bg-primary);
+  border-right: 1px solid var(--border-tertiary);
+  padding: 20px 0;
+  overflow-y: auto;
+  position: fixed;
+  top: 0; bottom: 0; left: 0;
+}
+.sidebar-header {
+  padding: 0 20px 20px;
+  border-bottom: 1px solid var(--border-tertiary);
+  margin-bottom: 16px;
+}
+.sidebar-header h1 {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+.sidebar-header p {
+  font-size: 11px;
+  color: var(--text-tertiary);
+}
+.sidebar-section { padding: 8px 0; }
+.sidebar-title {
+  padding: 8px 20px;
+  font-size: 10px;
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+.sidebar-link {
+  display: block;
+  padding: 8px 20px;
+  font-size: 13px;
+  color: var(--text-secondary);
+  cursor: pointer;
+  text-decoration: none;
+  border-left: 3px solid transparent;
+}
+.sidebar-link:hover {
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+}
+.sidebar-link.active {
+  background: var(--bg-info);
+  color: var(--text-info);
+  border-left-color: var(--text-info);
+  font-weight: 500;
+}
+
+.main {
+  margin-left: 260px;
+  flex: 1;
+  padding: 32px;
+}
+.main-header {
+  margin-bottom: 24px;
+}
+.main-header h2 {
+  font-size: 22px;
+  margin-bottom: 6px;
+}
+.main-header p {
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+.screen-container {
+  background: var(--bg-primary);
+  border-radius: var(--radius-xl);
+  padding: 24px;
+  margin-bottom: 16px;
+  border: 1px solid var(--border-tertiary);
+}
+.screen-title {
+  font-size: 14px;
+  font-weight: 500;
+  margin-bottom: 12px;
+  color: var(--text-primary);
+}
+.screen-description {
+  font-size: 12px;
+  color: var(--text-tertiary);
+  margin-bottom: 16px;
+  line-height: 1.5;
+}
+.mockup-frame {
+  background: #F0EDE5;
+  border-radius: var(--radius-lg);
+  padding: 20px;
+  display: flex;
+  justify-content: center;
+}
+.mockup-mobile {
+  max-width: 380px;
+  width: 100%;
+}
+
+.section-divider {
+  margin: 32px 0 24px;
+  padding-bottom: 12px;
+  border-bottom: 2px solid var(--border-tertiary);
+}
+.section-divider h3 {
+  font-size: 18px;
+  font-weight: 600;
+}
+.section-divider p {
+  font-size: 12px;
+  color: var(--text-secondary);
+  margin-top: 4px;
+}
+
+button {
+  border-radius: var(--radius-md);
+  border: 0.5px solid var(--border-secondary);
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: inherit;
+  cursor: pointer;
+}
+.modal-bg {
+  background: rgba(0,0,0,0.45);
+  border-radius: var(--radius-lg);
+  padding: 30px 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 580px;
+}
+
+@media (max-width: 768px) {
+  .sidebar {
+    position: relative;
+    width: 100%;
+    height: auto;
+  }
+  .main { margin-left: 0; padding: 16px; }
+}
+</style>
+</head>
+<body>
+
+<aside class="sidebar">
+<div class="sidebar-header">
+<h1>Front Gamificación</h1>
+<p>Checkpoint visual · jugador</p>
+</div>
+
+<div class="sidebar-section">
+<p class="sidebar-title">Estructura</p>
+<a class="sidebar-link" href="#header">Header del widget</a>
+<a class="sidebar-link" href="#tabs-nav">Navegación 9 tabs</a>
+</div>
+
+<div class="sidebar-section">
+<p class="sidebar-title">Tabs principales</p>
+<a class="sidebar-link" href="#tab-inicio">Inicio</a>
+<a class="sidebar-link" href="#tab-misiones">Misiones</a>
+<a class="sidebar-link" href="#tab-tienda">Tienda</a>
+<a class="sidebar-link" href="#tab-asistencia">Asistencia y racha</a>
+<a class="sidebar-link" href="#tab-ranking">Ranking</a>
+<a class="sidebar-link" href="#tab-torneos">Torneos</a>
+<a class="sidebar-link" href="#tab-feed">Feed</a>
+<a class="sidebar-link" href="#tab-noticias">Noticias</a>
+</div>
+
+<div class="sidebar-section">
+<p class="sidebar-title">Perfiles</p>
+<a class="sidebar-link" href="#perfil-propio">Perfil propio</a>
+<a class="sidebar-link" href="#perfil-publico">Perfil ajeno público</a>
+<a class="sidebar-link" href="#perfil-privado">Perfil ajeno privado</a>
+</div>
+
+<div class="sidebar-section">
+<p class="sidebar-title">Modales wow</p>
+<a class="sidebar-link" href="#modal-caja">Caja misteriosa</a>
+<a class="sidebar-link" href="#modal-rueda">Rueda de la fortuna</a>
+<a class="sidebar-link" href="#modal-cofre">Cofre de racha</a>
+<a class="sidebar-link" href="#modal-raspadita">Raspadita</a>
+</div>
+
+<div class="sidebar-section">
+<p class="sidebar-title">Otros modales</p>
+<a class="sidebar-link" href="#modal-compra">Compra en tienda</a>
+<a class="sidebar-link" href="#modal-editor">Editor de post</a>
+<a class="sidebar-link" href="#modal-notif">Centro de notificaciones</a>
+</div>
+
+<div class="sidebar-section">
+<p class="sidebar-title">Configuración</p>
+<a class="sidebar-link" href="#config">Configuración del widget</a>
+</div>
+</aside>
+
+<main class="main">
+
+<div class="main-header">
+<h2>Front Gamificación · Jugador</h2>
+<p>Checkpoint visual completo · todas las pantallas que verá el jugador en el widget</p>
+</div>
+
+<div class="section-divider">
+<h3>Estructura base</h3>
+<p>Header siempre visible y navegación entre tabs</p>
+</div>
+
+<div class="screen-container" id="header">
+<p class="screen-title">Header del widget</p>
+<p class="screen-description">Visible en todas las pantallas del widget. Avatar, nivel + barra XP, racha, monedas, regalo (premios pendientes), campana (notificaciones).</p>
+<div class="mockup-frame">
+<div class="mockup-mobile">
+<div style="background: var(--bg-primary); border: 0.5px solid var(--border-tertiary); border-radius: var(--radius-lg); padding: 12px;">
+<div style="display: flex; align-items: center; gap: 10px;">
+<div style="width: 40px; height: 40px; border-radius: 50%; background: var(--bg-info); display: flex; align-items: center; justify-content: center; color: var(--text-info); font-size: 13px; font-weight: 500; flex-shrink: 0;">JM</div>
+<div style="flex: 1; min-width: 0;">
+<div style="display: flex; align-items: baseline; gap: 6px; margin-bottom: 4px;">
+<span style="font-size: 13px; font-weight: 500;">Nivel 20</span>
+<span style="font-size: 10px; color: var(--text-tertiary);">2,840 / 4,000 XP</span>
+</div>
+<div style="height: 4px; background: var(--bg-tertiary); border-radius: 999px; overflow: hidden;">
+<div style="height: 100%; width: 71%; background: var(--text-info); border-radius: 999px;"></div>
+</div>
+</div>
+<div style="display: flex; gap: 6px; flex-shrink: 0;">
+<div style="background: var(--bg-secondary); border-radius: 999px; padding: 5px 8px; display: flex; align-items: center; gap: 4px;">
+<svg width="11" height="11" viewBox="0 0 24 24" fill="#D85A30"><path d="M12 2c-1 4-4 5-4 9a4 4 0 0 0 8 0c0-2-1-3-2-4 0 2-1 3-2 3 0-3 2-5 0-8z"/></svg>
+<span style="font-size: 10px; font-weight: 500;">12</span>
+</div>
+<div style="background: var(--bg-secondary); border-radius: 999px; padding: 5px 8px; display: flex; align-items: center; gap: 4px;">
+<svg width="11" height="11" viewBox="0 0 24 24" fill="#854F0B"><circle cx="12" cy="12" r="10"/><text x="12" y="16" text-anchor="middle" fill="#FFE9A3" font-size="13" font-weight="500">$</text></svg>
+<span style="font-size: 10px; font-weight: 500;">2,150</span>
+</div>
+<button style="position: relative; width: 32px; height: 32px; border-radius: 50%; background: var(--bg-secondary); border: none; display: flex; align-items: center; justify-content: center; padding: 0;">
+<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--text-primary)" stroke-width="2"><polyline points="20 12 20 22 4 22 4 12"/><rect x="2" y="7" width="20" height="5"/><line x1="12" y1="22" x2="12" y2="7"/></svg>
+<div style="position: absolute; top: -2px; right: -2px; min-width: 14px; height: 14px; border-radius: 999px; background: #B91C1C; color: white; font-size: 9px; font-weight: 500; display: flex; align-items: center; justify-content: center; padding: 0 3px;">2</div>
+</button>
+<button style="position: relative; width: 32px; height: 32px; border-radius: 50%; background: var(--bg-secondary); border: none; display: flex; align-items: center; justify-content: center; padding: 0;">
+<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--text-primary)" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+<div style="position: absolute; top: -2px; right: -2px; min-width: 14px; height: 14px; border-radius: 999px; background: #B91C1C; color: white; font-size: 9px; font-weight: 500; display: flex; align-items: center; justify-content: center; padding: 0 3px;">5</div>
+</button>
+</div>
+</div>
+<button style="font-size: 10px; padding: 0; background: none; border: none; color: var(--text-info); margin-top: 4px; padding-left: 50px;">ver perfil →</button>
+</div>
+</div>
+</div>
+</div>
+
+<div class="screen-container" id="tabs-nav">
+<p class="screen-title">Navegación de 9 tabs por swipe lateral</p>
+<p class="screen-description">El jugador navega los tabs deslizando lateralmente. En mobile se ven 4 a la vez con un botón "+5 →" para expandir. El operador puede configurar el orden y cuáles activar.</p>
+<div class="mockup-frame">
+<div class="mockup-mobile">
+<div style="background: var(--bg-primary); border: 0.5px solid var(--border-tertiary); border-radius: var(--radius-lg); padding: 12px;">
+<div style="display: flex; gap: 6px; overflow-x: auto;">
+<button style="font-size: 11px; padding: 8px 14px; white-space: nowrap; background: var(--text-info); color: white; border-color: var(--text-info);">inicio</button>
+<button style="font-size: 11px; padding: 8px 14px; white-space: nowrap;">misiones</button>
+<button style="font-size: 11px; padding: 8px 14px; white-space: nowrap;">tienda</button>
+<button style="font-size: 11px; padding: 8px 14px; white-space: nowrap;">racha</button>
+<button style="font-size: 11px; padding: 8px 14px; white-space: nowrap;">+5 →</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="section-divider">
+<h3>Tabs principales</h3>
+<p>Las 9 secciones del widget</p>
+</div>
+
+<div class="screen-container" id="tab-inicio">
+<p class="screen-title">Tab Inicio</p>
+<p class="screen-description">Pantalla principal configurable por el operador. Hasta 10 secciones drag-and-drop. Banner de premios pendientes arriba si aplica. Las secciones sin contenido se ocultan automáticamente.</p>
+<div class="mockup-frame">
+<div class="mockup-mobile">
+<div style="background: var(--bg-primary); border: 0.5px solid var(--border-tertiary); border-radius: var(--radius-lg); padding: 14px;">
+<div style="background: linear-gradient(90deg, #FBEAF0, #F5D0DC); border-radius: var(--radius-md); padding: 12px 14px; margin-bottom: 14px; display: flex; align-items: center; gap: 10px;">
+<svg width="20" height="20" viewBox="0 0 24 24" fill="#993556"><rect x="3" y="8" width="18" height="13" rx="2"/></svg>
+<div style="flex: 1;">
+<p style="font-size: 12px; font-weight: 500; margin: 0; color: #72243E;">tenés 3 premios sin reclamar</p>
+<p style="font-size: 10px; color: #993556; margin: 2px 0 0;">tocá para ver tus premios</p>
+</div>
+<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#72243E" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+</div>
+<p style="font-size: 13px; font-weight: 500; margin: 0 0 10px;">Misiones del día</p>
+<div style="background: var(--bg-secondary); border-radius: var(--radius-md); padding: 12px; margin-bottom: 6px;">
+<p style="font-size: 12px; margin: 0;">Hacé 3 apuestas en deportes</p>
+<div style="height: 4px; background: var(--bg-tertiary); border-radius: 999px; margin: 6px 0; overflow: hidden;">
+<div style="height: 100%; width: 66%; background: var(--text-info); border-radius: 999px;"></div>
+</div>
+<p style="font-size: 10px; color: var(--text-tertiary); margin: 0;">2/3 · +50 XP al completar</p>
+</div>
+<div style="background: var(--bg-secondary); border-radius: var(--radius-md); padding: 12px; margin-bottom: 14px;">
+<p style="font-size: 12px; margin: 0;">Jugá 30 minutos en slots</p>
+<div style="height: 4px; background: var(--bg-tertiary); border-radius: 999px; margin: 6px 0; overflow: hidden;">
+<div style="height: 100%; width: 100%; background: #0F6E56; border-radius: 999px;"></div>
+</div>
+<p style="font-size: 10px; color: #0F6E56; margin: 0; font-weight: 500;">completada · tocá para reclamar</p>
+</div>
+<p style="font-size: 13px; font-weight: 500; margin: 0 0 10px;">Tu progreso</p>
+<div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; padding: 12px; background: var(--bg-secondary); border-radius: var(--radius-md);">
+<div style="text-align: center;">
+<p style="font-size: 16px; font-weight: 500; margin: 0;">20</p>
+<p style="font-size: 10px; color: var(--text-tertiary); margin: 2px 0 0;">nivel</p>
+</div>
+<div style="text-align: center;">
+<p style="font-size: 16px; font-weight: 500; margin: 0; color: #D85A30;">12</p>
+<p style="font-size: 10px; color: var(--text-tertiary); margin: 2px 0 0;">racha</p>
+</div>
+<div style="text-align: center;">
+<p style="font-size: 16px; font-weight: 500; margin: 0;">2,150</p>
+<p style="font-size: 10px; color: var(--text-tertiary); margin: 2px 0 0;">monedas</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="screen-container" id="tab-misiones">
+<p class="screen-title">Tab Misiones</p>
+<p class="screen-description">Misiones agrupadas por tipo en secciones colapsables: diarias, semanales, eventos. Filtros por categoría (deportes, slots, poker, predicciones, social). Reclamo manual con botón.</p>
+<div class="mockup-frame">
+<div class="mockup-mobile">
+<div style="background: var(--bg-primary); border: 0.5px solid var(--border-tertiary); border-radius: var(--radius-lg); padding: 14px;">
+<div style="background: linear-gradient(90deg, #EEEDFE, #C8C2EB); border-radius: var(--radius-md); padding: 12px 14px; margin-bottom: 14px;">
+<p style="font-size: 11px; color: #2A2459; margin: 0;">progreso de hoy</p>
+<p style="font-size: 16px; font-weight: 500; margin: 4px 0 0; color: #2A2459;">2 de 5 completadas · +120 XP ganado</p>
+</div>
+<div style="display: flex; gap: 6px; margin-bottom: 14px; overflow-x: auto;">
+<button style="font-size: 10px; padding: 4px 10px; white-space: nowrap; background: var(--text-info); color: white; border-color: var(--text-info);">todas</button>
+<button style="font-size: 10px; padding: 4px 10px; white-space: nowrap;">deportes</button>
+<button style="font-size: 10px; padding: 4px 10px; white-space: nowrap;">slots</button>
+<button style="font-size: 10px; padding: 4px 10px; white-space: nowrap;">predicciones</button>
+</div>
+<button style="width: 100%; padding: 10px 14px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; font-size: 12px; font-weight: 500;">
+<span>Diarias · 3 disponibles</span>
+<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+</button>
+<div style="background: var(--bg-secondary); border-radius: var(--radius-md); padding: 12px; margin-bottom: 6px;">
+<div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
+<div>
+<p style="font-size: 12px; font-weight: 500; margin: 0;">Hacé 3 apuestas en deportes</p>
+<p style="font-size: 10px; color: var(--text-tertiary); margin: 2px 0 0;">vence en 8h · +50 XP</p>
+</div>
+<span style="font-size: 10px; color: var(--text-tertiary);">2/3</span>
+</div>
+<div style="height: 4px; background: var(--bg-tertiary); border-radius: 999px; overflow: hidden;">
+<div style="height: 100%; width: 66%; background: var(--text-info); border-radius: 999px;"></div>
+</div>
+</div>
+<div style="background: var(--bg-secondary); border-radius: var(--radius-md); padding: 12px;">
+<div style="display: flex; justify-content: space-between; align-items: center;">
+<div>
+<p style="font-size: 12px; font-weight: 500; margin: 0;">Jugá 30 minutos en slots</p>
+<p style="font-size: 10px; color: #0F6E56; margin: 2px 0 0; font-weight: 500;">completada · +30 XP</p>
+</div>
+<button style="font-size: 11px; padding: 6px 12px; background: var(--text-info); color: white; border-color: var(--text-info);">reclamar</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="screen-container" id="tab-tienda">
+<p class="screen-title">Tab Tienda</p>
+<p class="screen-description">3 categorías: bonos del operador, gamificación (cajas, raspaditas), físicos. Carrusel de hasta 3 promos destacadas. Modelos de stock: ilimitado, limitado, por jugador, temporal.</p>
+<div class="mockup-frame">
+<div class="mockup-mobile">
+<div style="background: var(--bg-primary); border: 0.5px solid var(--border-tertiary); border-radius: var(--radius-lg); padding: 14px;">
+<div style="display: flex; justify-content: space-between; align-items: center; padding: 8px 12px; background: linear-gradient(135deg, #FFD888, #F0C040); border-radius: var(--radius-md); margin-bottom: 14px;">
+<p style="font-size: 12px; font-weight: 500; margin: 0; color: #3F2304;">tu saldo</p>
+<div style="display: flex; align-items: center; gap: 6px;">
+<svg width="14" height="14" viewBox="0 0 24 24" fill="#854F0B"><circle cx="12" cy="12" r="10"/><text x="12" y="16" text-anchor="middle" fill="#FFE9A3" font-size="13" font-weight="500">$</text></svg>
+<p style="font-size: 13px; font-weight: 500; margin: 0; color: #3F2304;">2,150 monedas</p>
+</div>
+</div>
+<div style="background: linear-gradient(135deg, #993556, #72243E); border-radius: var(--radius-md); padding: 14px; margin-bottom: 14px; color: white;">
+<p style="font-size: 10px; margin: 0; opacity: 0.8;">PROMO ESPECIAL · termina en 3 días</p>
+<p style="font-size: 14px; font-weight: 500; margin: 6px 0 4px;">Caja oro x3 al precio de 2</p>
+<p style="font-size: 11px; margin: 0; opacity: 0.9;">desde 800 monedas</p>
+</div>
+<p style="font-size: 13px; font-weight: 500; margin: 0 0 10px;">Bonos del operador</p>
+<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 14px;">
+<div style="background: var(--bg-secondary); border-radius: var(--radius-md); padding: 12px;">
+<div style="height: 60px; background: linear-gradient(135deg, #B5D4F4, #7DAFE0); border-radius: 6px; margin-bottom: 8px; display: flex; align-items: center; justify-content: center;">
+<svg width="28" height="28" viewBox="0 0 24 24" fill="#042C53"><circle cx="12" cy="12" r="10"/><text x="12" y="16" text-anchor="middle" fill="white" font-size="11" font-weight="500">$</text></svg>
+</div>
+<p style="font-size: 11px; font-weight: 500; margin: 0;">$10 bonus</p>
+<p style="font-size: 10px; color: var(--text-tertiary); margin: 4px 0 6px;">apuestas libres</p>
+<button style="font-size: 11px; padding: 4px 8px; width: 100%; background: var(--text-info); color: white; border-color: var(--text-info);">500 monedas</button>
+</div>
+<div style="background: var(--bg-secondary); border-radius: var(--radius-md); padding: 12px;">
+<div style="height: 60px; background: linear-gradient(135deg, #C8C2EB, #9B92D5); border-radius: 6px; margin-bottom: 8px; display: flex; align-items: center; justify-content: center;">
+<svg width="28" height="28" viewBox="0 0 24 24" fill="#3C3489"><path d="M12 2 15 8h6l-5 4 2 8-6-4-6 4 2-8-5-4h6z"/></svg>
+</div>
+<p style="font-size: 11px; font-weight: 500; margin: 0;">10 free spins</p>
+<p style="font-size: 10px; color: var(--text-tertiary); margin: 4px 0 6px;">en Sweet Bonanza</p>
+<button style="font-size: 11px; padding: 4px 8px; width: 100%; background: var(--text-info); color: white; border-color: var(--text-info);">300 monedas</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="screen-container" id="tab-asistencia">
+<p class="screen-title">Tab Asistencia y racha</p>
+<p class="screen-description">Hero con racha actual y mejor racha histórica. Línea de últimos 14 días con marcadores de cofre. 3 horizontes de cofres próximos (corto, medio, largo plazo).</p>
+<div class="mockup-frame">
+<div class="mockup-mobile">
+<div style="background: var(--bg-primary); border: 0.5px solid var(--border-tertiary); border-radius: var(--radius-lg); padding: 14px;">
+<div style="background: linear-gradient(135deg, #FAEEDA, #F0D693); border-radius: var(--radius-lg); padding: 20px; margin-bottom: 16px; text-align: center;">
+<svg width="48" height="48" viewBox="0 0 24 24" fill="#D85A30" style="margin: 0 auto;"><path d="M12 2c-1 4-4 5-4 9a4 4 0 0 0 8 0c0-2-1-3-2-4 0 2-1 3-2 3 0-3 2-5 0-8z"/></svg>
+<p style="font-size: 32px; font-weight: 500; margin: 8px 0 4px; color: #3F2304;">12</p>
+<p style="font-size: 13px; color: #633806; margin: 0;">días seguidos</p>
+<p style="font-size: 11px; color: #854F0B; margin: 8px 0 0;">tu mejor racha: 21 días</p>
+</div>
+<p style="font-size: 12px; font-weight: 500; margin: 0 0 10px;">tus últimos 14 días</p>
+<div style="display: flex; gap: 4px; margin-bottom: 16px; padding: 0 2px;">
+<div style="flex: 1; aspect-ratio: 1; border-radius: 6px; background: #D85A30;"></div>
+<div style="flex: 1; aspect-ratio: 1; border-radius: 6px; background: #D85A30;"></div>
+<div style="flex: 1; aspect-ratio: 1; border-radius: 6px; background: #D85A30;"></div>
+<div style="flex: 1; aspect-ratio: 1; border-radius: 6px; background: #D85A30;"></div>
+<div style="flex: 1; aspect-ratio: 1; border-radius: 6px; background: #D85A30;"></div>
+<div style="flex: 1; aspect-ratio: 1; border-radius: 6px; background: #D85A30;"></div>
+<div style="flex: 1; aspect-ratio: 1; border-radius: 6px; background: #D85A30;"></div>
+<div style="flex: 1; aspect-ratio: 1; border-radius: 6px; background: #D85A30;"></div>
+<div style="flex: 1; aspect-ratio: 1; border-radius: 6px; background: #D85A30;"></div>
+<div style="flex: 1; aspect-ratio: 1; border-radius: 6px; background: #D85A30;"></div>
+<div style="flex: 1; aspect-ratio: 1; border-radius: 6px; background: #D85A30;"></div>
+<div style="flex: 1; aspect-ratio: 1; border-radius: 6px; background: #D85A30; outline: 2px solid var(--text-info); outline-offset: 1px;"></div>
+<div style="flex: 1; aspect-ratio: 1; border-radius: 6px; background: var(--bg-tertiary); border: 0.5px dashed var(--border-secondary);"></div>
+<div style="flex: 1; aspect-ratio: 1; border-radius: 6px; background: var(--bg-tertiary); border: 0.5px dashed var(--border-secondary);"></div>
+</div>
+<p style="font-size: 12px; font-weight: 500; margin: 0 0 10px;">próximos cofres</p>
+<div style="background: var(--bg-primary); border: 0.5px solid var(--border-tertiary); border-radius: var(--radius-md); padding: 14px; display: flex; align-items: center; gap: 12px;">
+<div style="width: 44px; height: 44px; border-radius: var(--radius-md); background: #FAEEDA; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+<svg width="22" height="22" viewBox="0 0 24 24" fill="#854F0B"><path d="M3 12l5-9h8l5 9-9 9z"/></svg>
+</div>
+<div style="flex: 1; min-width: 0;">
+<p style="font-size: 13px; font-weight: 500; margin: 0;">Cofre de 14 días</p>
+<p style="font-size: 11px; color: var(--text-tertiary); margin: 2px 0 4px;">+1500 XP · 300 monedas · caja extra</p>
+<div style="display: flex; align-items: center; gap: 6px;">
+<div style="height: 4px; flex: 1; background: var(--bg-tertiary); border-radius: 999px; overflow: hidden;">
+<div style="height: 100%; width: 85%; background: #D85A30; border-radius: 999px;"></div>
+</div>
+<span style="font-size: 10px; color: var(--text-tertiary);">12/14</span>
+</div>
+</div>
+<p style="font-size: 11px; font-weight: 500; color: #993556; margin: 0;">en 2 días</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="screen-container" id="tab-ranking">
+<p class="screen-title">Tab Ranking</p>
+<p class="screen-description">Divisiones tipo Duolingo de 50 jugadores. Toggle entre semanal y mensual. Top 5 destacado, mi posición resaltada, líneas de zona ascenso/descenso.</p>
+<div class="mockup-frame">
+<div class="mockup-mobile">
+<div style="background: var(--bg-primary); border: 0.5px solid var(--border-tertiary); border-radius: var(--radius-lg); padding: 14px;">
+<div style="display: flex; gap: 4px; margin-bottom: 16px;">
+<button style="font-size: 12px; padding: 8px; flex: 1; background: var(--text-info); color: white; border-color: var(--text-info);">esta semana</button>
+<button style="font-size: 12px; padding: 8px; flex: 1;">este mes</button>
+</div>
+<div style="background: linear-gradient(135deg, #B5D4F4, #7DAFE0); border-radius: var(--radius-lg); padding: 16px; margin-bottom: 16px;">
+<div style="display: flex; align-items: center; gap: 14px;">
+<div style="width: 56px; height: 56px; border-radius: 50%; background: rgba(255,255,255,0.4); display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+<svg width="32" height="32" viewBox="0 0 24 24" fill="#042C53"><path d="M12 2 L4 7 v10 l8 5 8-5 V7 z"/></svg>
+</div>
+<div style="flex: 1;">
+<p style="font-size: 11px; color: #042C53; margin: 0;">tu división actual</p>
+<p style="font-size: 16px; font-weight: 500; margin: 2px 0; color: #042C53;">Liga Plata · grupo 12</p>
+<p style="font-size: 11px; color: #042C53; margin: 0;">termina en 4 días 8h</p>
+</div>
+</div>
+</div>
+<div style="background: linear-gradient(90deg, #FAEEDA, #F0D693); border-radius: var(--radius-md); padding: 10px 12px; margin-bottom: 4px; display: flex; align-items: center; gap: 10px;">
+<div style="width: 28px; text-align: center; flex-shrink: 0;">
+<svg width="20" height="20" viewBox="0 0 24 24" fill="#854F0B"><path d="M5 4h14l-2 14H7z"/></svg>
+</div>
+<div style="width: 32px; height: 32px; border-radius: 50%; background: #FCEBEB; display: flex; align-items: center; justify-content: center; color: #791F1F; font-size: 11px; font-weight: 500; flex-shrink: 0;">AS</div>
+<div style="flex: 1; min-width: 0;">
+<p style="font-size: 12px; font-weight: 500; margin: 0; color: #3F2304;">Ana Soto</p>
+<p style="font-size: 10px; color: #633806; margin: 2px 0 0;">nivel 32 · VIP oro</p>
+</div>
+<p style="font-size: 13px; font-weight: 500; margin: 0; color: #3F2304;">8,420</p>
+</div>
+<div style="background: var(--text-info); border-radius: var(--radius-md); padding: 10px 12px; margin-top: 8px; display: flex; align-items: center; gap: 10px;">
+<div style="width: 28px; text-align: center; flex-shrink: 0;">
+<span style="font-size: 13px; font-weight: 500; color: white;">7</span>
+</div>
+<div style="width: 32px; height: 32px; border-radius: 50%; background: rgba(255,255,255,0.3); display: flex; align-items: center; justify-content: center; color: white; font-size: 11px; font-weight: 500;">JM</div>
+<div style="flex: 1;">
+<p style="font-size: 12px; font-weight: 500; margin: 0; color: white;">vos</p>
+<p style="font-size: 10px; color: rgba(255,255,255,0.8); margin: 2px 0 0;">nivel 20</p>
+</div>
+<p style="font-size: 13px; font-weight: 500; margin: 0; color: white;">2,840</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="screen-container" id="tab-torneos">
+<p class="screen-title">Tab Torneos</p>
+<p class="screen-description">Tipos custom configurables. Inscripción gratis con restricción opcional por VIP/nivel. Cards con 4 estados: EN VIVO, ABIERTO, VIP+, CASI LLENO. Banner de torneo destacado arriba.</p>
+<div class="mockup-frame">
+<div class="mockup-mobile">
+<div style="background: var(--bg-primary); border: 0.5px solid var(--border-tertiary); border-radius: var(--radius-lg); padding: 14px;">
+<div style="background: linear-gradient(135deg, #FAEEDA, #F0D693); border-radius: var(--radius-lg); padding: 16px; margin-bottom: 16px; display: flex; align-items: center; gap: 12px;">
+<div style="width: 48px; height: 48px; border-radius: 50%; background: rgba(255,255,255,0.4); display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+<svg width="28" height="28" viewBox="0 0 24 24" fill="#3F2304"><path d="M7 4h10v3a5 5 0 0 1-10 0V4z M5 7h14M9 14h6v3l1 3H8l1-3v-3z"/></svg>
+</div>
+<div style="flex: 1;">
+<p style="font-size: 11px; color: #633806; margin: 0;">torneo destacado</p>
+<p style="font-size: 14px; font-weight: 500; margin: 4px 0; color: #3F2304;">Campeonato slots de fin de semana</p>
+<p style="font-size: 11px; color: #854F0B; margin: 0;">premio total $5,000</p>
+</div>
+</div>
+<div style="background: var(--bg-primary); border: 0.5px solid #C9941F; border-radius: var(--radius-md); padding: 14px;">
+<div style="display: flex; align-items: center; gap: 6px; margin-bottom: 8px;">
+<span style="font-size: 10px; padding: 2px 8px; border-radius: 999px; background: #FAEEDA; color: #854F0B; font-weight: 500;">EN VIVO</span>
+<span style="font-size: 10px; color: var(--text-tertiary);">termina en 2 días 4h</span>
+</div>
+<p style="font-size: 13px; font-weight: 500; margin: 0;">Liga semanal de slots</p>
+<p style="font-size: 11px; color: var(--text-tertiary); margin: 4px 0 10px;">238 inscritos · premio $1,500</p>
+<div style="background: #E1F5EE; border-radius: var(--radius-md); padding: 8px 12px; margin-bottom: 8px;">
+<p style="font-size: 11px; color: #0A4A39; font-weight: 500; margin: 0;">posición #14 · zona top 20</p>
+</div>
+<button style="font-size: 12px; padding: 8px; width: 100%; background: var(--text-info); color: white; border-color: var(--text-info);">ver detalle</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="screen-container" id="tab-feed">
+<p class="screen-title">Tab Feed</p>
+<p class="screen-description">Red social interna con sub-tabs siguiendo + explorar. Posts con texto, imagen y compartir fija (solo deportes, sin montos). Like + comentar. Composer arriba.</p>
+<div class="mockup-frame">
+<div class="mockup-mobile">
+<div style="background: var(--bg-primary); border: 0.5px solid var(--border-tertiary); border-radius: var(--radius-lg); padding: 14px;">
+<div style="display: flex; gap: 4px; margin-bottom: 14px;">
+<button style="font-size: 12px; padding: 8px; flex: 1; background: var(--text-info); color: white; border-color: var(--text-info);">siguiendo</button>
+<button style="font-size: 12px; padding: 8px; flex: 1;">explorar</button>
+</div>
+<div style="background: var(--bg-secondary); border-radius: var(--radius-md); padding: 12px 14px; margin-bottom: 14px; display: flex; align-items: center; gap: 10px;">
+<div style="width: 32px; height: 32px; border-radius: 50%; background: var(--bg-info); display: flex; align-items: center; justify-content: center; color: var(--text-info); font-size: 12px; font-weight: 500;">JM</div>
+<button style="flex: 1; font-size: 12px; padding: 8px 12px; text-align: left; color: var(--text-tertiary);">¿qué estás pensando?</button>
+</div>
+<div style="background: var(--bg-primary); border: 0.5px solid var(--border-tertiary); border-radius: var(--radius-md); padding: 14px;">
+<div style="display: flex; gap: 10px; margin-bottom: 10px; align-items: flex-start;">
+<div style="width: 36px; height: 36px; border-radius: 50%; background: #FCEBEB; display: flex; align-items: center; justify-content: center; color: #791F1F; font-size: 12px; font-weight: 500;">MR</div>
+<div style="flex: 1;">
+<div style="display: flex; align-items: center; gap: 6px; flex-wrap: wrap;">
+<p style="font-size: 13px; font-weight: 500; margin: 0;">María Rodríguez</p>
+<span style="font-size: 10px; padding: 2px 6px; border-radius: 999px; background: #B5D4F4; color: #042C53;">VIP plata</span>
+</div>
+<p style="font-size: 11px; color: var(--text-tertiary); margin: 2px 0 0;">hace 2 horas</p>
+</div>
+</div>
+<p style="font-size: 13px; margin: 0 0 10px; line-height: 1.5;">¡La fija del finde se da! Boca por la mínima en el clásico</p>
+<div style="background: var(--bg-secondary); border-radius: var(--radius-md); padding: 12px; margin-bottom: 10px;">
+<p style="font-size: 11px; color: var(--text-tertiary); margin: 0 0 8px; font-weight: 500;">FIJA · Boca vs River</p>
+<div style="display: flex; justify-content: space-between;">
+<div><p style="font-size: 11px; color: var(--text-tertiary); margin: 0;">predicción</p><p style="font-size: 12px; font-weight: 500; margin: 2px 0 0;">Boca gana</p></div>
+<div><p style="font-size: 11px; color: var(--text-tertiary); margin: 0;">cuota</p><p style="font-size: 12px; font-weight: 500; margin: 2px 0 0;">2.40</p></div>
+</div>
+</div>
+<div style="display: flex; gap: 16px; padding-top: 10px; border-top: 0.5px solid var(--border-tertiary);">
+<button style="font-size: 11px; padding: 4px; background: none; border: none;">♥ 23</button>
+<button style="font-size: 11px; padding: 4px; background: none; border: none;">💬 7 comentarios</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="screen-container" id="tab-noticias">
+<p class="screen-title">Tab Noticias</p>
+<p class="screen-description">Comunicaciones del operador y del sistema central. 4 categorías: PROMO, EVENTO, ANUNCIO, SISTEMA. Texto + imagen banner + botón CTA opcional. Operador define expiración por noticia.</p>
+<div class="mockup-frame">
+<div class="mockup-mobile">
+<div style="background: var(--bg-primary); border: 0.5px solid var(--border-tertiary); border-radius: var(--radius-lg); padding: 14px;">
+<div style="display: flex; gap: 6px; margin-bottom: 14px; overflow-x: auto;">
+<button style="font-size: 11px; padding: 6px 12px; white-space: nowrap; background: var(--text-info); color: white; border-color: var(--text-info);">todo · 12</button>
+<button style="font-size: 11px; padding: 6px 12px; white-space: nowrap;">promos</button>
+<button style="font-size: 11px; padding: 6px 12px; white-space: nowrap;">eventos</button>
+</div>
+<div style="background: var(--bg-primary); border: 0.5px solid var(--border-tertiary); border-radius: var(--radius-md); margin-bottom: 12px; overflow: hidden;">
+<div style="aspect-ratio: 16/7; background: linear-gradient(135deg, #FAEEDA, #F0D693); display: flex; align-items: center; justify-content: center;">
+<svg width="48" height="48" viewBox="0 0 24 24" fill="#854F0B"><path d="M12 2 15 8h6l-5 4 2 8-6-4-6 4 2-8-5-4h6z"/></svg>
+</div>
+<div style="padding: 14px;">
+<div style="display: flex; align-items: center; gap: 6px; margin-bottom: 8px;">
+<span style="font-size: 10px; padding: 2px 8px; border-radius: 999px; background: #FBEAF0; color: #993556; font-weight: 500;">PROMO</span>
+<span style="font-size: 10px; color: var(--text-tertiary);">hace 3 horas</span>
+<span style="font-size: 10px; padding: 2px 6px; border-radius: 4px; background: var(--bg-info); color: var(--text-info); font-weight: 500;">NUEVO</span>
+</div>
+<p style="font-size: 14px; font-weight: 500; margin: 0 0 6px;">Doble XP en slots este fin de semana</p>
+<p style="font-size: 12px; color: var(--text-secondary); margin: 0 0 12px; line-height: 1.5;">desde el viernes a las 18:00 hasta el domingo a las 23:59 todas las apuestas en slots dan el doble de XP.</p>
+<button style="font-size: 12px; padding: 8px 14px; background: var(--text-info); color: white; border-color: var(--text-info);">jugar slots ahora</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="section-divider">
+<h3>Perfiles</h3>
+<p>Tres niveles de visibilidad: propio, ajeno público, ajeno privado</p>
+</div>
+
+<div class="screen-container" id="perfil-propio">
+<p class="screen-title">Perfil propio</p>
+<p class="screen-description">5 tabs internos: resumen, premios pendientes, logros y colecciones, historial y rating, social. Veo todo de mí mismo.</p>
+<div class="mockup-frame">
+<div class="mockup-mobile">
+<div style="background: var(--bg-primary); border: 0.5px solid var(--border-tertiary); border-radius: var(--radius-lg); padding: 18px;">
+<div style="display: flex; align-items: center; gap: 8px; margin-bottom: 14px;">
+<button style="font-size: 11px; padding: 4px 8px; background: none; border: none; color: var(--text-secondary);">← volver</button>
+<button style="font-size: 11px; padding: 4px 8px; background: none; border: none; margin-left: auto;">⚙</button>
+</div>
+<div style="display: flex; gap: 16px; margin-bottom: 16px;">
+<div style="width: 76px; height: 76px; border-radius: 50%; background: var(--bg-info); display: flex; align-items: center; justify-content: center; color: var(--text-info); font-size: 22px; font-weight: 500; flex-shrink: 0;">JM</div>
+<div style="flex: 1;">
+<div style="display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap;">
+<p style="font-size: 16px; font-weight: 500; margin: 0;">Juan Martínez</p>
+<span style="font-size: 11px; padding: 2px 8px; border-radius: 999px; background: #FFD888; color: #633806; font-weight: 500;">VIP oro</span>
+</div>
+<p style="font-size: 12px; color: var(--text-secondary); margin: 4px 0;">@juanm · nivel 20</p>
+<p style="font-size: 13px; line-height: 1.5; margin: 0;">Tipster amateur, fanático de las ligas europeas.</p>
+</div>
+</div>
+<div style="display: flex; gap: 4px; overflow-x: auto; margin-bottom: 16px;">
+<button style="font-size: 11px; padding: 6px 10px; white-space: nowrap; background: var(--text-info); color: white; border-color: var(--text-info);">resumen</button>
+<button style="font-size: 11px; padding: 6px 10px; white-space: nowrap;">premios</button>
+<button style="font-size: 11px; padding: 6px 10px; white-space: nowrap;">logros</button>
+<button style="font-size: 11px; padding: 6px 10px; white-space: nowrap;">historial</button>
+<button style="font-size: 11px; padding: 6px 10px; white-space: nowrap;">social</button>
+</div>
+<div style="background: var(--bg-secondary); border-radius: var(--radius-md); padding: 14px; margin-bottom: 12px;">
+<p style="font-size: 11px; color: var(--text-tertiary); margin: 0 0 8px;">progreso al siguiente nivel</p>
+<div style="height: 6px; background: var(--bg-tertiary); border-radius: 999px; overflow: hidden; margin-bottom: 6px;">
+<div style="height: 100%; width: 71%; background: var(--text-info); border-radius: 999px;"></div>
+</div>
+<p style="font-size: 11px; color: var(--text-tertiary); margin: 0;">2,840 / 4,000 XP · faltan 1,160 para nivel 21</p>
+</div>
+<div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px;">
+<div style="background: var(--bg-secondary); border-radius: var(--radius-md); padding: 12px; text-align: center;">
+<p style="font-size: 18px; font-weight: 500; margin: 0;">12</p>
+<p style="font-size: 10px; color: var(--text-tertiary); margin: 2px 0 0;">racha</p>
+</div>
+<div style="background: var(--bg-secondary); border-radius: var(--radius-md); padding: 12px; text-align: center;">
+<p style="font-size: 18px; font-weight: 500; margin: 0;">847</p>
+<p style="font-size: 10px; color: var(--text-tertiary); margin: 2px 0 0;">seguidores</p>
+</div>
+<div style="background: var(--bg-secondary); border-radius: var(--radius-md); padding: 12px; text-align: center;">
+<p style="font-size: 18px; font-weight: 500; margin: 0;">58%</p>
+<p style="font-size: 10px; color: var(--text-tertiary); margin: 2px 0 0;">aciertos</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="screen-container" id="perfil-publico">
+<p class="screen-title">Perfil ajeno público</p>
+<p class="screen-description">Identidad, stats de deportes, posts y predicciones. Sin stats de slots/casino, sin monedas, sin premios, sin logros bloqueados.</p>
+<div class="mockup-frame">
+<div class="mockup-mobile">
+<div style="background: var(--bg-primary); border: 0.5px solid var(--border-tertiary); border-radius: var(--radius-lg); padding: 18px;">
+<div style="display: flex; align-items: center; gap: 8px; margin-bottom: 14px;">
+<button style="font-size: 11px; padding: 4px 8px; background: none; border: none;">← volver</button>
+<button style="font-size: 11px; padding: 4px 8px; background: none; border: none; margin-left: auto;">⋯</button>
+</div>
+<div style="display: flex; gap: 16px; margin-bottom: 16px;">
+<div style="width: 76px; height: 76px; border-radius: 50%; background: #FCEBEB; display: flex; align-items: center; justify-content: center; color: #791F1F; font-size: 22px; font-weight: 500;">MR</div>
+<div style="flex: 1;">
+<div style="display: flex; align-items: baseline; gap: 8px;">
+<p style="font-size: 16px; font-weight: 500; margin: 0;">María Rodríguez</p>
+<span style="font-size: 11px; padding: 2px 8px; border-radius: 999px; background: #B5D4F4; color: #042C53;">VIP plata</span>
+</div>
+<p style="font-size: 12px; color: var(--text-secondary); margin: 0 0 8px;">@mariar · nivel 32</p>
+<p style="font-size: 13px;">Apuesto a Boca, predigo lo que puedo, gano lo que se da.</p>
+</div>
+</div>
+<button style="font-size: 12px; padding: 10px; width: 100%; background: var(--text-info); color: white; border-color: var(--text-info); margin-bottom: 16px;">seguir</button>
+<div style="background: var(--bg-secondary); border-radius: var(--radius-md); padding: 14px;">
+<p style="font-size: 11px; color: var(--text-tertiary); margin: 0 0 8px;">apuestas en deportes</p>
+<div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+<div><p style="font-size: 11px; color: var(--text-tertiary); margin: 0;">total</p><p style="font-size: 18px; font-weight: 500; margin: 2px 0 0;">512</p></div>
+<div><p style="font-size: 11px; color: var(--text-tertiary); margin: 0;">ganadas</p><p style="font-size: 18px; font-weight: 500; margin: 2px 0 0; color: #0F6E56;">298</p></div>
+<div><p style="font-size: 11px; color: var(--text-tertiary); margin: 0;">perdidas</p><p style="font-size: 18px; font-weight: 500; margin: 2px 0 0; color: #B91C1C;">214</p></div>
+</div>
+<p style="font-size: 11px; color: var(--text-tertiary); margin: 0;">58% de aciertos en deportes</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="screen-container" id="perfil-privado">
+<p class="screen-title">Perfil ajeno privado</p>
+<p class="screen-description">Identidad mínima con candado, contadores básicos, botón "solicitar seguir". El resto está bloqueado hasta que el dueño acepte la solicitud.</p>
+<div class="mockup-frame">
+<div class="mockup-mobile">
+<div style="background: var(--bg-primary); border: 0.5px solid var(--border-tertiary); border-radius: var(--radius-lg); padding: 18px;">
+<div style="display: flex; align-items: center; gap: 8px; margin-bottom: 14px;">
+<button style="font-size: 11px; padding: 4px 8px; background: none; border: none;">← volver</button>
+<button style="font-size: 11px; padding: 4px 8px; background: none; border: none; margin-left: auto;">⋯</button>
+</div>
+<div style="display: flex; gap: 16px; margin-bottom: 16px;">
+<div style="position: relative;">
+<div style="width: 76px; height: 76px; border-radius: 50%; background: #FAEEDA; display: flex; align-items: center; justify-content: center; color: #854F0B; font-size: 22px; font-weight: 500;">PG</div>
+<div style="position: absolute; bottom: 0; right: 0; width: 24px; height: 24px; border-radius: 50%; background: var(--bg-primary); border: 0.5px solid var(--border-secondary); display: flex; align-items: center; justify-content: center;">🔒</div>
+</div>
+<div style="flex: 1;">
+<p style="font-size: 16px; font-weight: 500; margin: 0;">Pedro García</p>
+<p style="font-size: 12px; color: var(--text-secondary); margin: 4px 0 0;">@pedrog · nivel 12</p>
+</div>
+</div>
+<button style="font-size: 12px; padding: 10px; width: 100%; background: var(--text-info); color: white; border-color: var(--text-info); margin-bottom: 16px;">solicitar seguir</button>
+<div style="background: var(--bg-secondary); border-radius: var(--radius-lg); padding: 32px 20px; text-align: center;">
+<div style="font-size: 28px; margin-bottom: 14px;">🔒</div>
+<p style="font-size: 14px; font-weight: 500; margin: 0; color: var(--text-secondary);">este perfil es privado</p>
+<p style="font-size: 12px; color: var(--text-tertiary); margin: 8px 0 0; line-height: 1.5;">solicitá seguirlo para ver sus stats, posts y predicciones</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="section-divider">
+<h3>Modales wow</h3>
+<p>Mecanismos de recompensa con animaciones cinematográficas</p>
+</div>
+
+<div class="screen-container" id="modal-caja">
+<p class="screen-title">Modal Caja Misteriosa · vista pre-apertura</p>
+<p class="screen-description">Carrusel horizontal con indicador central. Operador configura imágenes de cajas y probabilidades (default ocultas, configurable visible para regulación).</p>
+<div class="modal-bg">
+<div class="mockup-mobile">
+<div style="background: var(--bg-primary); border-radius: var(--radius-xl); padding: 20px;">
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px;">
+<p style="font-size: 14px; font-weight: 500;">caja misteriosa oro</p>
+<button style="font-size: 11px; padding: 4px 8px; background: none; border: none;">✕</button>
+</div>
+<div style="background: linear-gradient(135deg, #FAEEDA, #F0D693); border-radius: var(--radius-lg); padding: 28px; margin-bottom: 18px; text-align: center;">
+<svg width="80" height="80" viewBox="0 0 100 100">
+<rect x="20" y="40" width="60" height="45" rx="4" fill="#854F0B"/>
+<rect x="20" y="40" width="60" height="14" rx="4" fill="#A06618"/>
+<rect x="46" y="40" width="8" height="45" fill="#633806"/>
+<rect x="46" y="48" width="8" height="6" fill="#FFD888"/>
+</svg>
+<p style="font-size: 14px; color: #633806; margin: 14px 0 4px; font-weight: 500;">premio aleatorio</p>
+<p style="font-size: 11px; color: #854F0B; margin: 0;">¿qué te tocará hoy?</p>
+</div>
+<button style="font-size: 14px; padding: 12px; width: 100%; background: var(--text-info); color: white; border-color: var(--text-info); font-weight: 500;">abrir caja</button>
+</div>
+</div>
+</div>
+</div>
+
+<div class="screen-container" id="modal-rueda">
+<p class="screen-title">Modal Rueda de la Fortuna · pre-giro</p>
+<p class="screen-description">Rueda circular con 8 segmentos default (4-16 configurable). Indicador fijo arriba. Gira y desacelera frenando en el premio determinado por server.</p>
+<div class="modal-bg">
+<div class="mockup-mobile">
+<div style="background: var(--bg-primary); border-radius: var(--radius-xl); padding: 20px;">
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px;">
+<div>
+<p style="font-size: 14px; font-weight: 500; margin: 0;">rueda de la fortuna</p>
+<p style="font-size: 11px; color: var(--text-tertiary); margin: 4px 0 0;">giro disponible · vence en 8h</p>
+</div>
+<button style="font-size: 11px; padding: 4px 8px; background: none; border: none;">✕</button>
+</div>
+<div style="position: relative; width: 240px; height: 240px; margin: 0 auto 18px;">
+<svg viewBox="0 0 200 200" style="width: 100%; height: 100%;">
+<g transform="translate(100, 100)">
+<path d="M 0,0 L 100,0 A 100,100 0 0,1 70.71,70.71 Z" fill="#E1F5EE" stroke="white" stroke-width="2"/>
+<path d="M 0,0 L 70.71,70.71 A 100,100 0 0,1 0,100 Z" fill="#FBEAF0" stroke="white" stroke-width="2"/>
+<path d="M 0,0 L 0,100 A 100,100 0 0,1 -70.71,70.71 Z" fill="#E6F1FB" stroke="white" stroke-width="2"/>
+<path d="M 0,0 L -70.71,70.71 A 100,100 0 0,1 -100,0 Z" fill="#FAEEDA" stroke="white" stroke-width="2"/>
+<path d="M 0,0 L -100,0 A 100,100 0 0,1 -70.71,-70.71 Z" fill="#EEEDFE" stroke="white" stroke-width="2"/>
+<path d="M 0,0 L -70.71,-70.71 A 100,100 0 0,1 0,-100 Z" fill="#FAECE7" stroke="white" stroke-width="2"/>
+<path d="M 0,0 L 0,-100 A 100,100 0 0,1 70.71,-70.71 Z" fill="#FCEBEB" stroke="white" stroke-width="2"/>
+<path d="M 0,0 L 70.71,-70.71 A 100,100 0 0,1 100,0 Z" fill="#FAEEDA" stroke="white" stroke-width="2"/>
+</g>
+<circle cx="100" cy="100" r="14" fill="white" stroke="#534AB7" stroke-width="2"/>
+<circle cx="100" cy="100" r="6" fill="#534AB7"/>
+</svg>
+</div>
+<button style="font-size: 14px; padding: 12px; width: 100%; background: var(--text-info); color: white; border-color: var(--text-info); font-weight: 500;">girar rueda</button>
+</div>
+</div>
+</div>
+</div>
+
+<div class="screen-container" id="modal-cofre">
+<p class="screen-title">Modal Cofre de Racha</p>
+<p class="screen-description">Disparado por sistema cuando el jugador alcanza un día específico de racha. Animación cinematográfica de cofre que se abre lentamente.</p>
+<div class="modal-bg">
+<div class="mockup-mobile">
+<div style="background: var(--bg-primary); border-radius: var(--radius-xl); padding: 20px; text-align: center;">
+<div style="background: linear-gradient(135deg, #FAEEDA, #F0D693); border-radius: var(--radius-lg); padding: 24px; margin-bottom: 18px;">
+<svg width="20" height="20" viewBox="0 0 24 24" fill="#D85A30" style="float: left;"><path d="M12 2c-1 4-4 5-4 9a4 4 0 0 0 8 0c0-2-1-3-2-4 0 2-1 3-2 3 0-3 2-5 0-8z"/></svg>
+<span style="float: left; font-size: 12px; font-weight: 500; color: #3F2304; margin-left: 6px;">14 días seguidos</span>
+<svg width="120" height="100" viewBox="0 0 120 100" style="display: block; margin: 30px auto 14px; clear: both;">
+<rect x="20" y="40" width="80" height="50" rx="4" fill="#854F0B"/>
+<rect x="20" y="40" width="80" height="14" rx="4" fill="#A06618"/>
+<rect x="56" y="40" width="8" height="50" fill="#633806"/>
+<rect x="56" y="50" width="8" height="6" fill="#FFD888"/>
+</svg>
+<p style="font-size: 18px; font-weight: 500; margin: 0 0 6px; color: #3F2304;">¡Lo lograste!</p>
+<p style="font-size: 12px; color: #633806;">14 días entrando todos los días</p>
+</div>
+<button style="font-size: 14px; padding: 12px; width: 100%; background: var(--text-info); color: white; border-color: var(--text-info); font-weight: 500;">abrir cofre</button>
+</div>
+</div>
+</div>
+</div>
+
+<div class="screen-container" id="modal-raspadita">
+<p class="screen-title">Modal Raspadita</p>
+<p class="screen-description">3 casilleros tipo lotería real. 3 iguales = ganás. Drag con dedo (mobile) para revelar. Disponible en tienda o como premio de otras mecánicas.</p>
+<div class="modal-bg">
+<div class="mockup-mobile">
+<div style="background: var(--bg-primary); border-radius: var(--radius-xl); padding: 20px;">
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px;">
+<p style="font-size: 14px; font-weight: 500;">raspadita</p>
+<button style="font-size: 11px; padding: 4px 8px; background: none; border: none;">✕</button>
+</div>
+<div style="background: linear-gradient(135deg, #FFE9A3, #F0D693); border-radius: var(--radius-lg); padding: 24px 20px; text-align: center;">
+<p style="font-size: 12px; color: #633806; margin: 0 0 4px; font-weight: 500;">3 iguales = ganás</p>
+<p style="font-size: 14px; font-weight: 500; margin: 0 0 18px; color: #3F2304;">rascá las 3 casillas para revelar</p>
+<div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;">
+<div style="aspect-ratio: 1; background: linear-gradient(135deg, #C58B2F, #854F0B); border-radius: var(--radius-md); border: 2px solid #633806; display: flex; align-items: center; justify-content: center;">
+<span style="font-size: 9px; color: #FFE9A3; font-weight: 500;">RASCAR</span>
+</div>
+<div style="aspect-ratio: 1; background: linear-gradient(135deg, #C58B2F, #854F0B); border-radius: var(--radius-md); border: 2px solid #633806; display: flex; align-items: center; justify-content: center;">
+<span style="font-size: 9px; color: #FFE9A3; font-weight: 500;">RASCAR</span>
+</div>
+<div style="aspect-ratio: 1; background: linear-gradient(135deg, #C58B2F, #854F0B); border-radius: var(--radius-md); border: 2px solid #633806; display: flex; align-items: center; justify-content: center;">
+<span style="font-size: 9px; color: #FFE9A3; font-weight: 500;">RASCAR</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="section-divider">
+<h3>Otros modales</h3>
+<p>Compra, editor de post, centro de notificaciones</p>
+</div>
+
+<div class="screen-container" id="modal-compra">
+<p class="screen-title">Modal Confirmación de Compra</p>
+<p class="screen-description">Aparece al canjear item de la tienda. Muestra item, costo en monedas, saldo después de la compra. Confirmación obligatoria.</p>
+<div class="modal-bg">
+<div class="mockup-mobile">
+<div style="background: var(--bg-primary); border-radius: var(--radius-xl); padding: 20px;">
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px;">
+<p style="font-size: 14px; font-weight: 500;">confirmar canje</p>
+<button style="font-size: 11px; padding: 4px 8px; background: none; border: none;">✕</button>
+</div>
+<div style="background: var(--bg-secondary); border-radius: var(--radius-md); padding: 16px; margin-bottom: 14px; text-align: center;">
+<svg width="48" height="48" viewBox="0 0 24 24" fill="#534AB7" style="margin: 0 auto 10px; display: block;"><path d="M12 2 15 8h6l-5 4 2 8-6-4-6 4 2-8-5-4h6z"/></svg>
+<p style="font-size: 14px; font-weight: 500; margin: 0;">10 free spins</p>
+<p style="font-size: 11px; color: var(--text-tertiary); margin: 4px 0 0;">en Sweet Bonanza</p>
+</div>
+<div style="display: flex; justify-content: space-between; padding: 10px 14px; background: var(--bg-secondary); border-radius: var(--radius-md); margin-bottom: 14px;">
+<span style="font-size: 12px;">costo</span>
+<span style="font-size: 13px; font-weight: 500;">300 monedas</span>
+</div>
+<div style="display: flex; gap: 8px;">
+<button style="font-size: 12px; padding: 10px; flex: 1;">cancelar</button>
+<button style="font-size: 12px; padding: 10px; flex: 2; background: var(--text-info); color: white; border-color: var(--text-info); font-weight: 500;">confirmar canje</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="screen-container" id="modal-editor">
+<p class="screen-title">Editor de Post</p>
+<p class="screen-description">Bottom-sheet desde el feed. Texto + imagen opcional + selector de fija. Aviso explícito que los montos nunca son visibles.</p>
+<div class="modal-bg">
+<div class="mockup-mobile">
+<div style="background: var(--bg-primary); border-top-left-radius: var(--radius-xl); border-top-right-radius: var(--radius-xl); padding: 20px;">
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+<button style="font-size: 12px; padding: 4px 8px; background: none; border: none;">cancelar</button>
+<p style="font-size: 14px; font-weight: 500; margin: 0;">crear post</p>
+<button style="font-size: 12px; padding: 6px 14px; background: var(--text-info); color: white; border-color: var(--text-info); font-weight: 500;">publicar</button>
+</div>
+<textarea placeholder="¿qué estás pensando?" style="width: 100%; min-height: 80px; padding: 0; font-size: 14px; border: none; resize: none; outline: none;">Esta tarde van a jugar Boca y River. Mi fija va con Boca por la mínima.</textarea>
+<div style="background: #FAEEDA; border-radius: var(--radius-md); padding: 10px 14px; margin-top: 14px;">
+<p style="font-size: 11px; color: #633806; margin: 0; line-height: 1.5;">los montos de tus apuestas nunca son visibles · solo se comparte la predicción y la cuota</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="screen-container" id="modal-notif">
+<p class="screen-title">Centro de Notificaciones</p>
+<p class="screen-description">Modal flotante desde la campana del header. Hoy en lista plana, viejos agrupados por fecha. Retención 7 días con excepciones permanentes para críticas.</p>
+<div class="modal-bg">
+<div class="mockup-mobile">
+<div style="background: var(--bg-primary); border-radius: var(--radius-xl); overflow: hidden;">
+<div style="padding: 16px 20px; border-bottom: 0.5px solid var(--border-tertiary); display: flex; justify-content: space-between;">
+<div>
+<p style="font-size: 14px; font-weight: 500; margin: 0;">notificaciones</p>
+<p style="font-size: 11px; color: var(--text-tertiary); margin: 4px 0 0;">5 nuevas</p>
+</div>
+<button style="font-size: 11px; padding: 4px 8px;">marcar leídas</button>
+</div>
+<div style="padding: 8px;">
+<p style="font-size: 11px; color: var(--text-tertiary); margin: 8px 12px 6px; font-weight: 500;">HOY</p>
+<button style="width: 100%; text-align: left; padding: 12px; margin-bottom: 4px; background: var(--bg-info); border-radius: var(--radius-md); border: none; display: flex; gap: 12px;">
+<div style="width: 36px; height: 36px; border-radius: 50%; background: white; display: flex; align-items: center; justify-content: center;">
+<svg width="18" height="18" viewBox="0 0 24 24" fill="#534AB7"><path d="M12 2 L4 7 v10 l8 5 8-5 V7 z"/></svg>
+</div>
+<div style="flex: 1;">
+<p style="font-size: 12px; font-weight: 500; margin: 0;">¡Subiste a nivel 20!</p>
+<p style="font-size: 11px; color: var(--text-secondary); margin: 4px 0 0;">desbloqueaste 1 caja oro y 500 monedas</p>
+<p style="font-size: 10px; color: var(--text-tertiary); margin: 4px 0 0;">hace 12 minutos</p>
+</div>
+</button>
+<button style="width: 100%; text-align: left; padding: 12px; background: var(--bg-info); border-radius: var(--radius-md); border: none; display: flex; gap: 12px;">
+<div style="width: 36px; height: 36px; border-radius: 50%; background: #FCEBEB; display: flex; align-items: center; justify-content: center; color: #791F1F; font-size: 11px; font-weight: 500;">MR</div>
+<div style="flex: 1;">
+<p style="font-size: 12px; margin: 0;"><strong>María Rodríguez</strong> comentó tu post</p>
+<p style="font-size: 11px; color: var(--text-secondary); margin: 4px 0 0; font-style: italic;">"qué buen análisis del partido"</p>
+<p style="font-size: 10px; color: var(--text-tertiary); margin: 4px 0 0;">hace 2 horas</p>
+</div>
+</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="section-divider">
+<h3>Configuración</h3>
+<p>El jugador configura su experiencia · todo lo de cuenta de juego se delega al operador</p>
+</div>
+
+<div class="screen-container" id="config">
+<p class="screen-title">Pantalla de configuración</p>
+<p class="screen-description">5 categorías propias en cards colapsables: cuenta y perfil, notificaciones, privacidad del feed, apariencia, soporte técnico. Bloque neutral con link a la plataforma del operador para temas legales/cuenta.</p>
+<div class="mockup-frame">
+<div class="mockup-mobile">
+<div style="background: var(--bg-primary); border: 0.5px solid var(--border-tertiary); border-radius: var(--radius-lg); padding: 14px;">
+<div style="display: flex; align-items: center; gap: 8px; margin-bottom: 18px;">
+<button style="font-size: 11px; padding: 4px 8px; background: none; border: none;">← volver</button>
+<p style="font-size: 14px; font-weight: 500; margin: 0; flex: 1; text-align: center;">configuración de gamificación</p>
+<div style="width: 50px;"></div>
+</div>
+<div style="background: var(--bg-info); border-radius: var(--radius-md); padding: 10px 14px; margin-bottom: 18px;">
+<p style="font-size: 11px; color: var(--text-info); margin: 0; line-height: 1.5;">acá configurás cómo se ve tu experiencia de gamificación · todo lo relacionado con tu cuenta de juego se gestiona desde la plataforma del operador</p>
+</div>
+<button style="width: 100%; text-align: left; padding: 14px; margin-bottom: 8px; display: flex; justify-content: space-between; font-size: 13px; font-weight: 500;">
+<span>Cuenta y perfil</span>
+<span>›</span>
+</button>
+<button style="width: 100%; text-align: left; padding: 14px; margin-bottom: 8px; display: flex; justify-content: space-between; font-size: 13px; font-weight: 500;">
+<span>Notificaciones</span>
+<span>›</span>
+</button>
+<button style="width: 100%; text-align: left; padding: 14px; margin-bottom: 8px; display: flex; justify-content: space-between; font-size: 13px; font-weight: 500;">
+<span>Privacidad del feed</span>
+<span>›</span>
+</button>
+<button style="width: 100%; text-align: left; padding: 14px; margin-bottom: 8px; display: flex; justify-content: space-between; font-size: 13px; font-weight: 500;">
+<span>Apariencia</span>
+<span>›</span>
+</button>
+<button style="width: 100%; text-align: left; padding: 14px; margin-bottom: 18px; display: flex; justify-content: space-between; font-size: 13px; font-weight: 500;">
+<span>Soporte técnico</span>
+<span>›</span>
+</button>
+<div style="background: var(--bg-secondary); border-radius: var(--radius-md); padding: 14px;">
+<p style="font-size: 12px; font-weight: 500; margin: 0 0 6px;">Configuración de tu cuenta de juego</p>
+<p style="font-size: 11px; color: var(--text-secondary); margin: 0 0 12px; line-height: 1.5;">auto-exclusión, eliminar cuenta, límites de juego y cualquier consulta sobre tu cuenta de juego se gestionan directamente con el operador desde su plataforma</p>
+<button style="font-size: 12px; padding: 8px 14px; width: 100%;">ir a la plataforma del operador →</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<div style="margin-top: 40px; padding: 20px; text-align: center; color: var(--text-tertiary);">
+<p style="font-size: 12px;">Front Gamificación · Checkpoint visual del jugador</p>
+<p style="font-size: 10px; margin-top: 4px;">generado automáticamente · todas las pantallas validadas en sesión</p>
+</div>
+
+</main>
+
+<script>
+// Sidebar active link on scroll
+const links = document.querySelectorAll('.sidebar-link');
+const sections = document.querySelectorAll('.screen-container, .section-divider');
+window.addEventListener('scroll', () => {
+  let current = '';
+  sections.forEach(section => {
+    const top = section.offsetTop;
+    if (window.scrollY >= top - 100) {
+      current = section.id;
+    }
+  });
+  links.forEach(link => {
+    link.classList.remove('active');
+    if (link.getAttribute('href') === '#' + current) {
+      link.classList.add('active');
+    }
+  });
+});
+</script>
+
+</body>
+</html>
