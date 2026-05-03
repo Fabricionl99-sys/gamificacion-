@@ -6,7 +6,7 @@ export function RecognitionPhase() {
   return (
     <div className="space-y-5 text-center">
       <div>
-        <p className="text-sm font-light italic text-text-secondary">nuevo nivel desbloqueado</p>
+        <p className="text-sm font-light italic text-text-primary">nuevo nivel desbloqueado</p>
         <motion.p
           className="mt-2 text-3xl font-semibold text-text-primary"
           initial={{ scale: 0.8 }}

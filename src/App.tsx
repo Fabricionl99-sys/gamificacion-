@@ -1,11 +1,14 @@
 import { Suspense, lazy } from 'react';
 import { Skeleton } from './components/ui/Skeleton';
 
+const DemoPage = lazy(() => import('./demo/DemoPage'));
 const WidgetContainer = lazy(() =>
   import('./components/layout/WidgetContainer').then((module) => ({ default: module.WidgetContainer })),
 );
 
 export default function App() {
+  const isDemoRoute = window.location.pathname === '/demo';
+
   return (
     <Suspense
       fallback={
@@ -18,7 +21,7 @@ export default function App() {
         </div>
       }
     >
-      <WidgetContainer />
+      {isDemoRoute ? <DemoPage /> : <WidgetContainer />}
     </Suspense>
   );
 }

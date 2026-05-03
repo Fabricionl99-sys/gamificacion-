@@ -1,6 +1,5 @@
 import { forwardRef } from 'react';
 import type { ButtonHTMLAttributes, ReactNode } from 'react';
-import { Loader2 } from 'lucide-react';
 import { cn } from '../../utils/classnames';
 
 export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
@@ -57,7 +56,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       )}
       {...props}
     >
-      {isLoading ? <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" /> : null}
+      {isLoading ? <span className="h-4 w-4 animate-pulse rounded-full bg-current opacity-60" aria-hidden="true" /> : null}
       {!isLoading ? leftIcon : null}
       {children}
       {rightIcon}

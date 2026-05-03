@@ -1,5 +1,6 @@
 import { X } from 'lucide-react';
-import type { ReactNode } from 'react';
+import { useEffect, useRef } from 'react';
+import type { KeyboardEvent, ReactNode } from 'react';
 
 import { Button } from './Button';
 import { cn } from '../../utils/classnames';
@@ -23,22 +24,63 @@ export function Modal({
   className,
   labelledBy = 'modal-title',
 }: ModalProps) {
+  const dialogRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    if (!isOpen) return;
+    const dialog = dialogRef.current;
+    const focusable = getFocusableElements(dialog);
+    const firstElement = focusable[0];
+    firstElement?.focus();
+  }, [isOpen]);
+
   if (!isOpen) {
     return null;
   }
 
+  const handleKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
+    if (event.key === 'Escape') {
+      event.preventDefault();
+      onClose();
+      return;
+    }
+
+    if (event.key !== 'Tab') return;
+
+    const focusable = getFocusableElements(dialogRef.current);
+    if (focusable.length === 0) return;
+
+    const firstElement = focusable[0];
+    const lastElement = focusable[focusable.length - 1];
+    const activeElement = document.activeElement;
+
+    if (event.shiftKey && activeElement === firstElement) {
+      event.preventDefault();
+      lastElement.focus();
+      return;
+    }
+
+    if (!event.shiftKey && activeElement === lastElement) {
+      event.preventDefault();
+      firstElement.focus();
+    }
+  };
+
   return (
     <div
       aria-modal="true"
-      className="fixed inset-0 z-50 flex animate-[fade-in_180ms_ease-out] items-end justify-center bg-[rgba(10,14,19,0.85)] p-4 backdrop-blur-xs md:items-center"
+      className="fixed inset-0 z-50 flex animate-fade-in items-end justify-center bg-bg-overlay p-4 backdrop-blur-xs md:items-center"
       role="dialog"
       aria-labelledby={title ? labelledBy : undefined}
+      onKeyDown={handleKeyDown}
     >
       <div
+        ref={dialogRef}
         className={cn(
-          'card-glass max-h-[90vh] w-full max-w-[420px] animate-[modal-enter_200ms_ease-out] overflow-y-auto rounded-xl p-5 shadow-modal',
+          'card-glass max-h-[90vh] w-full max-w-[420px] animate-modal-enter overflow-y-auto rounded-xl p-5 shadow-modal',
           className,
         )}
+        tabIndex={-1}
       >
         {(title || description) && (
           <div className="mb-5 flex items-start justify-between gap-4">
@@ -58,5 +100,14 @@ export function Modal({
         {children}
       </div>
     </div>
+  );
+}
+
+function getFocusableElements(container: HTMLElement | null): HTMLElement[] {
+  if (!container) return [];
+  return Array.from(
+    container.querySelectorAll<HTMLElement>(
+      'button:not([disabled]), textarea:not([disabled]), input:not([disabled]), select:not([disabled]), a[href], [tabindex]:not([tabindex="-1"])',
+    ),
   );
 }

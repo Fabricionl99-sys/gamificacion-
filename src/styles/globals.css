@@ -21,8 +21,8 @@
     min-height: 100vh;
     margin: 0;
     background:
-      radial-gradient(circle at 20% 0%, rgba(10, 247, 132, 0.08), transparent 28rem),
-      radial-gradient(circle at 90% 10%, rgba(77, 159, 255, 0.08), transparent 24rem),
+      radial-gradient(circle at 20% 0%, var(--accent-subtle), transparent 28rem),
+      radial-gradient(circle at 90% 10%, var(--info-faint), transparent 24rem),
       var(--bg-primary);
     color: var(--text-primary);
     font-family: 'Urbanist', system-ui, sans-serif;
@@ -60,7 +60,7 @@
 
 @layer components {
   .card-glass {
-    background: rgba(30, 37, 47, 0.6);
+    background: var(--glass-surface);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
     border: 1px solid var(--border-default);
@@ -79,7 +79,7 @@
     padding: 1px;
     background: linear-gradient(135deg, var(--accent-primary), transparent 60%);
     border-radius: inherit;
-    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask: linear-gradient(var(--mask-solid) 0 0) content-box, linear-gradient(var(--mask-solid) 0 0);
     -webkit-mask-composite: xor;
     mask-composite: exclude;
     pointer-events: none;
@@ -94,7 +94,7 @@
     content: '';
     position: absolute;
     inset: 0;
-    background: linear-gradient(180deg, transparent, rgba(10, 247, 132, 0.05), transparent);
+    background: linear-gradient(180deg, transparent, var(--accent-scan), transparent);
     animation: scan 4s ease-in-out infinite;
     pointer-events: none;
   }

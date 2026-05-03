@@ -1,4 +1,4 @@
-import { Box, Coins, Shirt, Sparkles, Zap } from 'lucide-react';
+import { Box, Shirt, Sparkles, Zap } from 'lucide-react';
 
 import { mockPlayer, mockShopItems } from '../../mocks';
 import { useModalsStore } from '../../store/modalsStore';
@@ -9,6 +9,7 @@ import { Button } from '../ui/Button';
 import { Card } from '../ui/Card';
 import { EmptyState } from '../ui/EmptyState';
 import { SectionHeader } from '../shared/SectionHeader';
+import { tabEmptyStates } from './emptyStateConfig';
 
 const iconMap = {
   box: Box,
@@ -30,16 +31,16 @@ export default function ShopTab() {
   if (mockShopItems.length === 0) {
     return (
       <EmptyState
-        icon={<Coins />}
-        title="el operador todavia no configuro items"
-        description="cuando haya premios o bonos disponibles los vas a ver aca."
+        icon={tabEmptyStates.shop.icon}
+        title={tabEmptyStates.shop.title}
+        description={tabEmptyStates.shop.description}
       />
     );
   }
 
   return (
     <div className="space-y-4">
-      <Card className="flex items-center justify-between bg-[linear-gradient(135deg,rgba(255,176,32,0.95),rgba(255,215,0,0.72))] text-bg-primary">
+      <Card className="flex items-center justify-between bg-coins text-bg-primary">
         <span className="text-sm font-medium">tu saldo</span>
         <span className="text-xl font-semibold tracking-tight">{formatNumber(mockPlayer.coins)} monedas</span>
       </Card>

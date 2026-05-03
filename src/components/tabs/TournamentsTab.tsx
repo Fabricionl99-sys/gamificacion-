@@ -7,6 +7,7 @@ import { Button } from '../ui/Button';
 import { Tabs } from '../ui/Tabs';
 import { TournamentCard } from '../shared/TournamentCard';
 import { SectionHeader } from '../shared/SectionHeader';
+import { TournamentEmptyState } from './emptyStateCopy';
 
 const filters = [
   { id: 'activos', label: 'activos' },
@@ -24,16 +25,14 @@ export default function TournamentsTab() {
     return (
       <div className="space-y-4">
         <Tabs tabs={filters} activeTab={activeFilter} onChange={setActiveFilter} ariaLabel="Filtros de torneos" />
-        <Card>
-          <p className="text-sm text-text-secondary">no hay torneos disponibles · segui jugando para ganar XP</p>
-        </Card>
+        <TournamentEmptyState />
       </div>
     );
   }
 
   return (
     <div className="space-y-4">
-      <Card variant="neon" className="overflow-hidden bg-[linear-gradient(135deg,rgba(255,176,32,0.18),rgba(10,247,132,0.04))]">
+      <Card variant="neon" className="overflow-hidden bg-[linear-gradient(135deg,var(--accent-subtle),var(--bg-secondary))]">
         <div className="flex items-center gap-3">
           <div className="grid h-12 w-12 place-items-center rounded-lg bg-warning/15 text-warning">
             <Trophy className="h-6 w-6" />

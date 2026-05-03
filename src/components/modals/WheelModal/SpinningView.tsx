@@ -18,7 +18,7 @@ export function SpinningView({ onComplete }: SpinningViewProps) {
       <div className="relative mx-auto h-56 w-56">
         <div className="absolute left-1/2 top-0 z-10 h-0 w-0 -translate-x-1/2 border-x-[12px] border-t-[20px] border-x-transparent border-t-accent" />
         <motion.div
-          className="grid h-full w-full place-items-center rounded-full border border-border-accent bg-[conic-gradient(from_0deg,#1E252F,#242C38,#FFB020,#1E252F,#4D9FFF,#1E252F,#0AF784,#1E252F)] shadow-card"
+          className="grid h-full w-full place-items-center rounded-full border border-border-accent bg-wheel-segments shadow-card"
           animate={{ rotate: 1280 }}
           transition={{ duration: 4, ease: [0.25, 0.1, 0.25, 1] }}
         >

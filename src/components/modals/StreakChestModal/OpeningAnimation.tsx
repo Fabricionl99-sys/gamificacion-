@@ -9,7 +9,7 @@ interface OpeningAnimationProps {
 export function OpeningAnimation({ onCollect }: OpeningAnimationProps) {
   return (
     <div className="space-y-4">
-    <div className="relative grid min-h-[280px] place-items-center overflow-hidden rounded-lg bg-[radial-gradient(circle,rgba(255,176,32,0.24),transparent_60%)]">
+    <div className="relative grid min-h-[280px] place-items-center overflow-hidden rounded-lg bg-[radial-gradient(circle,var(--coins-glow),transparent_60%)]">
       <motion.div
         className="absolute h-28 w-28 rounded-full bg-warning/20 blur-2xl"
         animate={{ scale: [0.8, 1.4, 1], opacity: [0.3, 0.8, 0.4] }}

@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { ShieldCheck, TrendingDown, TrendingUp, Trophy } from 'lucide-react';
 import { Badge } from '../ui/Badge';
 import { Button } from '../ui/Button';
@@ -7,18 +8,34 @@ import { SectionHeader } from '../shared/SectionHeader';
 import { mockRanking } from '../../mocks';
 import { useModalsStore } from '../../store/modalsStore';
 import { formatNumber } from '../../utils/format';
+import { RankingEmptyState } from './emptyStateCopy';
 
 export default function RankingTab() {
   const openModal = useModalsStore((state) => state.openModal);
   const self = mockRanking.find((player) => player.isSelf);
+  const [period, setPeriod] = useState<'week' | 'month'>('week');
+
+  if (mockRanking.length === 0) {
+    return <RankingEmptyState />;
+  }
 
   return (
     <div className="space-y-4">
       <div className="grid grid-cols-2 gap-2 rounded-lg bg-bg-secondary p-1">
-        <Button variant="primary" size="sm">
+        <Button
+          aria-pressed={period === 'week'}
+          onClick={() => setPeriod('week')}
+          variant={period === 'week' ? 'primary' : 'ghost'}
+          size="sm"
+        >
           esta semana
         </Button>
-        <Button variant="ghost" size="sm">
+        <Button
+          aria-pressed={period === 'month'}
+          onClick={() => setPeriod('month')}
+          variant={period === 'month' ? 'primary' : 'ghost'}
+          size="sm"
+        >
           este mes
         </Button>
       </div>
@@ -35,7 +52,10 @@ export default function RankingTab() {
         <div className="grid grid-cols-2 gap-3">
           <div className="rounded-md bg-bg-tertiary p-3">
             <p className="text-xs text-text-tertiary">tu posicion</p>
-            <p className="text-2xl font-semibold">#{self?.position ?? 5}<span className="text-sm text-text-tertiary"> / 50</span></p>
+            <p className="text-2xl font-semibold">
+              #{self?.position ?? 5}
+              <span className="text-sm text-text-tertiary"> / 50</span>
+            </p>
           </div>
           <div className="rounded-md bg-bg-tertiary p-3">
             <p className="text-xs text-text-tertiary">XP semanal</p>

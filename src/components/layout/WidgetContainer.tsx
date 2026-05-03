@@ -78,7 +78,7 @@ export function WidgetContainer() {
   return (
     <div className="min-h-dvh bg-bg-primary text-text-primary md:flex md:items-stretch">
       <DesktopSidebar activeTab={activeTab} onSelect={setActiveTab} />
-      <main className="mx-auto flex min-h-dvh w-full max-w-[460px] flex-col border-x border-border-subtle bg-[radial-gradient(circle_at_top,rgba(10,247,132,0.08),transparent_34%),var(--bg-primary)] md:max-w-none md:flex-1 md:border-x-0">
+      <main className="mx-auto flex min-h-dvh w-full max-w-[460px] flex-col border-x border-border-subtle bg-[radial-gradient(circle_at_top,var(--accent-subtle),transparent_34%),var(--bg-primary)] md:max-w-none md:flex-1 md:border-x-0">
         <div className="sticky top-0 z-30 border-b border-border-subtle bg-bg-primary/85 px-4 pb-3 pt-4 backdrop-blur-xl md:px-6">
           <WidgetHeader />
         </div>

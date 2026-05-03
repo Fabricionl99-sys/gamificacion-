@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import type { TabId } from '../types/navigation';
 
-interface UiState {
+export interface UiState {
   activeTab: TabId;
   activeView: 'widget' | 'own-profile' | 'public-profile' | 'private-profile' | 'settings';
   isMobileMenuExpanded: boolean;

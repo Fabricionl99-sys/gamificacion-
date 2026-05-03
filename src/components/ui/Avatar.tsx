@@ -22,7 +22,7 @@ export function Avatar({ initials, label, size = 'md', locked = false, status, c
     <div
       aria-label={label ?? initials ?? 'avatar'}
       className={cn(
-        'relative inline-flex shrink-0 items-center justify-center rounded-full border border-border-default bg-[radial-gradient(circle_at_30%_20%,rgba(10,247,132,0.22),rgba(77,159,255,0.12)_45%,rgba(30,37,47,0.9))] font-semibold text-text-primary shadow-card',
+        'relative inline-flex shrink-0 items-center justify-center rounded-full border border-border-default bg-[radial-gradient(circle_at_30%_20%,var(--accent-subtle),var(--avatar-blue-glow)_45%,var(--avatar-surface-glow))] font-semibold text-text-primary shadow-card',
         sizeClass[size],
         className,
       )}

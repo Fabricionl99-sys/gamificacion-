@@ -13,7 +13,7 @@ export default function StreakTab() {
 
   return (
     <div className="space-y-4">
-      <Card variant="neon" className="overflow-hidden bg-[linear-gradient(135deg,rgba(255,176,32,0.18),rgba(255,107,53,0.06))]">
+      <Card variant="neon" className="overflow-hidden bg-streak-hero">
         <div className="relative z-10">
           <div className="mb-3 flex items-center gap-2 text-streak">
             <Flame className="h-5 w-5" />
@@ -60,7 +60,7 @@ export default function StreakTab() {
           ['Cofre medio', 'en 18 dias', 'bono neutral + XP'],
           ['Cofre legendario', 'en 88 dias', 'a la distancia'],
         ].map(([title, time, detail], index) => (
-          <Card key={title} className={index === 2 ? 'bg-[linear-gradient(135deg,rgba(255,215,0,0.16),rgba(19,24,31,1))]' : ''}>
+          <Card key={title} className={index === 2 ? 'bg-legendary-chest' : undefined}>
             <div className="flex items-center gap-3">
               <div className="grid h-10 w-10 place-items-center rounded-md bg-bg-tertiary text-warning">
                 {index === 2 ? <Trophy className="h-5 w-5" /> : <Lock className="h-5 w-5" />}

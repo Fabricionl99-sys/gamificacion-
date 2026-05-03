@@ -19,6 +19,7 @@ export default {
           secondary: '#13181F',
           tertiary: '#1E252F',
           elevated: '#242C38',
+          overlay: 'rgba(10, 14, 19, 0.85)',
         },
         accent: {
           DEFAULT: '#0AF784',
@@ -98,8 +99,18 @@ export default {
         scan: 'scan 4s ease-in-out infinite',
         'spin-decel': 'spin-decel 4s cubic-bezier(0.25, 0.1, 0.25, 1) forwards',
         shimmer: 'shimmer 1.8s ease-in-out infinite',
+        'fade-in': 'fade-in 180ms ease-out',
+        'modal-enter': 'modal-enter 200ms ease-out',
       },
       keyframes: {
+        'fade-in': {
+          '0%': { opacity: '0' },
+          '100%': { opacity: '1' },
+        },
+        'modal-enter': {
+          '0%': { opacity: '0', transform: 'translateY(24px) scale(0.98)' },
+          '100%': { opacity: '1', transform: 'translateY(0) scale(1)' },
+        },
         'pulse-glow': {
           '0%, 100%': { boxShadow: '0 0 0 0 rgba(255, 77, 109, 0.4)' },
           '50%': { boxShadow: '0 0 0 8px rgba(255, 77, 109, 0)' },

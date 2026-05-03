@@ -10,7 +10,7 @@ interface PreOpenViewProps {
 export function PreOpenView({ onOpen }: PreOpenViewProps) {
   return (
     <div className="space-y-4 text-center">
-      <Card className="bg-[radial-gradient(circle_at_top,rgba(255,176,32,0.22),var(--bg-secondary))]">
+      <Card className="bg-[radial-gradient(circle_at_top,var(--warning-glow),var(--bg-secondary))]">
         <div className="mx-auto mb-3 flex h-20 w-20 items-center justify-center rounded-lg border border-warning/30 bg-warning/10">
           <Unlock className="h-10 w-10 text-warning" />
         </div>

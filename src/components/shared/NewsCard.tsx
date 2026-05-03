@@ -22,7 +22,7 @@ export function NewsCard({ news }: NewsCardProps) {
 
   return (
     <Card className="space-y-3">
-      <div className="h-24 rounded-md border border-border-subtle bg-[linear-gradient(135deg,rgba(10,247,132,0.08),rgba(77,159,255,0.14))]" />
+      <div className="h-24 rounded-md border border-border-subtle bg-news-banner" />
       <div className="flex items-center gap-2">
         <Badge variant={news.category === 'anuncio' ? 'success' : news.category === 'promo' ? 'danger' : 'neutral'}>
           {categoryLabels[news.category]}

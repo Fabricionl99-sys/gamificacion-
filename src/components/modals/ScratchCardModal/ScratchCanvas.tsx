@@ -14,9 +14,9 @@ export function ScratchCanvas({ onComplete }: ScratchCanvasProps) {
     if (!canvas) return;
     const context = canvas.getContext('2d');
     if (!context) return;
-    context.fillStyle = '#FFB020';
+    context.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--color-coins').trim();
     context.fillRect(0, 0, canvas.width, canvas.height);
-    context.fillStyle = '#0A0E13';
+    context.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--bg-primary').trim();
     context.font = '600 18px Urbanist';
     context.textAlign = 'center';
     context.fillText('RASCAR', canvas.width / 2, canvas.height / 2 + 6);

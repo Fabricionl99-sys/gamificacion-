@@ -9,6 +9,17 @@
   --accent-active: #06B85F;
   --accent-glow: rgba(10, 247, 132, 0.3);
   --accent-subtle: rgba(10, 247, 132, 0.08);
+  --info-subtle: rgba(77, 159, 255, 0.14);
+  --color-info-soft: rgba(77, 159, 255, 0.18);
+  --warning-glow: rgba(255, 176, 32, 0.22);
+  --coins-glow: rgba(255, 176, 32, 0.24);
+  --avatar-blue-glow: rgba(77, 159, 255, 0.12);
+  --avatar-surface-glow: rgba(30, 37, 47, 0.9);
+  --app-accent-wash: rgba(10, 247, 132, 0.08);
+  --app-info-wash: rgba(77, 159, 255, 0.08);
+  --glass-surface: rgba(30, 37, 47, 0.6);
+  --scan-accent: rgba(10, 247, 132, 0.05);
+  --mask-white: #FFFFFF;
   --accent-text: #0A0E13;
   --text-primary: #FFFFFF;
   --text-secondary: #A0A8B5;

@@ -8,6 +8,7 @@ import { Button } from '../ui/Button';
 import { Card } from '../ui/Card';
 import { Tabs } from '../ui/Tabs';
 import PostCard from '../shared/PostCard';
+import { FollowingFeedEmptyState } from './emptyStateCopy';
 
 export default function FeedTab() {
   const openModal = useModalsStore((state) => state.openModal);
@@ -44,11 +45,15 @@ export default function FeedTab() {
           </Button>
         </div>
       </Card>
-      <div className="space-y-3">
-        {mockPosts.map((post) => (
-          <PostCard key={post.id} post={post} />
-        ))}
-      </div>
+      {mockPosts.length > 0 ? (
+        <div className="space-y-3">
+          {mockPosts.map((post) => (
+            <PostCard key={post.id} post={post} />
+          ))}
+        </div>
+      ) : (
+        <FollowingFeedEmptyState />
+      )}
     </div>
   );
 }

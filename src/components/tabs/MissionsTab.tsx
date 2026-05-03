@@ -1,9 +1,10 @@
-import { ChevronDown, ShieldCheck } from 'lucide-react';
+import { ChevronDown } from 'lucide-react';
 import { Card } from '../ui/Card';
 import { Badge } from '../ui/Badge';
 import { EmptyState } from '../ui/EmptyState';
 import { MissionCard } from '../shared/MissionCard';
 import { mockMissions } from '../../mocks';
+import { tabEmptyStates } from './emptyStateConfig';
 
 const filters = ['todas', 'deportes', 'slots', 'predicciones', 'social'];
 const groups = [
@@ -21,7 +22,7 @@ export default function MissionsTab() {
 
   return (
     <div className="space-y-4">
-      <Card className="bg-[linear-gradient(135deg,rgba(77,159,255,0.18),rgba(10,247,132,0.08))]">
+      <Card className="bg-[linear-gradient(135deg,var(--color-info-soft),var(--accent-subtle))]">
         <p className="text-xs uppercase tracking-wide text-text-secondary">progreso de hoy</p>
         <p className="mt-1 text-lg font-semibold text-text-primary">
           {completedToday} de 5 completadas · +{earnedXP} XP ganado
@@ -38,9 +39,9 @@ export default function MissionsTab() {
 
       {mockMissions.length === 0 ? (
         <EmptyState
-          icon={<ShieldCheck className="h-8 w-8" />}
-          title="sin misiones por ahora"
-          description="vamos a avisarte cuando haya nuevas"
+          icon={tabEmptyStates.missions.icon}
+          title={tabEmptyStates.missions.title}
+          description={tabEmptyStates.missions.description}
         />
       ) : (
         groups.map((group) => {

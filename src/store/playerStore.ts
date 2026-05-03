@@ -6,6 +6,7 @@ import type { Player } from '../types/player';
 interface PlayerStore {
   player: Player;
   claimPrize: () => void;
+  resetPlayer: () => void;
 }
 
 export const usePlayerStore = create<PlayerStore>((set) => ({
@@ -17,4 +18,5 @@ export const usePlayerStore = create<PlayerStore>((set) => ({
         pendingPrizes: Math.max(0, state.player.pendingPrizes - 1),
       },
     })),
+  resetPlayer: () => set({ player: mockPlayer }),
 }));
