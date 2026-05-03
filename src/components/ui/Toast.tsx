@@ -1,4 +1,3 @@
-import { motion } from 'framer-motion';
 import { AlertCircle, CheckCircle2, Info } from 'lucide-react';
 import { useToast } from '../../hooks/useToast';
 import { cn } from '../../utils/classnames';
@@ -26,14 +25,11 @@ export function Toast({ message, tone = 'info', actionLabel, onAction }: ToastPr
   const Icon = toneIcons[tone];
 
   return (
-    <motion.div
+    <div
       role="status"
       aria-live="polite"
-      initial={{ opacity: 0, y: 16 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: 16 }}
       className={cn(
-        'fixed bottom-4 left-4 right-4 z-50 mx-auto flex max-w-sm items-center gap-3 rounded-lg border bg-bg-elevated/95 p-4 text-sm text-text-primary shadow-modal backdrop-blur-xl',
+        'fixed bottom-4 left-4 right-4 z-50 mx-auto flex max-w-sm animate-[fade-in_200ms_ease-out] items-center gap-3 rounded-lg border bg-bg-elevated/95 p-4 text-sm text-text-primary shadow-modal backdrop-blur-xl',
         toneStyles[tone],
       )}
     >
@@ -44,7 +40,7 @@ export function Toast({ message, tone = 'info', actionLabel, onAction }: ToastPr
           {actionLabel}
         </button>
       ) : null}
-    </motion.div>
+    </div>
   );
 }
 

@@ -1,5 +1,4 @@
 import { Suspense, lazy, type LazyExoticComponent, type ReactElement } from 'react';
-import { AnimatePresence, motion } from 'framer-motion';
 import { Skeleton } from '../ui/Skeleton';
 import { ToastViewport } from '../ui/Toast';
 import { DesktopSidebar } from './DesktopSidebar';
@@ -66,18 +65,9 @@ function MainView() {
   return (
     <>
       <TabNavigation />
-      <AnimatePresence mode="wait">
-        <motion.div
-          key={activeTab}
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -8 }}
-          transition={{ duration: 0.18, ease: 'easeOut' }}
-          className="pt-4 md:pt-0"
-        >
-          <ActiveTab />
-        </motion.div>
-      </AnimatePresence>
+      <div key={activeTab} className="animate-[tab-enter_180ms_ease-out] pt-4 md:pt-0">
+        <ActiveTab />
+      </div>
     </>
   );
 }

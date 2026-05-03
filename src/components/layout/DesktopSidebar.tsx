@@ -1,5 +1,3 @@
-import { motion } from 'framer-motion';
-
 import type { TabId } from '../../types/navigation';
 import { cn } from '../../utils/classnames';
 import { tabs, getTabIcon } from './navigation';
@@ -23,13 +21,12 @@ export function DesktopSidebar({ activeTab, onSelect }: DesktopSidebarProps) {
             const isActive = activeTab === tab.id;
 
             return (
-              <motion.button
+              <button
                 key={tab.id}
                 type="button"
-                whileHover={{ x: 2 }}
                 onClick={() => onSelect(tab.id)}
                 className={cn(
-                  'flex w-full items-center gap-3 rounded-md border-l-2 px-3 py-3 text-left text-sm font-medium transition-colors',
+                  'flex w-full items-center gap-3 rounded-md border-l-2 px-3 py-3 text-left text-sm font-medium transition duration-200 hover:translate-x-0.5',
                   isActive
                     ? 'border-accent bg-accent/10 text-text-primary'
                     : 'border-transparent text-text-secondary hover:bg-bg-tertiary hover:text-text-primary',
@@ -38,7 +35,7 @@ export function DesktopSidebar({ activeTab, onSelect }: DesktopSidebarProps) {
               >
                 <Icon className={cn('h-4 w-4', isActive ? 'text-accent' : 'text-text-tertiary')} />
                 {tab.label}
-              </motion.button>
+              </button>
             );
           })}
         </nav>
