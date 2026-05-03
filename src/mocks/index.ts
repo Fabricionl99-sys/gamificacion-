@@ -1,0 +1,295 @@
+import { addDays, subHours } from 'date-fns';
+import type { Mission } from '../types/mission';
+import type { Player, PublicPlayer } from '../types/player';
+import type { ShopItem } from '../types/reward';
+import type { AppNotification, FeedPost, NewsItem, ProfilePrize } from '../types/social';
+import type { Tournament } from '../types/tournament';
+
+const now = new Date();
+
+export const mockPlayer: Player = {
+  id: 'player-001',
+  name: 'Juan Martinez',
+  username: 'juanm',
+  avatar: 'JM',
+  level: 20,
+  currentXP: 2840,
+  nextLevelXP: 4000,
+  streak: 12,
+  bestStreak: 21,
+  coins: 2150,
+  vipTier: 'gold',
+  bio: 'Tipster amateur, fanatico de las ligas europeas.',
+  pendingPrizes: 3,
+  unreadNotifications: 5,
+  followers: 184,
+  following: 72,
+  isPrivate: false,
+};
+
+export const mockMissions: Mission[] = [
+  {
+    id: 'mission-001',
+    title: 'Hace 3 apuestas en deportes',
+    description: 'Completa tres tickets deportivos para sumar XP hoy.',
+    category: 'deportes',
+    group: 'daily',
+    progress: 2,
+    target: 3,
+    rewardXP: 50,
+    rewardCoins: 20,
+    expiresAt: addDays(now, 1).toISOString(),
+    status: 'pending',
+  },
+  {
+    id: 'mission-002',
+    title: 'Juga 30 minutos en slots',
+    description: 'Mantene actividad en slots sin importar el resultado.',
+    category: 'slots',
+    group: 'daily',
+    progress: 30,
+    target: 30,
+    rewardXP: 30,
+    rewardCoins: 15,
+    expiresAt: addDays(now, 1).toISOString(),
+    status: 'completed',
+  },
+  {
+    id: 'mission-003',
+    title: 'Publica una fija responsable',
+    description: 'Compartila sin montos y suma interaccion social.',
+    category: 'social',
+    group: 'weekly',
+    progress: 0,
+    target: 1,
+    rewardXP: 80,
+    expiresAt: addDays(now, 4).toISOString(),
+    status: 'pending',
+  },
+  {
+    id: 'mission-004',
+    title: 'Predice el clasico del domingo',
+    description: 'Evento especial con XP adicional del operador.',
+    category: 'predicciones',
+    group: 'event',
+    progress: 1,
+    target: 1,
+    rewardXP: 120,
+    rewardCoins: 60,
+    expiresAt: addDays(now, 2).toISOString(),
+    status: 'completed',
+  },
+  {
+    id: 'mission-005',
+    title: 'Mision VIP Plata',
+    description: 'Disponible al alcanzar VIP plata.',
+    category: 'casino',
+    group: 'locked',
+    progress: 0,
+    target: 1,
+    rewardXP: 200,
+    status: 'locked',
+    lockReason: 'requiere VIP plata',
+  },
+];
+
+export const mockShopItems: ShopItem[] = [
+  {
+    id: 'shop-001',
+    name: 'Caja misteriosa premium',
+    description: 'Puede contener XP, monedas o bonos del operador.',
+    category: 'gamification',
+    cost: 450,
+    stockLabel: 'ilimitado',
+    icon: 'box',
+    featured: true,
+  },
+  {
+    id: 'shop-002',
+    name: '25 free spins',
+    description: 'Validos en slots seleccionados por el operador.',
+    category: 'operatorBonus',
+    cost: 1200,
+    stockLabel: 'quedan 18',
+    icon: 'sparkles',
+    featured: true,
+  },
+  {
+    id: 'shop-003',
+    name: 'Multiplicador XP x2',
+    description: 'Activalo durante una hora de juego.',
+    category: 'gamification',
+    cost: 800,
+    stockLabel: 'termina en 6h',
+    icon: 'zap',
+  },
+  {
+    id: 'shop-004',
+    name: 'Hoodie edicion liga oro',
+    description: 'Producto fisico para jugadores VIP.',
+    category: 'physical',
+    cost: 3600,
+    stockLabel: 'solo VIP+',
+    icon: 'shirt',
+    disabledReason: 'saldo insuficiente',
+  },
+];
+
+export const mockRanking: PublicPlayer[] = [
+  { id: 'rank-001', name: 'Sofia R.', username: 'sofiwins', avatar: 'SR', level: 31, vipTier: 'diamond', weeklyXP: 9820, position: 1 },
+  { id: 'rank-002', name: 'Max Power', username: 'maxp', avatar: 'MP', level: 28, vipTier: 'gold', weeklyXP: 8740, position: 2 },
+  { id: 'rank-003', name: 'Anonimo', username: 'anon-314', avatar: '??', level: 24, vipTier: 'silver', weeklyXP: 7120, position: 3, isAnonymous: true },
+  { id: 'rank-004', name: 'Lau Data', username: 'laudata', avatar: 'LD', level: 22, vipTier: 'bronze', weeklyXP: 6900, position: 4 },
+  { id: 'rank-005', name: 'Juan Martinez', username: 'juanm', avatar: 'JM', level: 20, vipTier: 'gold', weeklyXP: 6420, position: 5, isSelf: true },
+  { id: 'rank-019', name: 'Nico Norte', username: 'nicon', avatar: 'NN', level: 18, vipTier: 'none', weeklyXP: 3440, position: 19 },
+];
+
+export const mockTournaments: Tournament[] = [
+  {
+    id: 'tour-001',
+    name: 'Liga Champions Weekend',
+    description: 'Competi por XP durante los partidos del fin de semana.',
+    status: 'live',
+    endsIn: '2 dias',
+    participants: 842,
+    capacity: 1000,
+    prizePool: '$8,000',
+    myPosition: 37,
+    xp: 1840,
+  },
+  {
+    id: 'tour-002',
+    name: 'Sprint Slots Nocturno',
+    description: 'Inscripciones abiertas para una ventana competitiva corta.',
+    status: 'open',
+    startsIn: 'manana',
+    participants: 421,
+    capacity: 500,
+    prizePool: '$3,500',
+  },
+  {
+    id: 'tour-003',
+    name: 'Mesa Alta VIP',
+    description: 'Evento reservado para jugadores plata o superior.',
+    status: 'vip',
+    startsIn: '4 dias',
+    participants: 88,
+    capacity: 120,
+    prizePool: '$12,000',
+    vipRequired: 'plata',
+  },
+];
+
+export const mockPosts: FeedPost[] = [
+  {
+    id: 'post-001',
+    authorName: 'Max Power',
+    authorAvatar: 'MP',
+    vipTier: 'gold',
+    level: 28,
+    body: 'Me gusta el over en el partido de hoy. Sin montos, solo lectura del momentum.',
+    createdAt: subHours(now, 2).toISOString(),
+    likes: 42,
+    comments: 8,
+    sharedPick: {
+      teams: 'River vs Palmeiras',
+      prediction: 'Over 2.5 goles',
+      odds: 1.86,
+      status: 'pendiente',
+    },
+  },
+  {
+    id: 'post-002',
+    authorName: 'Sofia R.',
+    authorAvatar: 'SR',
+    vipTier: 'diamond',
+    level: 31,
+    body: 'Prediccion acertada y racha extendida. La paciencia pago.',
+    createdAt: subHours(now, 5).toISOString(),
+    likes: 128,
+    comments: 19,
+    accuratePrediction: {
+      detail: 'Marcador exacto Napoli 2-1',
+      xp: 220,
+    },
+  },
+];
+
+export const mockNews: NewsItem[] = [
+  {
+    id: 'news-001',
+    category: 'promo',
+    title: 'Free spins para liga oro',
+    body: 'Reclama el pack semanal antes del cierre del domingo.',
+    createdAt: subHours(now, 3).toISOString(),
+    expiresAt: addDays(now, 2).toISOString(),
+    ctaLabel: 'ver promo',
+  },
+  {
+    id: 'news-002',
+    category: 'sistema',
+    title: 'Mejoras en ranking semanal',
+    body: 'Ahora las zonas de ascenso y descenso se actualizan en tiempo real.',
+    createdAt: subHours(now, 18).toISOString(),
+  },
+  {
+    id: 'news-003',
+    category: 'evento',
+    title: 'Torneo relampago este viernes',
+    body: 'Cupos limitados y premios para el top 20.',
+    createdAt: addDays(now, -2).toISOString(),
+    ctaLabel: 'inscribirme',
+  },
+];
+
+export const mockNotifications: AppNotification[] = [
+  {
+    id: 'notif-001',
+    title: 'Premio pendiente',
+    detail: 'Tu caja misteriosa vence pronto.',
+    createdAt: subHours(now, 1).toISOString(),
+    read: false,
+    kind: 'reward',
+  },
+  {
+    id: 'notif-002',
+    title: 'Subiste al top 5',
+    detail: 'Estas en zona de ascenso de liga oro.',
+    createdAt: subHours(now, 4).toISOString(),
+    read: false,
+    kind: 'tournament',
+  },
+  {
+    id: 'notif-003',
+    title: 'Sofia R. comento tu post',
+    detail: 'Buen analisis del partido.',
+    createdAt: subHours(now, 27).toISOString(),
+    read: true,
+    kind: 'social',
+  },
+];
+
+export const mockPendingPrizes: ProfilePrize[] = [
+  {
+    id: 'prize-001',
+    kind: 'mysteryBox',
+    label: 'Caja misteriosa premium',
+    value: 1,
+    expiresAt: addDays(now, 1).toISOString(),
+    urgent: true,
+  },
+  {
+    id: 'prize-002',
+    kind: 'freeSpin',
+    label: '25 free spins',
+    value: 25,
+    expiresAt: addDays(now, 3).toISOString(),
+  },
+  {
+    id: 'prize-003',
+    kind: 'coins',
+    label: 'Bono de 300 monedas',
+    value: 300,
+    expiresAt: addDays(now, 5).toISOString(),
+  },
+];
