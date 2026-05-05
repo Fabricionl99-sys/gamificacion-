@@ -104,3 +104,5 @@ npm test
 ```
 
 6. Si se toca UI shared o store, actualizar tests y revisar coverage.
+
+<!-- deploy-refresh: widget-alignment-2026-05-05 -->
