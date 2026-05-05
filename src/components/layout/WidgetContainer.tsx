@@ -1,6 +1,7 @@
 import { Suspense, lazy, type LazyExoticComponent, type ReactElement } from 'react';
 import { Skeleton } from '../ui/Skeleton';
 import { ToastViewport } from '../ui/Toast';
+import { BoostToastTrigger } from '../boost/BoostToast';
 import { DesktopSidebar } from './DesktopSidebar';
 import { TabNavigation } from './TabNavigation';
 import { WidgetHeader } from './WidgetHeader';
@@ -101,6 +102,7 @@ export function WidgetContainer() {
             <StreakChestModal />
             <ScratchCardModal />
             <LevelUpModal />
+            <BoostToastTrigger />
           </Suspense>
         </section>
       </main>

@@ -5,6 +5,7 @@ import { Badge } from '../ui/Badge';
 import { EmptyState } from '../ui/EmptyState';
 import { MissionCard } from '../shared/MissionCard';
 import { getMissions } from '../../api/missions';
+import { useActiveBoosts } from '../../hooks/useActiveBoosts';
 import { useAsyncData } from '../../hooks/useAsyncData';
 import { tabEmptyStates } from './emptyStateConfig';
 
@@ -18,6 +19,7 @@ const groups = [
 
 export default function MissionsTab() {
   const { data: missions = [], isLoading, error } = useAsyncData<Mission[]>(getMissions, []);
+  const { boosts } = useActiveBoosts();
   const completedToday = missions.filter((mission) => mission.status === 'completed').length;
   const earnedXP = missions
     .filter((mission) => mission.status === 'completed')
@@ -64,7 +66,7 @@ export default function MissionsTab() {
               </button>
               <div className="space-y-2">
                 {groupMissions.map((mission) => (
-                  <MissionCard key={mission.id} mission={mission} />
+                  <MissionCard key={mission.id} mission={mission} boosts={boosts} />
                 ))}
               </div>
             </section>

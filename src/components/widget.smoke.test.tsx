@@ -20,6 +20,7 @@ describe('widget smoke', () => {
     const user = userEvent.setup();
     renderWithRouter(<App />);
     await screen.findByLabelText('Estado del jugador');
+    expect(await screen.findByText(/x3 activo/i)).toBeInTheDocument();
 
     const moreButton = screen.queryByRole('button', { name: /\+4/i });
     if (moreButton) {
@@ -61,6 +62,7 @@ describe('widget smoke', () => {
 
     act(() => useUiStore.getState().setActiveTab('missions'));
     expect((await screen.findAllByRole('button', { name: /reclamar/i })).length).toBeGreaterThan(0);
+    expect(await screen.findAllByText(/\+100 con x2 activo/i)).toHaveLength(1);
 
     act(() => useUiStore.getState().setActiveTab('shop'));
     expect(await screen.findByRole('button', { name: /agotado/i })).toBeDisabled();

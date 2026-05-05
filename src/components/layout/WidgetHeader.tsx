@@ -3,6 +3,7 @@ import { Avatar } from '../ui/Avatar';
 import { Button } from '../ui/Button';
 import { Pill } from '../ui/Pill';
 import { ProgressBar } from '../ui/ProgressBar';
+import { BoostBadge } from '../boost/BoostBadge';
 import { usePlayer } from '../../hooks/usePlayer';
 import { useModalsStore } from '../../store/modalsStore';
 import { useUiStore } from '../../store/uiStore';
@@ -37,6 +38,7 @@ export function WidgetHeader() {
             </span>
           </div>
           <ProgressBar value={xpProgress} ariaLabel="Progreso de XP al siguiente nivel" />
+          <BoostBadge />
         </button>
 
         <div className="hidden shrink-0 items-center gap-2 xs:flex">

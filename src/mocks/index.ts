@@ -4,6 +4,7 @@ import type { Player, PublicPlayer } from '../types/player';
 import type { ShopItem } from '../types/reward';
 import type { AppNotification, FeedPost, NewsItem, ProfilePrize } from '../types/social';
 import type { Tournament } from '../types/tournament';
+import type { XPBoost } from '../types/boost';
 
 const now = new Date();
 
@@ -30,6 +31,7 @@ export const mockPlayer: Player = {
 export const mockMissions: Mission[] = [
   {
     id: 'mission-001',
+    ruleId: 'rule_sports_win',
     title: 'Hace 3 apuestas en deportes',
     description: 'Completa tres tickets deportivos para sumar XP hoy.',
     category: 'deportes',
@@ -43,6 +45,7 @@ export const mockMissions: Mission[] = [
   },
   {
     id: 'mission-002',
+    ruleId: 'rule_slots_bet',
     title: 'Juga 30 minutos en slots',
     description: 'Mantene actividad en slots sin importar el resultado.',
     category: 'slots',
@@ -56,6 +59,7 @@ export const mockMissions: Mission[] = [
   },
   {
     id: 'mission-003',
+    ruleId: 'rule_feed_share',
     title: 'Publica una fija responsable',
     description: 'Compartila sin montos y suma interaccion social.',
     category: 'social',
@@ -68,6 +72,7 @@ export const mockMissions: Mission[] = [
   },
   {
     id: 'mission-004',
+    ruleId: 'rule_predictions_event',
     title: 'Predice el clasico del domingo',
     description: 'Evento especial con XP adicional del operador.',
     category: 'predicciones',
@@ -81,6 +86,7 @@ export const mockMissions: Mission[] = [
   },
   {
     id: 'mission-005',
+    ruleId: 'rule_casino_vip',
     title: 'Mision VIP Plata',
     description: 'Disponible al alcanzar VIP plata.',
     category: 'casino',
@@ -90,6 +96,25 @@ export const mockMissions: Mission[] = [
     rewardXP: 200,
     status: 'locked',
     lockReason: 'requiere VIP plata',
+  },
+];
+
+export const mockActiveBoosts: XPBoost[] = [
+  {
+    enabled: true,
+    multiplier: 2,
+    starts_at: addDays(now, -1).toISOString(),
+    ends_at: addDays(now, 2).toISOString(),
+    rule_id: 'rule_sports_win',
+    rule_name: 'Apuesta deportiva ganadora',
+  },
+  {
+    enabled: true,
+    multiplier: 3,
+    starts_at: addDays(now, -0.2).toISOString(),
+    ends_at: addDays(now, 1).toISOString(),
+    rule_id: 'rule_slots_bet',
+    rule_name: 'Apuesta en slots',
   },
 ];
 
@@ -289,6 +314,22 @@ export const mockNotifications: AppNotification[] = [
     createdAt: subHours(now, 27).toISOString(),
     read: true,
     kind: 'social',
+  },
+  {
+    id: 'notif-boost-start',
+    title: '🚀 ¡XP x2 activado!',
+    detail: 'vence en 2 días',
+    createdAt: subHours(now, 1).toISOString(),
+    read: false,
+    kind: 'system_event',
+  },
+  {
+    id: 'notif-boost-end',
+    title: 'Se terminó el x2',
+    detail: 'tu XP volvió al ritmo normal · ¡seguí ganando!',
+    createdAt: subHours(now, 30).toISOString(),
+    read: true,
+    kind: 'system_event',
   },
 ];
 

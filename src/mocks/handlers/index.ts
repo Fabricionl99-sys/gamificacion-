@@ -9,6 +9,7 @@ import {
   mockRanking,
   mockShopItems,
   mockTournaments,
+  mockActiveBoosts,
 } from '../index';
 
 const wait = () => delay(180 + Math.random() * 320);
@@ -49,5 +50,9 @@ export const handlers = [
   http.get('*/player/notifications', async () => {
     await wait();
     return HttpResponse.json(mockNotifications);
+  }),
+  http.get('*/player/active-boosts', async () => {
+    await wait();
+    return HttpResponse.json(mockActiveBoosts);
   }),
 ];
