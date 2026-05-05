@@ -49,9 +49,9 @@ export const mockMissions: Mission[] = [
   {
     id: 'mission-002',
     ruleId: 'rule_slots_bet',
-    title: 'Juga 30 minutos en slots',
-    description: 'Mantene actividad en slots sin importar el resultado.',
-    category: 'slots',
+    title: 'Juga 30 minutos en casino',
+    description: 'Mantené actividad en slots, bingo, crash o RNG sin importar el resultado.',
+    category: 'casino',
     group: 'daily',
     progress: 30,
     target: 30,
@@ -105,19 +105,27 @@ export const mockMissions: Mission[] = [
 export const mockActiveBoosts: XPBoost[] = [
   {
     enabled: true,
+    id: 'boost_sports_weekend',
+    name: 'Doble XP deportes',
     multiplier: 2,
     starts_at: addDays(now, -1).toISOString(),
     ends_at: addDays(now, 2).toISOString(),
+    scope: 'category',
+    category_code: 'deportes',
     rule_id: 'rule_sports_win',
     rule_name: 'Apuesta deportiva ganadora',
   },
   {
+    id: 'boost_all_week',
+    name: 'Semana XP x1.5',
     enabled: true,
-    multiplier: 3,
+    multiplier: 1.5,
     starts_at: addDays(now, -0.2).toISOString(),
     ends_at: addDays(now, 1).toISOString(),
+    scope: 'all',
+    category_code: undefined,
     rule_id: 'rule_slots_bet',
-    rule_name: 'Apuesta en slots',
+    rule_name: 'Apuesta en casino',
   },
 ];
 
