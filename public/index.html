@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <meta name="color-scheme" content="dark" />
     <title>WINGOAT · Widget jugador demo</title>
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -29,6 +30,10 @@
   </head>
   <body>
     <div id="root"></div>
+    <script>
+      window.process = window.process || { env: { NODE_ENV: 'production' } };
+      window.process.env = window.process.env || { NODE_ENV: 'production' };
+    </script>
     <script src="/gamification-widget.iife.js"></script>
   </body>
 </html>
