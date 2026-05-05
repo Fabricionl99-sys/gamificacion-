@@ -39,6 +39,7 @@ describe('key tab interactions', () => {
     await userEvent.click((await screen.findAllByRole('button', { name: /reclamar/i }))[0]);
     expect(screen.getAllByText(/completada/i).length).toBeGreaterThan(0);
     expect(await screen.findByText(/\+100 con x2 activo/i)).toBeInTheDocument();
+    expect(screen.getAllByText(/casino/i).length).toBeGreaterThan(0);
   });
 
   it('renders achievement grid and detail modal', async () => {

@@ -9,7 +9,7 @@ import { useActiveBoosts } from '../../hooks/useActiveBoosts';
 import { useAsyncData } from '../../hooks/useAsyncData';
 import { tabEmptyStates } from './emptyStateConfig';
 
-const filters = ['todas', 'deportes', 'slots', 'predicciones', 'social'];
+const filters = ['todas', 'deportes', 'casino', 'casino_vivo', 'virtuales', 'poker', 'predicciones', 'social'];
 const groups = [
   { id: 'daily', label: 'Diarias' },
   { id: 'weekly', label: 'Semanales' },

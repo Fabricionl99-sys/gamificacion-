@@ -1,4 +1,6 @@
-export type MissionCategory = 'deportes' | 'slots' | 'predicciones' | 'social' | 'casino';
+import type { GameCategory } from './category';
+
+export type MissionCategory = GameCategory | 'predicciones' | 'social';
 
 export type MissionStatus = 'pending' | 'completed' | 'claimed' | 'expired' | 'locked';
 

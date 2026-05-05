@@ -20,7 +20,7 @@ describe('widget smoke', () => {
     const user = userEvent.setup();
     renderWithRouter(<App />);
     await screen.findByLabelText('Estado del jugador');
-    expect(await screen.findByText(/x3 activo/i)).toBeInTheDocument();
+    expect(await screen.findByText(/x2 activo/i)).toBeInTheDocument();
 
     const moreButton = screen.queryByRole('button', { name: /\+5/i });
     if (moreButton) {
