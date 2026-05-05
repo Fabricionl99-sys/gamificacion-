@@ -69,8 +69,8 @@ describe('widget smoke', () => {
     expect(screen.getAllByText(/quedan 8 unidades/i).length).toBeGreaterThan(0);
 
     act(() => useUiStore.getState().setActiveTab('ranking'));
-    expect(await screen.findByRole('button', { name: /esta semana/i })).toBeInTheDocument();
-    await user.click(screen.getByRole('button', { name: /este mes/i }));
-    expect(screen.getByRole('button', { name: /este mes/i })).toBeInTheDocument();
+    expect(await screen.findByText(/competí con otros jugadores/i)).toBeInTheDocument();
+    await user.click(screen.getAllByRole('button', { name: /Ver leaderboard completo/i })[0]);
+    expect(await screen.findByRole('dialog', { name: /Mejores en XP/i })).toBeInTheDocument();
   });
 });

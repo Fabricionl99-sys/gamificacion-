@@ -2,6 +2,7 @@ import { addDays, subHours } from 'date-fns';
 import type { Achievement } from '../types/achievement';
 import type { Mission } from '../types/mission';
 import type { Player, PublicPlayer } from '../types/player';
+import type { LeaderboardFull, LeaderboardEntry, PlayerRankingSummary } from '../types/ranking';
 import type { PredictionEvent, PredictionMarketDefinition } from '../types/prediction';
 import type { ShopItem } from '../types/reward';
 import type { AppNotification, FeedPost, NewsItem, ProfilePrize } from '../types/social';
@@ -237,6 +238,99 @@ export const mockRanking: PublicPlayer[] = [
   { id: 'rank-005', name: 'Juan Martinez', username: 'juanm', avatar: 'JM', level: 20, vipTier: 'gold', weeklyXP: 6420, position: 5, isSelf: true },
   { id: 'rank-019', name: 'Nico Norte', username: 'nicon', avatar: 'NN', level: 18, vipTier: 'none', weeklyXP: 3440, position: 19 },
 ];
+
+const leaderboardEntries = (base: number): LeaderboardEntry[] =>
+  Array.from({ length: 20 }, (_, index) => ({
+    position: index + 1,
+    handle: ['tigre_loco_82', 'maria_apuestas', 'sofiwins', 'crypto_king_88', 'juanm'][index % 5] + (index > 4 ? `_${index}` : ''),
+    avatar: ['TL', 'MA', 'SW', 'CK', 'JM'][index % 5],
+    metric_value: base - index * 8420,
+    verified: index % 4 === 0,
+    vip_tier: index < 2 ? 'diamond' : index < 7 ? 'gold' : index < 14 ? 'silver' : 'bronze',
+    prize: index === 0 ? 100000 : index < 3 ? 50000 : index < 10 ? 10000 : index < 20 ? 5000 : undefined,
+    is_self: index === 11,
+  }));
+
+export const mockPlayerRankings: PlayerRankingSummary[] = [
+  {
+    ranking_id: 'best_xp',
+    ranking_name: 'Mejores en XP',
+    ranking_icon: '⭐',
+    active: true,
+    display_order: 1,
+    player_position: 12,
+    player_metric_value: 6420,
+    player_change: 3,
+    player_potential_prize: 5000,
+    total_participants: 13064,
+    closes_at: addDays(now, 20).toISOString(),
+    window: 'monthly',
+    metric_label: 'XP del mes',
+    top_5: leaderboardEntries(1847220).slice(0, 5),
+  },
+  {
+    ranking_id: 'best_casino',
+    ranking_name: 'Mejores en Casino',
+    ranking_icon: '🎰',
+    active: true,
+    display_order: 2,
+    player_position: 38,
+    player_metric_value: 420000,
+    player_change: -1,
+    player_potential_prize: 0,
+    total_participants: 8742,
+    closes_at: addDays(now, 20).toISOString(),
+    window: 'monthly',
+    metric_label: 'monto apostado',
+    top_5: leaderboardEntries(920000).slice(0, 5),
+  },
+  {
+    ranking_id: 'best_sports',
+    ranking_name: 'Mejores en Deportes',
+    ranking_icon: '⚽',
+    active: true,
+    display_order: 3,
+    player_position: 8,
+    player_metric_value: 310000,
+    player_change: 0,
+    player_potential_prize: 10000,
+    total_participants: 4312,
+    closes_at: addDays(now, 6).toISOString(),
+    window: 'weekly',
+    metric_label: 'monto apostado',
+    top_5: leaderboardEntries(680000).slice(0, 5),
+  },
+  {
+    ranking_id: 'best_depositors',
+    ranking_name: 'Mejores depositadores',
+    ranking_icon: '💳',
+    active: true,
+    display_order: 4,
+    player_position: 104,
+    player_metric_value: 120000,
+    player_change: 4,
+    player_potential_prize: 0,
+    total_participants: 2401,
+    closes_at: addDays(now, 20).toISOString(),
+    window: 'monthly',
+    metric_label: 'depósitos',
+    top_5: leaderboardEntries(510000).slice(0, 5),
+  },
+];
+
+export const mockLeaderboards: Record<string, LeaderboardFull> = Object.fromEntries(
+  mockPlayerRankings.map((ranking) => [
+    ranking.ranking_id,
+    {
+      ranking_id: ranking.ranking_id,
+      entries: leaderboardEntries(ranking.player_metric_value * 12).map((entry) =>
+        entry.position === 12 ? { ...entry, handle: mockPlayer.username, avatar: mockPlayer.avatar, is_self: true } : entry,
+      ),
+      player_position: ranking.player_position,
+      closes_at: ranking.closes_at,
+    },
+  ]),
+) as Record<string, LeaderboardFull>;
 
 export const mockTournaments: Tournament[] = [
   {

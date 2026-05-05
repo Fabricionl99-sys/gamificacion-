@@ -72,8 +72,8 @@ export default function HomeTab() {
         <SectionHeader title="Tu posicion en ranking" actionLabel="ver ranking" onAction={() => setActiveTab('ranking')} />
         <Card className="flex items-center justify-between">
           <div>
-            <p className="text-sm text-text-secondary">Liga oro · zona de ascenso</p>
-            <p className="mt-1 text-2xl font-semibold">#5 de 50</p>
+            <p className="text-sm text-text-secondary">Mejores en XP · ranking mensual</p>
+            <p className="mt-1 text-2xl font-semibold">#12 de 13.064</p>
           </div>
           <Trophy className="h-8 w-8 text-coins" />
         </Card>

@@ -9,7 +9,8 @@ import {
   mockPredictionEvents,
   mockPredictionMarkets,
   mockPosts,
-  mockRanking,
+  mockPlayerRankings,
+  mockLeaderboards,
   mockShopItems,
   mockTournaments,
   mockActiveBoosts,
@@ -30,9 +31,17 @@ export const handlers = [
     await wait();
     return HttpResponse.json(mockShopItems);
   }),
+  http.get('*/player/rankings', async () => {
+    await wait();
+    return HttpResponse.json(mockPlayerRankings);
+  }),
+  http.get('*/player/rankings/:id/leaderboard', async ({ params }) => {
+    await wait();
+    return HttpResponse.json(mockLeaderboards[String(params.id)] ?? mockLeaderboards.best_xp);
+  }),
   http.get('*/player/ranking', async () => {
     await wait();
-    return HttpResponse.json(mockRanking);
+    return HttpResponse.json(mockPlayerRankings);
   }),
   http.get('*/player/tournaments', async () => {
     await wait();

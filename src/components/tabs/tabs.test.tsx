@@ -82,10 +82,11 @@ describe('key tab interactions', () => {
     expect(screen.getByRole('dialog', { name: /nuevo post/i })).toBeInTheDocument();
   });
 
-  it('toggles ranking period controls', async () => {
+  it('renders BO-style ranking cards and leaderboard modal', async () => {
     renderWithProviders(<RankingTab />);
-    const monthButton = await screen.findByRole('button', { name: /este mes/i });
-    await userEvent.click(monthButton);
-    expect(monthButton).toHaveAttribute('aria-pressed', 'true');
+    expect(await screen.findByText(/competí con otros jugadores/i)).toBeInTheDocument();
+    expect(screen.getByText(/Hay 2 rankings activos más/i)).toBeInTheDocument();
+    await userEvent.click(screen.getAllByRole('button', { name: /Ver leaderboard completo/i })[0]);
+    expect(await screen.findByRole('dialog', { name: /Mejores en XP/i })).toBeInTheDocument();
   });
 });
