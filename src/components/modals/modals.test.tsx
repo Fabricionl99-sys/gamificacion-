@@ -31,7 +31,7 @@ describe('critical modals', () => {
     });
     renderWithProviders(<Component />);
 
-    expect(screen.getByRole('dialog', { name: title })).toBeInTheDocument();
+    expect(await screen.findByRole('dialog', { name: title })).toBeInTheDocument();
     await user.click(screen.getByRole('button', { name: /cerrar modal/i }));
     expect(screen.queryByRole('dialog', { name: title })).not.toBeInTheDocument();
   });

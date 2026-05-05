@@ -1,6 +1,7 @@
 import type { Tournament } from '../types/tournament';
-import { mockTournaments } from '../mocks';
+import { apiClient } from './client';
 
 export async function getTournaments(): Promise<Tournament[]> {
-  return mockTournaments;
+  const { data } = await apiClient.get<Tournament[]>('/player/tournaments');
+  return data;
 }

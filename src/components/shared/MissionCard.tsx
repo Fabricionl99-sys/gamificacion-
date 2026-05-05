@@ -1,6 +1,7 @@
 import { Lock } from 'lucide-react';
 import type { Mission } from '../../types/mission';
 import { formatNumber, formatRelativeShort, getProgressPercent } from '../../utils/format';
+import { MissionRewardWithBoost } from '../../features/missions/components/MissionRewardWithBoost';
 import { Badge } from '../ui/Badge';
 import { Button } from '../ui/Button';
 import { Card } from '../ui/Card';
@@ -9,9 +10,10 @@ import { ProgressBar } from '../ui/ProgressBar';
 interface MissionCardProps {
   mission: Mission;
   compact?: boolean;
+  boosts?: import('../../types/boost').XPBoost[];
 }
 
-export function MissionCard({ mission, compact = false }: MissionCardProps) {
+export function MissionCard({ mission, compact = false, boosts = [] }: MissionCardProps) {
   const isLocked = mission.status === 'locked';
   const isCompleted = mission.status === 'completed';
   const deadline = mission.expiresIn ?? formatRelativeShort(mission.expiresAt);
@@ -35,7 +37,7 @@ export function MissionCard({ mission, compact = false }: MissionCardProps) {
           <span>
             {formatNumber(mission.progress)} / {formatNumber(mission.target)}
           </span>
-          <span>+{formatNumber(mission.rewardXP)} XP</span>
+          <MissionRewardWithBoost mission={mission} boosts={boosts} />
         </div>
         <ProgressBar value={getProgressPercent(mission.progress, mission.target)} />
       </div>

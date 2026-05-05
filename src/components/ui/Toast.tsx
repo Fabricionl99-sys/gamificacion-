@@ -4,6 +4,7 @@ import { cn } from '../../utils/classnames';
 
 export interface ToastProps {
   message: string;
+  title?: string;
   tone?: 'success' | 'danger' | 'info';
   actionLabel?: string;
   onAction?: () => void;
@@ -21,7 +22,7 @@ const toneIcons = {
   info: Info,
 };
 
-export function Toast({ message, tone = 'info', actionLabel, onAction }: ToastProps) {
+export function Toast({ message, title, tone = 'info', actionLabel, onAction }: ToastProps) {
   const Icon = toneIcons[tone];
 
   return (
@@ -34,7 +35,10 @@ export function Toast({ message, tone = 'info', actionLabel, onAction }: ToastPr
       )}
     >
       <Icon className={cn('h-5 w-5 flex-none', tone === 'success' && 'text-accent', tone === 'danger' && 'text-danger', tone === 'info' && 'text-info')} />
-      <span className="flex-1">{message}</span>
+      <span className="flex-1">
+        {title ? <span className="block text-lg font-black text-accent">{title}</span> : null}
+        <span>{message}</span>
+      </span>
       {actionLabel ? (
         <button className="text-sm font-medium text-accent hover:text-accent-hover" type="button" onClick={onAction}>
           {actionLabel}
@@ -53,6 +57,7 @@ export function ToastViewport() {
         <Toast
           key={toast.id}
           message={toast.message}
+          title={toast.title}
           tone={toast.tone}
           actionLabel={toast.actionLabel}
           onAction={() => {

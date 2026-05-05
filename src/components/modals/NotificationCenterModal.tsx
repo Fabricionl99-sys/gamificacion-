@@ -2,7 +2,9 @@ import { formatDistanceToNow } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { Bell, CheckCheck } from 'lucide-react';
 
-import { mockNotifications } from '../../mocks';
+import { useActiveBoosts } from '../../hooks/useActiveBoosts';
+import { fetchNotifications } from '../../api/notifications';
+import { useAsyncData } from '../../hooks/useAsyncData';
 import { useModalsStore } from '../../store/modalsStore';
 import { useNotificationsStore } from '../../store/notificationsStore';
 import { Modal } from '../ui/Modal';
@@ -12,7 +14,28 @@ import { NotificationsEmptyState } from '../tabs/emptyStateCopy';
 export default function NotificationCenterModal() {
   const { activeModal, closeModal } = useModalsStore();
   const markAllRead = useNotificationsStore((state) => state.markAllRead);
-  const unreadCount = mockNotifications.filter((item) => !item.read).length;
+  const { data: notifications = [] } = useAsyncData(fetchNotifications, []);
+  const { boosts } = useActiveBoosts();
+  const boostNotifications = boosts.flatMap((boost) => [
+    {
+      id: `boost-start-${boost.rule_id}`,
+      kind: 'system_event' as const,
+      title: `🚀 ¡XP x${boost.multiplier} activado!`,
+      detail: `vence ${formatDistanceToNow(new Date(boost.ends_at), { addSuffix: true, locale: es })}`,
+      createdAt: boost.starts_at,
+      read: false,
+    },
+    {
+      id: `boost-end-${boost.rule_id}`,
+      kind: 'system_event' as const,
+      title: `Se terminó el x${boost.multiplier}`,
+      detail: 'tu XP volvió al ritmo normal · ¡seguí ganando!',
+      createdAt: boost.ends_at,
+      read: true,
+    },
+  ]);
+  const allNotifications = [...boostNotifications, ...notifications];
+  const unreadCount = allNotifications.filter((item) => !item.read).length;
 
   return (
     <Modal
@@ -27,13 +50,13 @@ export default function NotificationCenterModal() {
           marcar leidas
         </Button>
       </div>
-      {mockNotifications.length > 0 ? (
+      {allNotifications.length > 0 ? (
         <div aria-live="polite" className="space-y-5">
           {['HOY', 'AYER', 'esta semana · 4 mas'].map((section, sectionIndex) => (
             <section key={section}>
               <p className="mb-2 text-xs font-semibold uppercase tracking-widest text-text-tertiary">{section}</p>
               <div className="space-y-2">
-                {mockNotifications.slice(sectionIndex, sectionIndex + 2).map((notification) => (
+                {allNotifications.slice(sectionIndex, sectionIndex + 2).map((notification) => (
                   <button
                     key={`${section}-${notification.id}`}
                     type="button"

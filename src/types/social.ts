@@ -2,7 +2,7 @@ import type { Reward } from './reward';
 
 export type NewsCategory = 'promo' | 'evento' | 'anuncio' | 'sistema';
 export type PredictionStatus = 'pendiente' | 'ganada' | 'perdida';
-export type NotificationKind = 'reward' | 'mission' | 'social' | 'tournament' | 'system';
+export type NotificationKind = 'reward' | 'mission' | 'social' | 'tournament' | 'system' | 'system_event';
 
 export interface FeedPost {
   id: string;

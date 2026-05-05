@@ -1,11 +1,13 @@
 import { useState } from 'react';
 import { Image, Send } from 'lucide-react';
 
-import { mockPosts } from '../../mocks';
+import { feedApi } from '../../api/feed';
+import { useAsyncData } from '../../hooks/useAsyncData';
 import { useModalsStore } from '../../store/modalsStore';
 import { Avatar } from '../ui/Avatar';
 import { Button } from '../ui/Button';
 import { Card } from '../ui/Card';
+import { Skeleton } from '../ui/Skeleton';
 import { Tabs } from '../ui/Tabs';
 import PostCard from '../shared/PostCard';
 import { FollowingFeedEmptyState } from './emptyStateCopy';
@@ -13,6 +15,7 @@ import { FollowingFeedEmptyState } from './emptyStateCopy';
 export default function FeedTab() {
   const openModal = useModalsStore((state) => state.openModal);
   const [activeFeed, setActiveFeed] = useState('following');
+  const { data: posts = [], isLoading } = useAsyncData(feedApi.list);
 
   return (
     <div className="space-y-4">
@@ -45,9 +48,14 @@ export default function FeedTab() {
           </Button>
         </div>
       </Card>
-      {mockPosts.length > 0 ? (
+      {isLoading ? (
         <div className="space-y-3">
-          {mockPosts.map((post) => (
+          <Skeleton className="h-28" />
+          <Skeleton className="h-28" />
+        </div>
+      ) : posts.length > 0 ? (
+        <div className="space-y-3">
+          {posts.map((post) => (
             <PostCard key={post.id} post={post} />
           ))}
         </div>
