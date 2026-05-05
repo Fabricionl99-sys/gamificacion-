@@ -1,6 +1,6 @@
 import type { TabId } from '../../types/navigation';
 import { cn } from '../../utils/classnames';
-import { tabs, getTabIcon } from './navigation';
+import { visibleTabs, getTabIcon } from './navigation';
 
 interface DesktopSidebarProps {
   activeTab: TabId;
@@ -16,7 +16,7 @@ export function DesktopSidebar({ activeTab, onSelect }: DesktopSidebarProps) {
           <p className="mt-1 text-xs text-text-tertiary">Widget jugador</p>
         </div>
         <nav className="space-y-1">
-          {tabs.map((tab) => {
+          {visibleTabs.map((tab) => {
             const Icon = getTabIcon(tab.id);
             const isActive = activeTab === tab.id;
 

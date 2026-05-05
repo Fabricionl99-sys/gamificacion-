@@ -7,7 +7,7 @@ import { useModalsStore } from '../store/modalsStore';
 import { useUiStore } from '../store/uiStore';
 import { renderWithRouter } from '../test/render';
 
-const tabLabels = ['inicio', 'misiones', 'tienda', 'racha', 'ranking', 'torneos', 'predicciones', 'feed', 'noticias'] as const;
+const tabLabels = ['inicio', 'misiones', 'tienda', 'racha', 'ranking', 'torneos', 'predicciones', 'noticias'] as const;
 
 describe('widget smoke', () => {
   it('renders WidgetContainer shell', async () => {
@@ -21,7 +21,7 @@ describe('widget smoke', () => {
     renderWithRouter(<App />);
     await screen.findByLabelText('Estado del jugador');
 
-    const moreButton = screen.queryByRole('button', { name: /\+5/i });
+    const moreButton = screen.queryByRole('button', { name: /\+4/i });
     if (moreButton) {
       await user.click(moreButton);
     }
@@ -64,13 +64,6 @@ describe('widget smoke', () => {
 
     act(() => useUiStore.getState().setActiveTab('shop'));
     expect(await screen.findByRole('button', { name: /saldo insuficiente/i })).toBeDisabled();
-
-    act(() => useUiStore.getState().setActiveTab('feed'));
-    await user.click(await screen.findByRole('button', { name: /que estas pensando/i }));
-    await user.type(screen.getByPlaceholderText(/que estas pensando/i), 'Vamos con una fija responsable');
-    const publishButtons = screen.getAllByRole('button', { name: /^publicar$/i });
-    await user.click(publishButtons[publishButtons.length - 1]);
-    expect(await screen.findByRole('status')).toHaveTextContent(/post enviado/i);
 
     act(() => useUiStore.getState().setActiveTab('ranking'));
     expect(await screen.findByRole('button', { name: /esta semana/i })).toBeInTheDocument();

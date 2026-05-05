@@ -2,7 +2,7 @@ import { ChevronRight } from 'lucide-react';
 import { Button } from '../ui/Button';
 import { useSwipeNavigation } from '../../hooks/useSwipeNavigation';
 import { useUiStore } from '../../store/uiStore';
-import { tabs } from './navigation';
+import { visibleTabs } from './navigation';
 
 export function TabNavigation() {
   const activeTab = useUiStore((state) => state.activeTab);
@@ -10,7 +10,7 @@ export function TabNavigation() {
   const setActiveTab = useUiStore((state) => state.setActiveTab);
   const toggleMobileMenu = useUiStore((state) => state.toggleMobileMenu);
   const swipeHandlers = useSwipeNavigation();
-  const visibleItems = expanded ? tabs : tabs.slice(0, 4);
+  const visibleItems = expanded ? visibleTabs : visibleTabs.slice(0, 4);
 
   return (
     <nav
@@ -34,7 +34,7 @@ export function TabNavigation() {
         ))}
         {!expanded && (
           <Button size="sm" variant="secondary" className="shrink-0" onClick={toggleMobileMenu}>
-            +{tabs.length - 4} <ChevronRight className="h-3.5 w-3.5" />
+            +{visibleTabs.length - 4} <ChevronRight className="h-3.5 w-3.5" />
           </Button>
         )}
       </div>

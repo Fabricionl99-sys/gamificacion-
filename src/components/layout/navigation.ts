@@ -11,6 +11,7 @@ import {
   Zap,
 } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
+import { FEATURES } from '../../config/features';
 import type { TabId, WidgetTabConfig } from '../../types/navigation';
 
 interface TabIcon {
@@ -40,5 +41,7 @@ export const tabs: WidgetTabConfig[] = [
   { id: 'feed', label: 'Feed', shortLabel: 'feed' },
   { id: 'news', label: 'Noticias', shortLabel: 'noticias' },
 ];
+
+export const visibleTabs = tabs.filter((tab) => tab.id !== 'feed' || FEATURES.feed_enabled);
 
 export const getTabIcon = (tabId: TabId): LucideIcon => tabIcons[tabId]?.icon ?? Bell;
