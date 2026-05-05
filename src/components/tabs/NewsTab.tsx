@@ -3,17 +3,19 @@ import { Badge } from '../ui/Badge';
 import { EmptyState } from '../ui/EmptyState';
 import { NewsCard } from '../shared/NewsCard';
 import { SectionHeader } from '../shared/SectionHeader';
-import { mockNews } from '../../mocks';
-
-const filters = [
-  ['todo', mockNews.length],
-  ['promos', mockNews.filter((item) => item.category === 'promo').length],
-  ['eventos', mockNews.filter((item) => item.category === 'evento').length],
-  ['anuncios', mockNews.filter((item) => item.category === 'anuncio').length],
-  ['sistema', mockNews.filter((item) => item.category === 'sistema').length],
-];
+import { getNews } from '../../api/feed';
+import { useAsyncData } from '../../hooks/useAsyncData';
 
 export default function NewsTab() {
+  const { data: news = [] } = useAsyncData(getNews, []);
+  const filters = [
+    ['todo', news.length],
+    ['promos', news.filter((item) => item.category === 'promo').length],
+    ['eventos', news.filter((item) => item.category === 'evento').length],
+    ['anuncios', news.filter((item) => item.category === 'anuncio').length],
+    ['sistema', news.filter((item) => item.category === 'sistema').length],
+  ];
+
   return (
     <div className="space-y-4">
       <SectionHeader
@@ -29,9 +31,9 @@ export default function NewsTab() {
           </Badge>
         ))}
       </div>
-      {mockNews.length > 0 ? (
+      {news.length > 0 ? (
         <div className="space-y-3">
-          {mockNews.map((item) => (
+          {news.map((item) => (
             <NewsCard key={item.id} news={item} />
           ))}
         </div>

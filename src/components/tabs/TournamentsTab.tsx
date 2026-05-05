@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Trophy } from 'lucide-react';
-import { mockTournaments } from '../../mocks';
+import { getTournaments } from '../../api/tournaments';
+import { useAsyncData } from '../../hooks/useAsyncData';
 import { useModalsStore } from '../../store/modalsStore';
 import { Card } from '../ui/Card';
 import { Button } from '../ui/Button';
@@ -19,7 +20,16 @@ const filters = [
 export default function TournamentsTab() {
   const openModal = useModalsStore((state) => state.openModal);
   const [activeFilter, setActiveFilter] = useState('activos');
-  const featured = mockTournaments[0];
+  const { data: tournaments = [], isLoading, error } = useAsyncData(getTournaments, []);
+  const featured = tournaments[0];
+
+  if (isLoading) {
+    return <Card className="animate-pulse text-sm text-text-tertiary">Cargando torneos...</Card>;
+  }
+
+  if (error) {
+    return <Card className="text-sm text-danger">No pudimos cargar torneos.</Card>;
+  }
 
   if (!featured) {
     return (
@@ -47,7 +57,7 @@ export default function TournamentsTab() {
       <Tabs tabs={filters} activeTab={activeFilter} onChange={setActiveFilter} ariaLabel="Filtros de torneos" />
       <SectionHeader title="Eventos competitivos" actionLabel="ver detalle" onAction={() => openModal('tournamentRegister')} />
       <div className="space-y-3">
-        {mockTournaments.map((tournament) => (
+        {tournaments.map((tournament) => (
           <TournamentCard key={tournament.id} tournament={tournament} onAction={() => openModal('tournamentRegister')} />
         ))}
       </div>

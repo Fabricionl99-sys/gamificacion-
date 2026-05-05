@@ -1,6 +1,8 @@
-import { Box, Shirt, Sparkles, Zap } from 'lucide-react';
+import { Box, ShoppingBag, Shirt, Sparkles, Zap } from 'lucide-react';
 
-import { mockPlayer, mockShopItems } from '../../mocks';
+import { getPlayer } from '../../api/player';
+import { getShopItems } from '../../api/shop';
+import { useAsyncData } from '../../hooks/useAsyncData';
 import { useModalsStore } from '../../store/modalsStore';
 import type { ShopIcon } from '../../types/reward';
 import { formatNumber } from '../../utils/format';
@@ -8,6 +10,7 @@ import { Badge } from '../ui/Badge';
 import { Button } from '../ui/Button';
 import { Card } from '../ui/Card';
 import { EmptyState } from '../ui/EmptyState';
+import { Skeleton } from '../ui/Skeleton';
 import { SectionHeader } from '../shared/SectionHeader';
 import { tabEmptyStates } from './emptyStateConfig';
 
@@ -26,9 +29,15 @@ const categoryLabels = {
 
 export default function ShopTab() {
   const openModal = useModalsStore((state) => state.openModal);
+  const { data: player } = useAsyncData(getPlayer);
+  const { data: shopItems, isLoading, error } = useAsyncData(getShopItems, []);
   const categories = Object.entries(categoryLabels);
+  const items = shopItems ?? [];
 
-  if (mockShopItems.length === 0) {
+  if (isLoading) return <Skeleton className="h-40" />;
+  if (error) return <EmptyState icon={<ShoppingBag className="h-8 w-8" />} title="No pudimos cargar la tienda" description="Intentá de nuevo en unos minutos." />;
+
+  if (items.length === 0) {
     return (
       <EmptyState
         icon={tabEmptyStates.shop.icon}
@@ -42,11 +51,11 @@ export default function ShopTab() {
     <div className="space-y-4">
       <Card className="flex items-center justify-between bg-coins text-bg-primary">
         <span className="text-sm font-medium">tu saldo</span>
-        <span className="text-xl font-semibold tracking-tight">{formatNumber(mockPlayer.coins)} monedas</span>
+        <span className="text-xl font-semibold tracking-tight">{formatNumber(player?.coins ?? 0)} monedas</span>
       </Card>
 
       <div className="grid gap-3 md:grid-cols-3">
-        {mockShopItems
+        {items
           .filter((item) => item.featured)
           .map((item) => (
             <Card key={item.id} variant="neon" className="scan-effect">
@@ -65,11 +74,11 @@ export default function ShopTab() {
             onAction={category === 'gamification' ? () => openModal('mysteryBox') : undefined}
           />
           <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-3">
-            {mockShopItems
+            {items
               .filter((item) => item.category === category)
               .map((item) => {
                 const Icon = iconMap[item.icon];
-                const disabled = Boolean(item.disabledReason) || mockPlayer.coins < item.cost;
+                const disabled = Boolean(item.disabledReason) || (player?.coins ?? 0) < item.cost;
                 const modal = item.icon === 'box' ? 'mysteryBox' : item.icon === 'zap' ? 'levelUp' : 'purchase';
                 return (
                   <Card key={item.id} className={disabled ? 'opacity-60' : undefined}>

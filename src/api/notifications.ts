@@ -1,6 +1,6 @@
-import { mockNotifications } from '../mocks';
+import { apiClient } from './client';
 import type { AppNotification } from '../types/social';
 
 export async function fetchNotifications(): Promise<AppNotification[]> {
-  return mockNotifications;
+  return apiClient.get('/player/notifications').then((response) => response.data as AppNotification[]);
 }

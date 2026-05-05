@@ -9,7 +9,7 @@ import { useUiStore } from '../../store/uiStore';
 import { formatNumber } from '../../utils/format';
 
 export function WidgetHeader() {
-  const { player } = usePlayer();
+  const { player, isLoading } = usePlayer();
   const openModal = useModalsStore((state) => state.openModal);
   const setActiveView = useUiStore((state) => state.setActiveView);
   const xpProgress = (player.currentXP / player.nextLevelXP) * 100;
@@ -33,7 +33,7 @@ export function WidgetHeader() {
           <div className="mb-1 flex items-baseline gap-2">
             <span className="text-sm font-semibold text-text-primary">Nivel {player.level}</span>
             <span className="truncate text-xs text-text-tertiary">
-              {formatNumber(player.currentXP)} / {formatNumber(player.nextLevelXP)} XP
+              {isLoading ? 'sincronizando...' : `${formatNumber(player.currentXP)} / ${formatNumber(player.nextLevelXP)} XP`}
             </span>
           </div>
           <ProgressBar value={xpProgress} ariaLabel="Progreso de XP al siguiente nivel" />

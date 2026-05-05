@@ -1,6 +1,8 @@
 import { Sparkles } from 'lucide-react';
 
-import { mockPlayer, mockShopItems } from '../../mocks';
+import { getPlayer } from '../../api/player';
+import { getShopItems } from '../../api/shop';
+import { useAsyncData } from '../../hooks/useAsyncData';
 import { useModalsStore } from '../../store/modalsStore';
 import { formatNumber } from '../../utils/format';
 import { Button } from '../ui/Button';
@@ -9,13 +11,15 @@ import { Modal } from '../ui/Modal';
 
 export default function PurchaseConfirmModal() {
   const { activeModal, closeModal } = useModalsStore();
-  const item = mockShopItems[0] ?? mockShopItems[1];
+  const { data: items = [] } = useAsyncData(getShopItems, []);
+  const { data: player } = useAsyncData(getPlayer);
+  const item = items[0] ?? items[1];
 
-  if (!item) {
+  if (!item || !player) {
     return null;
   }
 
-  const remaining = mockPlayer.coins - item.cost;
+  const remaining = player.coins - item.cost;
 
   return (
     <Modal

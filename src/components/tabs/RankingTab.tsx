@@ -1,21 +1,25 @@
 import { useState } from 'react';
 import { ShieldCheck, TrendingDown, TrendingUp, Trophy } from 'lucide-react';
+import { getRanking } from '../../api/ranking';
+import { useAsyncData } from '../../hooks/useAsyncData';
 import { Badge } from '../ui/Badge';
 import { Button } from '../ui/Button';
 import { Card } from '../ui/Card';
 import { PlayerListItem } from '../shared/PlayerListItem';
 import { SectionHeader } from '../shared/SectionHeader';
-import { mockRanking } from '../../mocks';
 import { useModalsStore } from '../../store/modalsStore';
 import { formatNumber } from '../../utils/format';
 import { RankingEmptyState } from './emptyStateCopy';
 
 export default function RankingTab() {
   const openModal = useModalsStore((state) => state.openModal);
-  const self = mockRanking.find((player) => player.isSelf);
   const [period, setPeriod] = useState<'week' | 'month'>('week');
+  const { data: ranking = [], isLoading, error } = useAsyncData(getRanking, []);
+  const self = ranking.find((player) => player.isSelf);
 
-  if (mockRanking.length === 0) {
+  if (isLoading) return <Card className="h-32 animate-pulse" />;
+  if (error) return <RankingEmptyState />;
+  if (ranking.length === 0) {
     return <RankingEmptyState />;
   }
 
@@ -73,7 +77,7 @@ export default function RankingTab() {
 
       <SectionHeader title="top 5" actionLabel="ver los 50 jugadores" onAction={() => openModal('divisionPrizes')} />
       <div className="space-y-2">
-        {mockRanking.slice(0, 5).map((player) => (
+        {ranking.slice(0, 5).map((player) => (
           <PlayerListItem key={player.id} player={player} />
         ))}
       </div>

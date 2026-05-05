@@ -2,7 +2,8 @@ import { formatDistanceToNow } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { Bell, CheckCheck } from 'lucide-react';
 
-import { mockNotifications } from '../../mocks';
+import { fetchNotifications } from '../../api/notifications';
+import { useAsyncData } from '../../hooks/useAsyncData';
 import { useModalsStore } from '../../store/modalsStore';
 import { useNotificationsStore } from '../../store/notificationsStore';
 import { Modal } from '../ui/Modal';
@@ -12,7 +13,8 @@ import { NotificationsEmptyState } from '../tabs/emptyStateCopy';
 export default function NotificationCenterModal() {
   const { activeModal, closeModal } = useModalsStore();
   const markAllRead = useNotificationsStore((state) => state.markAllRead);
-  const unreadCount = mockNotifications.filter((item) => !item.read).length;
+  const { data: notifications = [] } = useAsyncData(fetchNotifications, []);
+  const unreadCount = notifications.filter((item) => !item.read).length;
 
   return (
     <Modal
@@ -27,13 +29,13 @@ export default function NotificationCenterModal() {
           marcar leidas
         </Button>
       </div>
-      {mockNotifications.length > 0 ? (
+      {notifications.length > 0 ? (
         <div aria-live="polite" className="space-y-5">
           {['HOY', 'AYER', 'esta semana · 4 mas'].map((section, sectionIndex) => (
             <section key={section}>
               <p className="mb-2 text-xs font-semibold uppercase tracking-widest text-text-tertiary">{section}</p>
               <div className="space-y-2">
-                {mockNotifications.slice(sectionIndex, sectionIndex + 2).map((notification) => (
+                {notifications.slice(sectionIndex, sectionIndex + 2).map((notification) => (
                   <button
                     key={`${section}-${notification.id}`}
                     type="button"

@@ -1,4 +1,7 @@
 import type { Player } from '../types/player';
-import { mockPlayer } from '../mocks';
+import { apiClient } from './client';
 
-export const getPlayer = async (): Promise<Player> => mockPlayer;
+export const getPlayer = async (): Promise<Player> => {
+  const { data } = await apiClient.get<Player>('/player/me');
+  return data;
+};

@@ -5,7 +5,11 @@ import { MissionCard } from '../shared/MissionCard';
 import { SectionHeader } from '../shared/SectionHeader';
 import { StatCard } from '../shared/StatCard';
 import { TournamentCard } from '../shared/TournamentCard';
-import { mockMissions, mockNews, mockPlayer, mockTournaments } from '../../mocks';
+import { getMissions } from '../../api/missions';
+import { getNews } from '../../api/feed';
+import { getPlayer } from '../../api/player';
+import { getTournaments } from '../../api/tournaments';
+import { useAsyncData } from '../../hooks/useAsyncData';
 import { useModalsStore } from '../../store/modalsStore';
 import { useUiStore } from '../../store/uiStore';
 import { formatNumber } from '../../utils/format';
@@ -13,23 +17,29 @@ import { formatNumber } from '../../utils/format';
 export default function HomeTab() {
   const openModal = useModalsStore((state) => state.openModal);
   const { setActiveTab, setActiveView } = useUiStore();
-  const dailyMissions = mockMissions.slice(0, 3);
-  const featuredTournament = mockTournaments[0];
-  const latestNews = mockNews[0];
+  const { data: missions = [] } = useAsyncData(getMissions, []);
+  const { data: tournaments = [] } = useAsyncData(getTournaments, []);
+  const { data: news = [] } = useAsyncData(getNews, []);
+  const { data: player } = useAsyncData(getPlayer);
+  const dailyMissions = missions.slice(0, 3);
+  const featuredTournament = tournaments[0];
+  const latestNews = news[0];
 
   return (
     <div className="space-y-4">
-      <button
-        type="button"
-        onClick={() => setActiveView('own-profile')}
-        className="flex w-full items-center gap-3 rounded-lg border border-danger/30 bg-danger/10 p-3 text-left transition-transform hover:-translate-y-0.5"
-      >
-        <Gift className="h-5 w-5 text-danger" />
-        <span className="flex-1">
-          <span className="block text-sm font-semibold text-text-primary">tenes {mockPlayer.pendingPrizes} premios sin reclamar</span>
-          <span className="text-xs text-text-secondary">tocá para ver tus premios pendientes</span>
-        </span>
-      </button>
+      {player ? (
+        <button
+          type="button"
+          onClick={() => setActiveView('own-profile')}
+          className="flex w-full items-center gap-3 rounded-lg border border-danger/30 bg-danger/10 p-3 text-left transition-transform hover:-translate-y-0.5"
+        >
+          <Gift className="h-5 w-5 text-danger" />
+          <span className="flex-1">
+            <span className="block text-sm font-semibold text-text-primary">tenes {player.pendingPrizes} premios sin reclamar</span>
+            <span className="text-xs text-text-secondary">tocá para ver tus premios pendientes</span>
+          </span>
+        </button>
+      ) : null}
 
       <section>
         <SectionHeader title="Misiones del dia" actionLabel="ver todas" onAction={() => setActiveTab('missions')} />
@@ -43,9 +53,9 @@ export default function HomeTab() {
       <section>
         <SectionHeader title="Tu progreso" />
         <div className="grid grid-cols-3 gap-2">
-          <StatCard label="nivel" value={mockPlayer.level} />
-          <StatCard label="racha" value={mockPlayer.streak} tone="streak" />
-          <StatCard label="monedas" value={formatNumber(mockPlayer.coins)} tone="coins" />
+          <StatCard label="nivel" value={player?.level ?? '...'} />
+          <StatCard label="racha" value={player?.streak ?? '...'} tone="streak" />
+          <StatCard label="monedas" value={player ? formatNumber(player.coins) : '...'} tone="coins" />
         </div>
       </section>
 

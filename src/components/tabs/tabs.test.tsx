@@ -34,13 +34,13 @@ describe('tabs smoke', () => {
 describe('key tab interactions', () => {
   it('shows a claim action in missions', async () => {
     renderWithProviders(<MissionsTab />);
-    await userEvent.click(screen.getAllByRole('button', { name: /reclamar/i })[0]);
+    await userEvent.click((await screen.findAllByRole('button', { name: /reclamar/i }))[0]);
     expect(screen.getAllByText(/completada/i).length).toBeGreaterThan(0);
   });
 
-  it('keeps insufficient balance shop item disabled', () => {
+  it('keeps insufficient balance shop item disabled', async () => {
     renderWithProviders(<ShopTab />);
-    expect(screen.getByRole('button', { name: /saldo insuficiente/i })).toBeDisabled();
+    expect(await screen.findByRole('button', { name: /saldo insuficiente/i })).toBeDisabled();
   });
 
   it('opens post editor from feed composer', async () => {
@@ -56,7 +56,7 @@ describe('key tab interactions', () => {
 
   it('toggles ranking period controls', async () => {
     renderWithProviders(<RankingTab />);
-    const monthButton = screen.getByRole('button', { name: /este mes/i });
+    const monthButton = await screen.findByRole('button', { name: /este mes/i });
     await userEvent.click(monthButton);
     expect(monthButton).toHaveAttribute('aria-pressed', 'true');
   });
