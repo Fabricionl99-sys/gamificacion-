@@ -4,6 +4,7 @@ import { describe, expect, it } from 'vitest';
 
 import { renderWithProviders } from '../../test/render';
 import FeedTab from './FeedTab';
+import AchievementsTab from './AchievementsTab';
 import HomeTab from './HomeTab';
 import MissionsTab from './MissionsTab';
 import NewsTab from './NewsTab';
@@ -18,6 +19,7 @@ describe('tabs smoke', () => {
   it.each([
     ['home', <HomeTab />],
     ['missions', <MissionsTab />],
+    ['achievements', <AchievementsTab />],
     ['shop', <ShopTab />],
     ['streak', <StreakTab />],
     ['ranking', <RankingTab />],
@@ -34,13 +36,39 @@ describe('tabs smoke', () => {
 describe('key tab interactions', () => {
   it('shows a claim action in missions', async () => {
     renderWithProviders(<MissionsTab />);
-    await userEvent.click(screen.getAllByRole('button', { name: /reclamar/i })[0]);
+    await userEvent.click((await screen.findAllByRole('button', { name: /reclamar/i }))[0]);
     expect(screen.getAllByText(/completada/i).length).toBeGreaterThan(0);
+    expect(await screen.findByText(/\+100 con x2 activo/i)).toBeInTheDocument();
   });
 
-  it('keeps insufficient balance shop item disabled', () => {
+  it('renders achievement grid and detail modal', async () => {
+    renderWithProviders(<AchievementsTab />);
+    expect(await screen.findByText(/desbloqueá insignias jugando/i)).toBeInTheDocument();
+    await userEvent.click(screen.getByText('Racha 10 dias'));
+    expect(screen.getByRole('dialog', { name: /Racha 10 dias/i })).toBeInTheDocument();
+  });
+
+  it('shows shop stock, VIP and time restrictions', async () => {
     renderWithProviders(<ShopTab />);
-    expect(screen.getByRole('button', { name: /saldo insuficiente/i })).toBeDisabled();
+    expect((await screen.findAllByText(/quedan 8 unidades/i)).length).toBeGreaterThan(0);
+    expect(screen.getAllByText(/vip diamond/i).length).toBeGreaterThan(0);
+    expect(screen.getByRole('button', { name: /agotado/i })).toBeDisabled();
+    expect(screen.getAllByText(/termina en/i).length).toBeGreaterThan(0);
+  });
+
+  it('lets the player complete and review predictions', async () => {
+    renderWithProviders(<PredictionsTab />);
+    expect(await screen.findByText(/ganá monedas prediciendo resultados/i)).toBeInTheDocument();
+    await userEvent.click((await screen.findAllByRole('button', { name: /Predecir/i }, { timeout: 3000 }))[0]);
+    expect(await screen.findByText(/Confirmar predicción/i)).toBeDisabled();
+    await userEvent.click((await screen.findAllByRole('button', { name: /local/i }))[0]);
+    await userEvent.click(screen.getByRole('button', { name: /más 2\.5/i }));
+    await userEvent.click(screen.getByRole('button', { name: /sí/i }));
+    await userEvent.click(screen.getByRole('button', { name: /más 9\.5/i }));
+    await userEvent.click(screen.getByRole('button', { name: /2-1/i }));
+    expect(screen.getByRole('button', { name: /Confirmar predicción \(5\/5/i })).not.toBeDisabled();
+    await userEvent.click(screen.getByRole('button', { name: /^Mis predicciones/i }));
+    expect((await screen.findAllByRole('button', { name: /Ver mis predicciones/i })).length).toBeGreaterThan(0);
   });
 
   it('opens post editor from feed composer', async () => {
@@ -54,10 +82,11 @@ describe('key tab interactions', () => {
     expect(screen.getByRole('dialog', { name: /nuevo post/i })).toBeInTheDocument();
   });
 
-  it('toggles ranking period controls', async () => {
+  it('renders BO-style ranking cards and leaderboard modal', async () => {
     renderWithProviders(<RankingTab />);
-    const monthButton = screen.getByRole('button', { name: /este mes/i });
-    await userEvent.click(monthButton);
-    expect(monthButton).toHaveAttribute('aria-pressed', 'true');
+    expect(await screen.findByText(/competí con otros jugadores/i)).toBeInTheDocument();
+    expect(screen.getByText(/Hay 2 rankings activos más/i)).toBeInTheDocument();
+    await userEvent.click(screen.getAllByRole('button', { name: /Ver leaderboard completo/i })[0]);
+    expect(await screen.findByRole('dialog', { name: /Mejores en XP/i })).toBeInTheDocument();
   });
 });

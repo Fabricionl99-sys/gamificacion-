@@ -1,4 +1,5 @@
 export type RewardKind = 'xp' | 'coins' | 'bonus' | 'freeSpin' | 'mysteryBox' | 'scratchCard' | 'physical';
+import type { VipTier } from './player';
 
 export interface Reward {
   id: string;
@@ -20,7 +21,9 @@ export interface ShopItem {
   cost: number;
   icon: ShopIcon;
   featured?: boolean;
-  stockLabel: string;
-  minVipTier?: string;
+  stock: number | null;
+  lowStockThreshold: number;
+  vipRequired: Exclude<VipTier, 'none'> | null;
+  endsAt: string | null;
   disabledReason?: string;
 }

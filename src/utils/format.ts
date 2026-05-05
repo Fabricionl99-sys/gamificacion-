@@ -24,5 +24,17 @@ export const formatRelativeTime = (date: string): string =>
 
 export const formatRelativeShort = (date?: string): string => (date ? formatRelativeTime(date) : 'vence pronto');
 
+export const formatTimeRemaining = (date?: string | null): string => {
+  if (!date) return '';
+  const diff = new Date(date).getTime() - Date.now();
+  if (diff <= 0) return 'terminó';
+  const minutes = Math.floor(diff / 60000);
+  const hours = Math.floor(minutes / 60);
+  const days = Math.floor(hours / 24);
+  if (days >= 1) return `${days} ${days === 1 ? 'día' : 'días'}`;
+  if (hours >= 1) return `${hours}h ${minutes % 60}m`;
+  return `${Math.max(1, minutes)}m`;
+};
+
 export const getProgressPercent = (value: number, max: number): number =>
   max > 0 ? Math.min(100, Math.max(0, (value / max) * 100)) : 0;

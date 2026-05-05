@@ -1,14 +1,17 @@
 import { Suspense, lazy, type LazyExoticComponent, type ReactElement } from 'react';
 import { Skeleton } from '../ui/Skeleton';
 import { ToastViewport } from '../ui/Toast';
+import { BoostToastTrigger } from '../boost/BoostToast';
 import { DesktopSidebar } from './DesktopSidebar';
 import { TabNavigation } from './TabNavigation';
 import { WidgetHeader } from './WidgetHeader';
+import { FEATURES } from '../../config/features';
 import { useUiStore } from '../../store/uiStore';
 import type { TabId } from '../../types/navigation';
 
 const HomeTab = lazy(() => import('../tabs/HomeTab'));
 const MissionsTab = lazy(() => import('../tabs/MissionsTab'));
+const AchievementsTab = lazy(() => import('../tabs/AchievementsTab'));
 const ShopTab = lazy(() => import('../tabs/ShopTab'));
 const StreakTab = lazy(() => import('../tabs/StreakTab'));
 const RankingTab = lazy(() => import('../tabs/RankingTab'));
@@ -34,6 +37,7 @@ const LevelUpModal = lazy(() => import('../modals/LevelUpModal'));
 const tabComponents: Record<TabId, LazyExoticComponent<() => ReactElement>> = {
   home: HomeTab,
   missions: MissionsTab,
+  achievements: AchievementsTab,
   shop: ShopTab,
   streak: StreakTab,
   ranking: RankingTab,
@@ -54,8 +58,13 @@ function LoadingPanel() {
 }
 
 function MainView() {
-  const { activeTab, activeView } = useUiStore();
-  const ActiveTab = tabComponents[activeTab];
+  const { activeTab, activeView, setActiveTab } = useUiStore();
+  const safeActiveTab = !FEATURES.feed_enabled && activeTab === 'feed' ? 'home' : activeTab;
+  const ActiveTab = tabComponents[safeActiveTab];
+
+  if (safeActiveTab !== activeTab) {
+    setTimeout(() => setActiveTab(safeActiveTab), 0);
+  }
 
   if (activeView === 'own-profile') return <OwnProfile />;
   if (activeView === 'public-profile') return <PublicProfile />;
@@ -65,7 +74,7 @@ function MainView() {
   return (
     <>
       <TabNavigation />
-      <div key={activeTab} className="animate-[tab-enter_180ms_ease-out] pt-4 md:pt-0">
+      <div key={safeActiveTab} className="animate-[tab-enter_180ms_ease-out] pt-4 md:pt-0">
         <ActiveTab />
       </div>
     </>
@@ -95,6 +104,7 @@ export function WidgetContainer() {
             <StreakChestModal />
             <ScratchCardModal />
             <LevelUpModal />
+            <BoostToastTrigger />
           </Suspense>
         </section>
       </main>

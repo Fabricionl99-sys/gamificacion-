@@ -3,6 +3,7 @@ import { create } from 'zustand';
 export interface ToastInput {
   tone?: 'success' | 'danger' | 'info';
   message: string;
+  title?: string;
   actionLabel?: string;
   onAction?: () => void;
 }
@@ -31,6 +32,7 @@ export const useToast = create<ToastState>((set, get) => ({
         {
           id,
           tone: input.tone ?? 'info',
+          title: input.title,
           message: input.message,
           actionLabel: input.actionLabel,
           onAction: input.onAction,

@@ -10,6 +10,7 @@ export interface Mission {
   group: 'daily' | 'weekly' | 'event' | 'locked';
   progress: number;
   target: number;
+  ruleId?: string;
   rewardXP: number;
   rewardCoins?: number;
   expiresAt?: string;

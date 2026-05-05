@@ -7,7 +7,7 @@ import { useModalsStore } from '../store/modalsStore';
 import { useUiStore } from '../store/uiStore';
 import { renderWithRouter } from '../test/render';
 
-const tabLabels = ['inicio', 'misiones', 'tienda', 'racha', 'ranking', 'torneos', 'predicciones', 'feed', 'noticias'] as const;
+const tabLabels = ['inicio', 'misiones', 'logros', 'tienda', 'racha', 'ranking', 'torneos', 'predicciones', 'noticias'] as const;
 
 describe('widget smoke', () => {
   it('renders WidgetContainer shell', async () => {
@@ -20,6 +20,7 @@ describe('widget smoke', () => {
     const user = userEvent.setup();
     renderWithRouter(<App />);
     await screen.findByLabelText('Estado del jugador');
+    expect(await screen.findByText(/x3 activo/i)).toBeInTheDocument();
 
     const moreButton = screen.queryByRole('button', { name: /\+5/i });
     if (moreButton) {
@@ -61,20 +62,15 @@ describe('widget smoke', () => {
 
     act(() => useUiStore.getState().setActiveTab('missions'));
     expect((await screen.findAllByRole('button', { name: /reclamar/i })).length).toBeGreaterThan(0);
+    expect(await screen.findAllByText(/\+100 con x2 activo/i)).toHaveLength(1);
 
     act(() => useUiStore.getState().setActiveTab('shop'));
-    expect(await screen.findByRole('button', { name: /saldo insuficiente/i })).toBeDisabled();
-
-    act(() => useUiStore.getState().setActiveTab('feed'));
-    await user.click(await screen.findByRole('button', { name: /que estas pensando/i }));
-    await user.type(screen.getByPlaceholderText(/que estas pensando/i), 'Vamos con una fija responsable');
-    const publishButtons = screen.getAllByRole('button', { name: /^publicar$/i });
-    await user.click(publishButtons[publishButtons.length - 1]);
-    expect(await screen.findByRole('status')).toHaveTextContent(/post enviado/i);
+    expect(await screen.findByRole('button', { name: /agotado/i })).toBeDisabled();
+    expect(screen.getAllByText(/quedan 8 unidades/i).length).toBeGreaterThan(0);
 
     act(() => useUiStore.getState().setActiveTab('ranking'));
-    expect(await screen.findByRole('button', { name: /esta semana/i })).toBeInTheDocument();
-    await user.click(screen.getByRole('button', { name: /este mes/i }));
-    expect(screen.getByRole('button', { name: /este mes/i })).toBeInTheDocument();
+    expect(await screen.findByText(/competí con otros jugadores/i)).toBeInTheDocument();
+    await user.click(screen.getAllByRole('button', { name: /Ver leaderboard completo/i })[0]);
+    expect(await screen.findByRole('dialog', { name: /Mejores en XP/i })).toBeInTheDocument();
   });
 });

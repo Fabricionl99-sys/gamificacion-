@@ -1,9 +1,13 @@
 import { addDays, subHours } from 'date-fns';
+import type { Achievement } from '../types/achievement';
 import type { Mission } from '../types/mission';
 import type { Player, PublicPlayer } from '../types/player';
+import type { LeaderboardFull, LeaderboardEntry, PlayerRankingSummary } from '../types/ranking';
+import type { PredictionEvent, PredictionMarketDefinition } from '../types/prediction';
 import type { ShopItem } from '../types/reward';
 import type { AppNotification, FeedPost, NewsItem, ProfilePrize } from '../types/social';
 import type { Tournament } from '../types/tournament';
+import type { XPBoost } from '../types/boost';
 
 const now = new Date();
 
@@ -30,6 +34,7 @@ export const mockPlayer: Player = {
 export const mockMissions: Mission[] = [
   {
     id: 'mission-001',
+    ruleId: 'rule_sports_win',
     title: 'Hace 3 apuestas en deportes',
     description: 'Completa tres tickets deportivos para sumar XP hoy.',
     category: 'deportes',
@@ -43,6 +48,7 @@ export const mockMissions: Mission[] = [
   },
   {
     id: 'mission-002',
+    ruleId: 'rule_slots_bet',
     title: 'Juga 30 minutos en slots',
     description: 'Mantene actividad en slots sin importar el resultado.',
     category: 'slots',
@@ -56,6 +62,7 @@ export const mockMissions: Mission[] = [
   },
   {
     id: 'mission-003',
+    ruleId: 'rule_feed_share',
     title: 'Publica una fija responsable',
     description: 'Compartila sin montos y suma interaccion social.',
     category: 'social',
@@ -68,6 +75,7 @@ export const mockMissions: Mission[] = [
   },
   {
     id: 'mission-004',
+    ruleId: 'rule_predictions_event',
     title: 'Predice el clasico del domingo',
     description: 'Evento especial con XP adicional del operador.',
     category: 'predicciones',
@@ -81,6 +89,7 @@ export const mockMissions: Mission[] = [
   },
   {
     id: 'mission-005',
+    ruleId: 'rule_casino_vip',
     title: 'Mision VIP Plata',
     description: 'Disponible al alcanzar VIP plata.',
     category: 'casino',
@@ -93,6 +102,69 @@ export const mockMissions: Mission[] = [
   },
 ];
 
+export const mockActiveBoosts: XPBoost[] = [
+  {
+    enabled: true,
+    multiplier: 2,
+    starts_at: addDays(now, -1).toISOString(),
+    ends_at: addDays(now, 2).toISOString(),
+    rule_id: 'rule_sports_win',
+    rule_name: 'Apuesta deportiva ganadora',
+  },
+  {
+    enabled: true,
+    multiplier: 3,
+    starts_at: addDays(now, -0.2).toISOString(),
+    ends_at: addDays(now, 1).toISOString(),
+    rule_id: 'rule_slots_bet',
+    rule_name: 'Apuesta en slots',
+  },
+];
+
+export const mockPredictionMarkets: PredictionMarketDefinition[] = [
+  { id:'result_1x2', label:'Resultado 1X2', buttons:[{ value:'option1', label:'local' }, { value:'draw', label:'empate' }, { value:'option2', label:'visitante' }] },
+  { id:'winner_2options', label:'Ganador', buttons:[{ value:'option1', label:'opción 1' }, { value:'option2', label:'opción 2' }] },
+  { id:'total_goals', label:'Total goles', buttons:[{ value:'over', label:'más 2.5' }, { value:'under', label:'menos 2.5' }] },
+  { id:'total_corners', label:'Total córners', buttons:[{ value:'over', label:'más 9.5' }, { value:'under', label:'menos 9.5' }] },
+  { id:'both_score', label:'Ambos marcan', buttons:[{ value:'yes', label:'sí' }, { value:'no', label:'no' }] },
+  { id:'exact_score', label:'Resultado exacto', buttons:['1-0','1-1','2-0','2-1','2-2','3-1','otro'].map((value) => ({ value, label:value })) },
+];
+
+export const mockPredictionEvents: PredictionEvent[] = [
+  { id:'evt_champions', name:'Champions League · noche europea', description:'Predecí 5 mercados antes del pitazo inicial.', sport:'football', status:'active', closes_at:addDays(now,1).toISOString(), entry_cost:1000, grand_prize_amount:5000, participants_count:1847, pool_accumulated:1840000, items:[
+    { id:'champ_1', position:1, name:'Real Madrid vs Barcelona', market:'result_1x2', prize_amount:150 },
+    { id:'champ_2', position:2, name:'PSG vs Bayern', market:'total_goals', prize_amount:120 },
+    { id:'champ_3', position:3, name:'Inter vs City', market:'both_score', prize_amount:110 },
+    { id:'champ_4', position:4, name:'Arsenal vs Milan', market:'total_corners', prize_amount:90 },
+    { id:'champ_5', position:5, name:'Benfica vs Ajax', market:'exact_score', prize_amount:220 },
+  ] },
+  { id:'evt_atp', name:'ATP Madrid · semifinales', description:'Cuatro picks rápidos de tenis.', sport:'tennis', status:'active', closes_at:addDays(now,3).toISOString(), entry_cost:500, grand_prize_amount:2500, participants_count:612, pool_accumulated:306000, items:[
+    { id:'atp_1', position:1, name:'Sinner vs Alcaraz', market:'winner_2options', prize_amount:100 },
+    { id:'atp_2', position:2, name:'Zverev vs Ruud', market:'winner_2options', prize_amount:100 },
+    { id:'atp_3', position:3, name:'Total games final', market:'total_goals', prize_amount:80 },
+    { id:'atp_4', position:4, name:'Campeón del torneo', market:'winner_2options', prize_amount:120 },
+  ] },
+  { id:'evt_nba', name:'NBA Conference Finals', description:'Tres predicciones para la final de conferencia.', sport:'basketball', status:'past', closes_at:addDays(now,-2).toISOString(), entry_cost:750, grand_prize_amount:3000, participants_count:1020, pool_accumulated:765000, items:[
+    { id:'nba_1', position:1, name:'Celtics vs Knicks', market:'winner_2options', prize_amount:120, player_prediction:'option1', result:'option1' },
+    { id:'nba_2', position:2, name:'Total puntos', market:'total_goals', prize_amount:90, player_prediction:'over', result:'under' },
+    { id:'nba_3', position:3, name:'MVP del partido', market:'winner_2options', prize_amount:150, player_prediction:'option2', result:'option2' },
+  ] },
+  { id:'evt_ufc', name:'UFC 305', description:'Cartelera principal con premio pleno.', sport:'ufc', status:'active', closes_at:addDays(now,2).toISOString(), entry_cost:1000, grand_prize_amount:5000, participants_count:999, pool_accumulated:999000, items:[
+    { id:'ufc_1', position:1, name:'Main event', market:'winner_2options', prize_amount:200, player_prediction:'option1' },
+    { id:'ufc_2', position:2, name:'Co-main event', market:'winner_2options', prize_amount:180, player_prediction:'option2' },
+    { id:'ufc_3', position:3, name:'Pelea 3', market:'winner_2options', prize_amount:120, player_prediction:'option1' },
+    { id:'ufc_4', position:4, name:'Pelea 4', market:'winner_2options', prize_amount:120, player_prediction:'option2' },
+  ] },
+];
+
+export const mockAchievements: Achievement[] = [
+  { id:'ach_racha_10', name:'Racha 10 dias', description:'Mantuviste actividad 10 dias seguidos.', tier:'bronze', status:'unlocked', icon:'🔥', reward:{xp:500,coins:100}, progress:{current:10,total:10}, unlocked_at:addDays(now,-8).toISOString() },
+  { id:'ach_tipster', name:'Tipster preciso', description:'Acertá 10 predicciones deportivas.', tier:'silver', status:'in_progress', icon:'🎯', reward:{xp:1200,coins:350}, progress:{current:7,total:10} },
+  { id:'ach_casino_gold', name:'Maestro casino', description:'Completá 50 misiones de casino.', tier:'gold', status:'in_progress', icon:'🎰', reward:{xp:2500,coins:800}, progress:{current:32,total:50} },
+  { id:'ach_platinum_whale', name:'Leyenda de torneos', description:'Terminá top 3 en 5 torneos.', tier:'platinum', status:'locked', icon:'🏆', reward:{xp:5000,coins:1500}, progress:{current:1,total:5} },
+  { id:'ach_secret', name:'Logro secreto', description:'?????', tier:'diamond', status:'secret', icon:'?', reward:{xp:10000,coins:5000,chest_id:'chest_legendary'}, hint:'Probá una combinación perfecta de predicciones.' },
+];
+
 export const mockShopItems: ShopItem[] = [
   {
     id: 'shop-001',
@@ -100,7 +172,10 @@ export const mockShopItems: ShopItem[] = [
     description: 'Puede contener XP, monedas o bonos del operador.',
     category: 'gamification',
     cost: 450,
-    stockLabel: 'ilimitado',
+    stock: null,
+    lowStockThreshold: 10,
+    vipRequired: null,
+    endsAt: null,
     icon: 'box',
     featured: true,
   },
@@ -110,17 +185,23 @@ export const mockShopItems: ShopItem[] = [
     description: 'Validos en slots seleccionados por el operador.',
     category: 'operatorBonus',
     cost: 1200,
-    stockLabel: 'quedan 18',
+    stock: 8,
+    lowStockThreshold: 10,
+    vipRequired: null,
+    endsAt: null,
     icon: 'sparkles',
     featured: true,
   },
   {
     id: 'shop-003',
-    name: 'Multiplicador XP x2',
-    description: 'Activalo durante una hora de juego.',
+    name: 'Cofre relampago x2',
+    description: 'Promo de tiempo limitado con premios instantaneos.',
     category: 'gamification',
     cost: 800,
-    stockLabel: 'termina en 6h',
+    stock: 22,
+    lowStockThreshold: 8,
+    vipRequired: 'gold',
+    endsAt: addDays(now, 0.17).toISOString(),
     icon: 'zap',
   },
   {
@@ -129,9 +210,23 @@ export const mockShopItems: ShopItem[] = [
     description: 'Producto fisico para jugadores VIP.',
     category: 'physical',
     cost: 3600,
-    stockLabel: 'solo VIP+',
+    stock: 0,
+    lowStockThreshold: 10,
+    vipRequired: 'diamond',
+    endsAt: null,
     icon: 'shirt',
-    disabledReason: 'saldo insuficiente',
+  },
+  {
+    id: 'shop-005',
+    name: 'Bono casino VIP silver',
+    description: 'Bono exclusivo para tiers silver o superiores.',
+    category: 'operatorBonus',
+    cost: 1800,
+    stock: 40,
+    lowStockThreshold: 10,
+    vipRequired: 'silver',
+    endsAt: addDays(now, 3).toISOString(),
+    icon: 'sparkles',
   },
 ];
 
@@ -143,6 +238,99 @@ export const mockRanking: PublicPlayer[] = [
   { id: 'rank-005', name: 'Juan Martinez', username: 'juanm', avatar: 'JM', level: 20, vipTier: 'gold', weeklyXP: 6420, position: 5, isSelf: true },
   { id: 'rank-019', name: 'Nico Norte', username: 'nicon', avatar: 'NN', level: 18, vipTier: 'none', weeklyXP: 3440, position: 19 },
 ];
+
+const leaderboardEntries = (base: number): LeaderboardEntry[] =>
+  Array.from({ length: 20 }, (_, index) => ({
+    position: index + 1,
+    handle: ['tigre_loco_82', 'maria_apuestas', 'sofiwins', 'crypto_king_88', 'juanm'][index % 5] + (index > 4 ? `_${index}` : ''),
+    avatar: ['TL', 'MA', 'SW', 'CK', 'JM'][index % 5],
+    metric_value: base - index * 8420,
+    verified: index % 4 === 0,
+    vip_tier: index < 2 ? 'diamond' : index < 7 ? 'gold' : index < 14 ? 'silver' : 'bronze',
+    prize: index === 0 ? 100000 : index < 3 ? 50000 : index < 10 ? 10000 : index < 20 ? 5000 : undefined,
+    is_self: index === 11,
+  }));
+
+export const mockPlayerRankings: PlayerRankingSummary[] = [
+  {
+    ranking_id: 'best_xp',
+    ranking_name: 'Mejores en XP',
+    ranking_icon: '⭐',
+    active: true,
+    display_order: 1,
+    player_position: 12,
+    player_metric_value: 6420,
+    player_change: 3,
+    player_potential_prize: 5000,
+    total_participants: 13064,
+    closes_at: addDays(now, 20).toISOString(),
+    window: 'monthly',
+    metric_label: 'XP del mes',
+    top_5: leaderboardEntries(1847220).slice(0, 5),
+  },
+  {
+    ranking_id: 'best_casino',
+    ranking_name: 'Mejores en Casino',
+    ranking_icon: '🎰',
+    active: true,
+    display_order: 2,
+    player_position: 38,
+    player_metric_value: 420000,
+    player_change: -1,
+    player_potential_prize: 0,
+    total_participants: 8742,
+    closes_at: addDays(now, 20).toISOString(),
+    window: 'monthly',
+    metric_label: 'monto apostado',
+    top_5: leaderboardEntries(920000).slice(0, 5),
+  },
+  {
+    ranking_id: 'best_sports',
+    ranking_name: 'Mejores en Deportes',
+    ranking_icon: '⚽',
+    active: true,
+    display_order: 3,
+    player_position: 8,
+    player_metric_value: 310000,
+    player_change: 0,
+    player_potential_prize: 10000,
+    total_participants: 4312,
+    closes_at: addDays(now, 6).toISOString(),
+    window: 'weekly',
+    metric_label: 'monto apostado',
+    top_5: leaderboardEntries(680000).slice(0, 5),
+  },
+  {
+    ranking_id: 'best_depositors',
+    ranking_name: 'Mejores depositadores',
+    ranking_icon: '💳',
+    active: true,
+    display_order: 4,
+    player_position: 104,
+    player_metric_value: 120000,
+    player_change: 4,
+    player_potential_prize: 0,
+    total_participants: 2401,
+    closes_at: addDays(now, 20).toISOString(),
+    window: 'monthly',
+    metric_label: 'depósitos',
+    top_5: leaderboardEntries(510000).slice(0, 5),
+  },
+];
+
+export const mockLeaderboards: Record<string, LeaderboardFull> = Object.fromEntries(
+  mockPlayerRankings.map((ranking) => [
+    ranking.ranking_id,
+    {
+      ranking_id: ranking.ranking_id,
+      entries: leaderboardEntries(ranking.player_metric_value * 12).map((entry) =>
+        entry.position === 12 ? { ...entry, handle: mockPlayer.username, avatar: mockPlayer.avatar, is_self: true } : entry,
+      ),
+      player_position: ranking.player_position,
+      closes_at: ranking.closes_at,
+    },
+  ]),
+) as Record<string, LeaderboardFull>;
 
 export const mockTournaments: Tournament[] = [
   {
@@ -266,6 +454,22 @@ export const mockNotifications: AppNotification[] = [
     createdAt: subHours(now, 27).toISOString(),
     read: true,
     kind: 'social',
+  },
+  {
+    id: 'notif-boost-start',
+    title: '🚀 ¡XP x2 activado!',
+    detail: 'vence en 2 días',
+    createdAt: subHours(now, 1).toISOString(),
+    read: false,
+    kind: 'system_event',
+  },
+  {
+    id: 'notif-boost-end',
+    title: 'Se terminó el x2',
+    detail: 'tu XP volvió al ritmo normal · ¡seguí ganando!',
+    createdAt: subHours(now, 30).toISOString(),
+    read: true,
+    kind: 'system_event',
   },
 ];
 
