@@ -1,6 +1,7 @@
 export type WidgetTabId =
   | 'home'
   | 'missions'
+  | 'achievements'
   | 'shop'
   | 'streak'
   | 'ranking'

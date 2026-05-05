@@ -1,5 +1,6 @@
 import {
   Bell,
+  Award,
   Flame,
   Home,
   Megaphone,
@@ -21,6 +22,7 @@ interface TabIcon {
 const tabIcons: Record<TabId, TabIcon> = {
   home: { icon: Home },
   missions: { icon: Zap },
+  achievements: { icon: Award },
   shop: { icon: ShoppingBag },
   streak: { icon: Flame },
   ranking: { icon: Trophy },
@@ -33,6 +35,7 @@ const tabIcons: Record<TabId, TabIcon> = {
 export const tabs: WidgetTabConfig[] = [
   { id: 'home', label: 'Inicio', shortLabel: 'inicio' },
   { id: 'missions', label: 'Misiones', shortLabel: 'misiones' },
+  { id: 'achievements', label: 'Logros', shortLabel: 'logros' },
   { id: 'shop', label: 'Tienda', shortLabel: 'tienda' },
   { id: 'streak', label: 'Asistencia/Racha', shortLabel: 'racha' },
   { id: 'ranking', label: 'Ranking', shortLabel: 'ranking' },

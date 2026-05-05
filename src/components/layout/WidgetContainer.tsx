@@ -11,6 +11,7 @@ import type { TabId } from '../../types/navigation';
 
 const HomeTab = lazy(() => import('../tabs/HomeTab'));
 const MissionsTab = lazy(() => import('../tabs/MissionsTab'));
+const AchievementsTab = lazy(() => import('../tabs/AchievementsTab'));
 const ShopTab = lazy(() => import('../tabs/ShopTab'));
 const StreakTab = lazy(() => import('../tabs/StreakTab'));
 const RankingTab = lazy(() => import('../tabs/RankingTab'));
@@ -36,6 +37,7 @@ const LevelUpModal = lazy(() => import('../modals/LevelUpModal'));
 const tabComponents: Record<TabId, LazyExoticComponent<() => ReactElement>> = {
   home: HomeTab,
   missions: MissionsTab,
+  achievements: AchievementsTab,
   shop: ShopTab,
   streak: StreakTab,
   ranking: RankingTab,
