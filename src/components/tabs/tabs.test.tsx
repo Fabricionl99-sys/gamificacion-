@@ -38,9 +38,12 @@ describe('key tab interactions', () => {
     expect(screen.getAllByText(/completada/i).length).toBeGreaterThan(0);
   });
 
-  it('keeps insufficient balance shop item disabled', async () => {
+  it('shows shop stock, VIP and time restrictions', async () => {
     renderWithProviders(<ShopTab />);
-    expect(await screen.findByRole('button', { name: /saldo insuficiente/i })).toBeDisabled();
+    expect((await screen.findAllByText(/quedan 8 unidades/i)).length).toBeGreaterThan(0);
+    expect(screen.getAllByText(/vip diamond/i).length).toBeGreaterThan(0);
+    expect(screen.getByRole('button', { name: /agotado/i })).toBeDisabled();
+    expect(screen.getAllByText(/termina en/i).length).toBeGreaterThan(0);
   });
 
   it('opens post editor from feed composer', async () => {

@@ -63,7 +63,8 @@ describe('widget smoke', () => {
     expect((await screen.findAllByRole('button', { name: /reclamar/i })).length).toBeGreaterThan(0);
 
     act(() => useUiStore.getState().setActiveTab('shop'));
-    expect(await screen.findByRole('button', { name: /saldo insuficiente/i })).toBeDisabled();
+    expect(await screen.findByRole('button', { name: /agotado/i })).toBeDisabled();
+    expect(screen.getAllByText(/quedan 8 unidades/i).length).toBeGreaterThan(0);
 
     act(() => useUiStore.getState().setActiveTab('ranking'));
     expect(await screen.findByRole('button', { name: /esta semana/i })).toBeInTheDocument();
