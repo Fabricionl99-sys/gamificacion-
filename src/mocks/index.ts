@@ -2,6 +2,7 @@ import { addDays, subHours } from 'date-fns';
 import type { Achievement } from '../types/achievement';
 import type { Mission } from '../types/mission';
 import type { Player, PublicPlayer } from '../types/player';
+import type { PredictionEvent, PredictionMarketDefinition } from '../types/prediction';
 import type { ShopItem } from '../types/reward';
 import type { AppNotification, FeedPost, NewsItem, ProfilePrize } from '../types/social';
 import type { Tournament } from '../types/tournament';
@@ -117,6 +118,42 @@ export const mockActiveBoosts: XPBoost[] = [
     rule_id: 'rule_slots_bet',
     rule_name: 'Apuesta en slots',
   },
+];
+
+export const mockPredictionMarkets: PredictionMarketDefinition[] = [
+  { id:'result_1x2', label:'Resultado 1X2', buttons:[{ value:'option1', label:'local' }, { value:'draw', label:'empate' }, { value:'option2', label:'visitante' }] },
+  { id:'winner_2options', label:'Ganador', buttons:[{ value:'option1', label:'opción 1' }, { value:'option2', label:'opción 2' }] },
+  { id:'total_goals', label:'Total goles', buttons:[{ value:'over', label:'más 2.5' }, { value:'under', label:'menos 2.5' }] },
+  { id:'total_corners', label:'Total córners', buttons:[{ value:'over', label:'más 9.5' }, { value:'under', label:'menos 9.5' }] },
+  { id:'both_score', label:'Ambos marcan', buttons:[{ value:'yes', label:'sí' }, { value:'no', label:'no' }] },
+  { id:'exact_score', label:'Resultado exacto', buttons:['1-0','1-1','2-0','2-1','2-2','3-1','otro'].map((value) => ({ value, label:value })) },
+];
+
+export const mockPredictionEvents: PredictionEvent[] = [
+  { id:'evt_champions', name:'Champions League · noche europea', description:'Predecí 5 mercados antes del pitazo inicial.', sport:'football', status:'active', closes_at:addDays(now,1).toISOString(), entry_cost:1000, grand_prize_amount:5000, participants_count:1847, pool_accumulated:1840000, items:[
+    { id:'champ_1', position:1, name:'Real Madrid vs Barcelona', market:'result_1x2', prize_amount:150 },
+    { id:'champ_2', position:2, name:'PSG vs Bayern', market:'total_goals', prize_amount:120 },
+    { id:'champ_3', position:3, name:'Inter vs City', market:'both_score', prize_amount:110 },
+    { id:'champ_4', position:4, name:'Arsenal vs Milan', market:'total_corners', prize_amount:90 },
+    { id:'champ_5', position:5, name:'Benfica vs Ajax', market:'exact_score', prize_amount:220 },
+  ] },
+  { id:'evt_atp', name:'ATP Madrid · semifinales', description:'Cuatro picks rápidos de tenis.', sport:'tennis', status:'active', closes_at:addDays(now,3).toISOString(), entry_cost:500, grand_prize_amount:2500, participants_count:612, pool_accumulated:306000, items:[
+    { id:'atp_1', position:1, name:'Sinner vs Alcaraz', market:'winner_2options', prize_amount:100 },
+    { id:'atp_2', position:2, name:'Zverev vs Ruud', market:'winner_2options', prize_amount:100 },
+    { id:'atp_3', position:3, name:'Total games final', market:'total_goals', prize_amount:80 },
+    { id:'atp_4', position:4, name:'Campeón del torneo', market:'winner_2options', prize_amount:120 },
+  ] },
+  { id:'evt_nba', name:'NBA Conference Finals', description:'Tres predicciones para la final de conferencia.', sport:'basketball', status:'past', closes_at:addDays(now,-2).toISOString(), entry_cost:750, grand_prize_amount:3000, participants_count:1020, pool_accumulated:765000, items:[
+    { id:'nba_1', position:1, name:'Celtics vs Knicks', market:'winner_2options', prize_amount:120, player_prediction:'option1', result:'option1' },
+    { id:'nba_2', position:2, name:'Total puntos', market:'total_goals', prize_amount:90, player_prediction:'over', result:'under' },
+    { id:'nba_3', position:3, name:'MVP del partido', market:'winner_2options', prize_amount:150, player_prediction:'option2', result:'option2' },
+  ] },
+  { id:'evt_ufc', name:'UFC 305', description:'Cartelera principal con premio pleno.', sport:'ufc', status:'active', closes_at:addDays(now,2).toISOString(), entry_cost:1000, grand_prize_amount:5000, participants_count:999, pool_accumulated:999000, items:[
+    { id:'ufc_1', position:1, name:'Main event', market:'winner_2options', prize_amount:200, player_prediction:'option1' },
+    { id:'ufc_2', position:2, name:'Co-main event', market:'winner_2options', prize_amount:180, player_prediction:'option2' },
+    { id:'ufc_3', position:3, name:'Pelea 3', market:'winner_2options', prize_amount:120, player_prediction:'option1' },
+    { id:'ufc_4', position:4, name:'Pelea 4', market:'winner_2options', prize_amount:120, player_prediction:'option2' },
+  ] },
 ];
 
 export const mockAchievements: Achievement[] = [

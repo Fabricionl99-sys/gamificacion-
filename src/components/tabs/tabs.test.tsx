@@ -56,6 +56,21 @@ describe('key tab interactions', () => {
     expect(screen.getAllByText(/termina en/i).length).toBeGreaterThan(0);
   });
 
+  it('lets the player complete and review predictions', async () => {
+    renderWithProviders(<PredictionsTab />);
+    expect(await screen.findByText(/ganá monedas prediciendo resultados/i)).toBeInTheDocument();
+    await userEvent.click((await screen.findAllByRole('button', { name: /Predecir/i }, { timeout: 3000 }))[0]);
+    expect(await screen.findByText(/Confirmar predicción/i)).toBeDisabled();
+    await userEvent.click((await screen.findAllByRole('button', { name: /local/i }))[0]);
+    await userEvent.click(screen.getByRole('button', { name: /más 2\.5/i }));
+    await userEvent.click(screen.getByRole('button', { name: /sí/i }));
+    await userEvent.click(screen.getByRole('button', { name: /más 9\.5/i }));
+    await userEvent.click(screen.getByRole('button', { name: /2-1/i }));
+    expect(screen.getByRole('button', { name: /Confirmar predicción \(5\/5/i })).not.toBeDisabled();
+    await userEvent.click(screen.getByRole('button', { name: /^Mis predicciones/i }));
+    expect((await screen.findAllByRole('button', { name: /Ver mis predicciones/i })).length).toBeGreaterThan(0);
+  });
+
   it('opens post editor from feed composer', async () => {
     renderWithProviders(
       <>
