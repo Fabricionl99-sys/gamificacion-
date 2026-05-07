@@ -1,3 +1,6 @@
+import type { LevelDefinition } from './levels';
+import type { WalletCurrency } from './currency';
+
 export type VipTier = 'none' | 'bronze' | 'silver' | 'gold' | 'diamond';
 
 export interface Player {
@@ -18,6 +21,10 @@ export interface Player {
   isPrivate?: boolean;
   followers?: number;
   following?: number;
+  /** Curva de niveles del operador (nombres e insignias por nivel) */
+  levelDefinitions?: LevelDefinition[];
+  /** Balances por moneda con imagen */
+  wallet?: WalletCurrency[];
 }
 
 export interface PublicPlayer {

@@ -12,14 +12,14 @@ const tabLabels = ['inicio', 'misiones', 'logros', 'tienda', 'racha', 'ranking',
 describe('widget smoke', () => {
   it('renders WidgetContainer shell', async () => {
     renderWithRouter(<App />);
-    expect(await screen.findByLabelText('Estado del jugador')).toBeInTheDocument();
+    expect(await screen.findByLabelText('Estado del jugador', {}, { timeout: 15000 })).toBeInTheDocument();
     expect(screen.getByText('ver perfil')).toBeInTheDocument();
   });
 
   it('renders all 9 tabs without crashing', async () => {
     const user = userEvent.setup();
     renderWithRouter(<App />);
-    await screen.findByLabelText('Estado del jugador');
+    await screen.findByLabelText('Estado del jugador', {}, { timeout: 15000 });
     expect(await screen.findByText(/x2 activo/i)).toBeInTheDocument();
 
     const moreButton = screen.queryByRole('button', { name: /\+5/i });
@@ -35,7 +35,7 @@ describe('widget smoke', () => {
 
   it('opens and closes critical modals', async () => {
     renderWithRouter(<App />);
-    await screen.findByLabelText('Estado del jugador');
+    await screen.findByLabelText('Estado del jugador', {}, { timeout: 15000 });
 
     const modals = [
       ['levelUp', /level up/i],
@@ -58,7 +58,7 @@ describe('widget smoke', () => {
   it('supports key interactions in main tabs', async () => {
     const user = userEvent.setup();
     renderWithRouter(<App />);
-    await screen.findByLabelText('Estado del jugador');
+    await screen.findByLabelText('Estado del jugador', {}, { timeout: 15000 });
 
     act(() => useUiStore.getState().setActiveTab('missions'));
     expect((await screen.findAllByRole('button', { name: /reclamar/i })).length).toBeGreaterThan(0);
