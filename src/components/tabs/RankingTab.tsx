@@ -98,11 +98,16 @@ function RankingHighlightCard({ ranking, onOpen }: { ranking: PlayerRankingSumma
         <p className="mb-2 text-[10px] font-semibold uppercase tracking-widest text-text-tertiary">top 5</p>
         <div className="space-y-2">
           {ranking.top_5.map((entry, index) => (
-            <div key={entry.handle} className="flex items-center justify-between text-sm">
-              <span className="text-text-secondary">
-                #{index + 1} {entry.handle} {entry.verified ? '✓' : ''}
+            <div key={entry.handle} className="flex items-center justify-between gap-2 text-sm">
+              <span className="flex min-w-0 items-center gap-2 text-text-secondary">
+                {entry.level_badge_url ? (
+                  <img src={entry.level_badge_url} alt="" className="h-6 w-6 shrink-0 rounded-md object-cover" />
+                ) : null}
+                <span className="truncate">
+                  #{index + 1} {entry.handle} {entry.verified ? '✓' : ''}
+                </span>
               </span>
-              <b className="text-text-primary">{formatNumber(entry.metric_value)}</b>
+              <b className="shrink-0 text-text-primary">{formatNumber(entry.metric_value)}</b>
             </div>
           ))}
         </div>
@@ -160,8 +165,13 @@ function LeaderboardModal({ ranking, onClose }: { ranking: PlayerRankingSummary 
         {entries.map((entry) => (
           <div key={entry.position} className={`grid grid-cols-[48px_1fr_auto] items-center gap-2 rounded-md p-3 ${entry.is_self ? 'border border-accent bg-accent-subtle' : 'bg-bg-secondary'}`}>
             <b>#{entry.position}</b>
-            <span className="text-sm text-text-secondary">
-              {entry.handle} {entry.verified ? '✓' : ''}
+            <span className="flex items-center gap-2 text-sm text-text-secondary">
+              {entry.level_badge_url ? (
+                <img src={entry.level_badge_url} alt="" className="h-7 w-7 shrink-0 rounded-md object-cover" />
+              ) : null}
+              <span>
+                {entry.handle} {entry.verified ? '✓' : ''}
+              </span>
             </span>
             <span className="text-sm font-semibold">{formatNumber(entry.metric_value)}</span>
           </div>

@@ -1,19 +1,23 @@
-import { Bell, ChevronRight, Flame, Gift, Settings, Sparkles } from 'lucide-react';
+import { Bell, ChevronRight, Flame, Gift, Settings } from 'lucide-react';
 import { Avatar } from '../ui/Avatar';
 import { Button } from '../ui/Button';
-import { Pill } from '../ui/Pill';
-import { ProgressBar } from '../ui/ProgressBar';
 import { BoostBadge } from '../boost/BoostBadge';
+import { LevelBadge } from '../header/LevelBadge';
+import { CoinsBadge } from '../header/CoinsBadge';
 import { usePlayer } from '../../hooks/usePlayer';
 import { useModalsStore } from '../../store/modalsStore';
 import { useUiStore } from '../../store/uiStore';
 import { formatNumber } from '../../utils/format';
+import { resolveLevelBadgeUrl, resolveLevelDisplayName } from '../../utils/levelDisplay';
 
 export function WidgetHeader() {
   const { player, isLoading } = usePlayer();
   const openModal = useModalsStore((state) => state.openModal);
   const setActiveView = useUiStore((state) => state.setActiveView);
   const xpProgress = (player.currentXP / player.nextLevelXP) * 100;
+  const tiers = player.levelDefinitions ?? [];
+  const levelLabel = resolveLevelDisplayName(player.level, tiers);
+  const levelBadge = resolveLevelBadgeUrl(player.level, tiers);
 
   return (
     <header className="card-glass sticky top-0 z-30 rounded-2xl p-3 shadow-card" aria-label="Estado del jugador">
@@ -31,19 +35,23 @@ export function WidgetHeader() {
           className="min-w-0 flex-1 text-left transition-transform hover:-translate-y-0.5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent"
           onClick={() => setActiveView('own-profile')}
         >
-          <div className="mb-1 flex items-baseline gap-2">
-            <span className="text-sm font-semibold text-text-primary">Nivel {player.level}</span>
-            <span className="truncate text-xs text-text-tertiary">
-              {isLoading ? 'sincronizando...' : `${formatNumber(player.currentXP)} / ${formatNumber(player.nextLevelXP)} XP`}
-            </span>
-          </div>
-          <ProgressBar value={xpProgress} ariaLabel="Progreso de XP al siguiente nivel" />
+          <LevelBadge
+            displayName={levelLabel}
+            level={player.level}
+            badgeUrl={levelBadge}
+            currentXP={player.currentXP}
+            nextLevelXP={player.nextLevelXP}
+            isLoading={isLoading}
+            xpProgressPercent={xpProgress}
+          />
           <BoostBadge />
         </button>
 
-        <div className="hidden shrink-0 items-center gap-2 xs:flex">
-          <Pill icon={<Flame className="h-3 w-3 text-streak" />} label={formatNumber(player.streak)} />
-          <Pill icon={<Sparkles className="h-3 w-3 text-coins" />} label={formatNumber(player.coins)} />
+        <div className="hidden shrink-0 flex-col items-end gap-1 xs:flex">
+          <div className="flex items-center gap-2">
+            <span className="text-[10px] font-semibold uppercase tracking-wide text-text-tertiary">Monedas</span>
+          </div>
+          <CoinsBadge wallet={player.wallet} coinsFallback={player.coins} />
         </div>
 
         <button
@@ -82,9 +90,15 @@ export function WidgetHeader() {
         </button>
       </div>
       <div className="mt-2 flex items-center justify-between pl-[50px] xs:hidden">
+        <div className="flex flex-col gap-1">
+          <span className="text-[10px] font-semibold uppercase tracking-wide text-text-tertiary">Monedas</span>
+          <CoinsBadge wallet={player.wallet} coinsFallback={player.coins} />
+        </div>
         <div className="flex gap-2">
-          <Pill icon={<Flame className="h-3 w-3 text-streak" />} label={formatNumber(player.streak)} />
-          <Pill icon={<Sparkles className="h-3 w-3 text-coins" />} label={formatNumber(player.coins)} />
+          <span className="inline-flex items-center gap-1 rounded-full border border-border-default bg-bg-tertiary px-2 py-0.5 text-[11px]">
+            <Flame className="h-3 w-3 text-streak" aria-hidden />
+            {formatNumber(player.streak)}
+          </span>
         </div>
       </div>
       <Button

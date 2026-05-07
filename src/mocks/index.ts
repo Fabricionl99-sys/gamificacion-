@@ -16,9 +16,9 @@ export const mockPlayer: Player = {
   name: 'Juan Martinez',
   username: 'juanm',
   avatar: 'JM',
-  level: 20,
-  currentXP: 2840,
-  nextLevelXP: 4000,
+  level: 12,
+  currentXP: 5200,
+  nextLevelXP: 7250,
   streak: 12,
   bestStreak: 21,
   coins: 2150,
@@ -29,6 +29,37 @@ export const mockPlayer: Player = {
   followers: 184,
   following: 72,
   isPrivate: false,
+  levelDefinitions: [
+    {
+      level: 1,
+      displayName: 'Aprendiz',
+      badgeImageUrl: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=64&h=64&fit=crop',
+    },
+    {
+      level: 5,
+      displayName: 'Veterano',
+      badgeImageUrl: 'https://images.unsplash.com/photo-1527980965255-d3b416303d12?w=64&h=64&fit=crop',
+    },
+    {
+      level: 10,
+      displayName: 'Élite',
+      badgeImageUrl: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=64&h=64&fit=crop',
+    },
+  ],
+  wallet: [
+    {
+      id: 'coin_oro',
+      name: 'Oro',
+      balance: 2150,
+      imageUrl: 'https://cdn-icons-png.flaticon.com/64/272/272525.png',
+    },
+    {
+      id: 'coin_ruby',
+      name: 'Rubíes',
+      balance: 42,
+      imageUrl: 'https://cdn-icons-png.flaticon.com/64/9431/9431065.png',
+    },
+  ],
 };
 
 export const mockMissions: Mission[] = [
@@ -247,6 +278,12 @@ export const mockRanking: PublicPlayer[] = [
   { id: 'rank-019', name: 'Nico Norte', username: 'nicon', avatar: 'NN', level: 18, vipTier: 'none', weeklyXP: 3440, position: 19 },
 ];
 
+const badgeRot = [
+  'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=32&h=32&fit=crop',
+  'https://images.unsplash.com/photo-1527980965255-d3b416303d12?w=32&h=32&fit=crop',
+  'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=32&h=32&fit=crop',
+];
+
 const leaderboardEntries = (base: number): LeaderboardEntry[] =>
   Array.from({ length: 20 }, (_, index) => ({
     position: index + 1,
@@ -257,6 +294,7 @@ const leaderboardEntries = (base: number): LeaderboardEntry[] =>
     vip_tier: index < 2 ? 'diamond' : index < 7 ? 'gold' : index < 14 ? 'silver' : 'bronze',
     prize: index === 0 ? 100000 : index < 3 ? 50000 : index < 10 ? 10000 : index < 20 ? 5000 : undefined,
     is_self: index === 11,
+    level_badge_url: badgeRot[index % badgeRot.length],
   }));
 
 export const mockPlayerRankings: PlayerRankingSummary[] = [

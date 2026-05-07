@@ -15,6 +15,8 @@ export interface RankingTopEntry {
   metric_value: number;
   verified: boolean;
   vip_tier?: VipTier;
+  /** Insignia del nivel del jugador (curva BO / tenant). */
+  level_badge_url?: string;
 }
 
 export interface PlayerRankingSummary {
@@ -38,6 +40,7 @@ export interface LeaderboardEntry extends RankingTopEntry {
   position: number;
   prize_amount?: number;
   is_self?: boolean;
+  level_badge_url?: string;
 }
 
 export interface LeaderboardFull {
