@@ -33,16 +33,25 @@ export const mockPlayer: Player = {
       level: 1,
       displayName: 'Aprendiz',
       badgeImageUrl: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=64&h=64&fit=crop',
+      xpThreshold: 0,
     },
     {
       level: 5,
       displayName: 'Veterano',
       badgeImageUrl: 'https://images.unsplash.com/photo-1527980965255-d3b416303d12?w=64&h=64&fit=crop',
+      xpThreshold: 2000,
     },
     {
       level: 10,
       displayName: 'Élite',
       badgeImageUrl: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=64&h=64&fit=crop',
+      xpThreshold: 4000,
+    },
+    {
+      level: 12,
+      displayName: 'Élite',
+      badgeImageUrl: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=64&h=64&fit=crop',
+      xpThreshold: 4800,
     },
   ],
   wallet: [

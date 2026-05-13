@@ -1,5 +1,8 @@
-import { formatDistanceToNowStrict } from 'date-fns';
+import { format, formatDistanceToNowStrict } from 'date-fns';
 import { es } from 'date-fns/locale';
+
+/** Hora local HH:mm para fin de multiplicador del operador. */
+export const formatBoostEndClock = (iso: string): string => format(new Date(iso), 'HH:mm');
 
 export const formatNumber = (value: number): string =>
   new Intl.NumberFormat('es-AR').format(value);
