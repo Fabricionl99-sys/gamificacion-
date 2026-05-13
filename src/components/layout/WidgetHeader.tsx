@@ -1,4 +1,4 @@
-import { Coins, Settings, User, Zap } from 'lucide-react';
+import { Bell, ChevronRight, Coins, Gift, Settings, User, Zap } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 import { useActiveBoosts } from '../../hooks/useActiveBoosts';
@@ -13,6 +13,49 @@ import { resolveXpSegment } from '../../utils/xpLevelSegment';
 function formatMultiplierLabel(m: number): string {
   if (Number.isInteger(m)) return `x${m}`;
   return `x${String(m).replace('.', ',')}`;
+}
+
+/** Placeholder: conectar con panel de premios pendientes. */
+function handlePendingPrizesClick(): void {
+  /* intentionally empty */
+}
+
+/** Placeholder: conectar con centro de notificaciones. */
+function handleNotificationsClick(): void {
+  /* intentionally empty */
+}
+
+/** Placeholder: conectar con vista de perfil del jugador. */
+function handleProfileClick(): void {
+  /* intentionally empty */
+}
+
+function HeaderIconWithBadge({
+  icon: Icon,
+  count,
+  ariaLabel,
+  onPress,
+}: {
+  icon: typeof Gift;
+  count: number;
+  ariaLabel: string;
+  onPress: () => void;
+}) {
+  return (
+    <button
+      type="button"
+      className="relative flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-text-secondary transition hover:bg-bg-tertiary hover:text-text-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+      aria-label={ariaLabel}
+      onClick={onPress}
+    >
+      <Icon className="h-4 w-4" strokeWidth={2} aria-hidden />
+      {count > 0 ? (
+        <span className="pointer-events-none absolute -right-0.5 -top-0.5 grid min-h-4 min-w-4 place-items-center rounded-full bg-[#EF4444] px-1 text-[9px] font-bold leading-none text-white shadow-sm">
+          {count > 99 ? '99+' : count}
+        </span>
+      ) : null}
+    </button>
+  );
 }
 
 export function WidgetHeader() {
@@ -43,33 +86,58 @@ export function WidgetHeader() {
 
   return (
     <header
-      className="rounded-2xl border border-border-default/80 bg-gradient-to-b from-bg-secondary/95 to-bg-primary/90 px-4 py-5 shadow-card md:px-5 md:py-6"
+      className="relative rounded-2xl border border-border-default/80 bg-gradient-to-b from-bg-secondary/95 to-bg-primary/90 px-4 py-3 shadow-card md:px-5 md:py-4"
       aria-label="Estado del jugador"
     >
-      <div className="flex gap-3 md:gap-4">
-        <div
-          className="relative flex h-16 w-16 shrink-0 items-center justify-center rounded-full md:h-20 md:w-20"
-          style={{
-            background: avatarBg,
-            boxShadow: '0 0 0 1px rgba(10, 247, 132, 0.25), 0 0 20px rgba(10, 247, 132, 0.18)',
-          }}
-          aria-label={player.name ? `Avatar de ${player.name}` : 'Avatar del jugador'}
-        >
-          {initials ? (
-            <span className="font-mono text-lg font-bold leading-none tracking-tight text-white md:text-xl">
-              {initials}
-            </span>
-          ) : (
-            <User className="h-8 w-8 text-white/80" strokeWidth={1.75} aria-hidden />
-          )}
+      <div className="absolute right-3 top-2 z-10 flex items-center gap-0.5 md:right-4 md:top-2.5">
+        <HeaderIconWithBadge
+          icon={Gift}
+          count={player.pendingPrizes}
+          ariaLabel={`Premios pendientes (${player.pendingPrizes})`}
+          onPress={handlePendingPrizesClick}
+        />
+        <HeaderIconWithBadge
+          icon={Bell}
+          count={player.unreadNotifications}
+          ariaLabel={`Notificaciones sin leer (${player.unreadNotifications})`}
+          onPress={handleNotificationsClick}
+        />
+      </div>
+
+      <div className="flex gap-2.5 md:gap-3">
+        <div className="flex shrink-0 flex-col items-start gap-1.5">
+          <div
+            className="relative flex h-16 w-16 shrink-0 items-center justify-center rounded-full md:h-20 md:w-20"
+            style={{
+              background: avatarBg,
+              boxShadow: '0 0 0 1px rgba(10, 247, 132, 0.25), 0 0 20px rgba(10, 247, 132, 0.18)',
+            }}
+            aria-label={player.name ? `Avatar de ${player.name}` : 'Avatar del jugador'}
+          >
+            {initials ? (
+              <span className="font-mono text-lg font-bold leading-none tracking-tight text-white md:text-xl">
+                {initials}
+              </span>
+            ) : (
+              <User className="h-8 w-8 text-white/80" strokeWidth={1.75} aria-hidden />
+            )}
+          </div>
+          <button
+            type="button"
+            className="inline-flex items-center gap-0.5 font-urbanist text-[13px] font-medium text-white/80 transition hover:text-accent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent md:text-sm"
+            onClick={handleProfileClick}
+          >
+            Mi perfil
+            <ChevronRight className="h-3.5 w-3.5 shrink-0 opacity-90" aria-hidden strokeWidth={2.5} />
+          </button>
         </div>
 
-        <div className="min-w-0 flex-1">
-          <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between sm:gap-3">
+        <div className="min-w-0 flex-1 pr-[4.25rem] md:pr-[4.5rem]">
+          <div className="flex flex-col gap-1 sm:flex-row sm:items-start sm:justify-between sm:gap-2">
             <p className="min-w-0 flex-1 font-urbanist text-base font-semibold uppercase leading-snug tracking-wide text-text-primary md:text-lg">
               {levelTitle}
             </p>
-            <div className="flex shrink-0 flex-wrap items-center justify-end gap-2 sm:justify-end">
+            <div className="flex shrink-0 flex-wrap items-center justify-end gap-1.5 sm:justify-end">
               {topBoost ? (
                 <motion.span
                   className="inline-flex shrink-0 flex-wrap items-center gap-1 font-mono text-sm font-semibold text-accent sm:max-w-[48%] sm:justify-end md:text-[15px]"
@@ -94,9 +162,9 @@ export function WidgetHeader() {
             </div>
           </div>
 
-          <p className="mt-2 font-mono text-[13px] text-text-primary/70 md:text-sm">{xpLine}</p>
+          <p className="mt-1 font-mono text-[13px] text-text-primary/70 md:text-sm">{xpLine}</p>
 
-          <div className="mt-3 space-y-2 pl-0">
+          <div className="mt-1.5">
             <div
               className="h-2 overflow-hidden rounded-full bg-white/[0.1] md:h-2.5"
               role="progressbar"
@@ -110,7 +178,7 @@ export function WidgetHeader() {
                 style={{ width: `${progressPercent}%` }}
               />
             </div>
-            <div className="flex justify-end">
+            <div className="mt-1 flex justify-end pr-0.5">
               <div className="inline-flex items-center gap-1.5 font-mono text-sm font-bold text-text-primary md:text-base">
                 {primaryCoin?.imageUrl ? (
                   <img src={primaryCoin.imageUrl} alt="" className="h-5 w-5 shrink-0 rounded-full object-cover" />
