@@ -1,4 +1,4 @@
-import { Flame, Trophy, WalletCards } from 'lucide-react';
+import { Flame, WalletCards } from 'lucide-react';
 import { Card } from '../../ui/Card';
 import { ProgressBar } from '../../ui/ProgressBar';
 import { usePlayer } from '../../../hooks/usePlayer';
@@ -19,9 +19,8 @@ export function SummaryTab() {
         </div>
         <ProgressBar className="mt-3" value={(player.currentXP / player.nextLevelXP) * 100} />
       </Card>
-      <div className="grid grid-cols-3 gap-2">
+      <div className="grid grid-cols-2 gap-2">
         {[
-          { icon: Trophy, value: '18', label: 'logros' },
           { icon: Flame, value: player.streak, label: 'racha' },
           { icon: WalletCards, value: player.coins, label: 'monedas' },
         ].map((stat) => {

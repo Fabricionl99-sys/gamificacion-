@@ -1,7 +1,6 @@
 import { delay, http, HttpResponse } from 'msw';
 
 import {
-  mockAchievements,
   mockMissions,
   mockNews,
   mockNotifications,
@@ -66,10 +65,6 @@ export const handlers = [
   http.get('*/player/active-boosts', async () => {
     await wait();
     return HttpResponse.json(mockActiveBoosts);
-  }),
-  http.get('*/player/achievements', async () => {
-    await wait();
-    return HttpResponse.json(mockAchievements);
   }),
   http.get('*/player/predictions/events', async ({ request }) => {
     await wait();

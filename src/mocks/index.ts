@@ -1,5 +1,4 @@
 import { addDays, subHours } from 'date-fns';
-import type { Achievement } from '../types/achievement';
 import type { Mission } from '../types/mission';
 import type { Player, PublicPlayer } from '../types/player';
 import type { LeaderboardFull, LeaderboardEntry, PlayerRankingSummary } from '../types/ranking';
@@ -194,14 +193,6 @@ export const mockPredictionEvents: PredictionEvent[] = [
     { id:'ufc_3', position:3, name:'Pelea 3', market:'winner_2options', prize_amount:120, player_prediction:'option1' },
     { id:'ufc_4', position:4, name:'Pelea 4', market:'winner_2options', prize_amount:120, player_prediction:'option2' },
   ] },
-];
-
-export const mockAchievements: Achievement[] = [
-  { id:'ach_racha_10', name:'Racha 10 dias', description:'Mantuviste actividad 10 dias seguidos.', tier:'bronze', status:'unlocked', icon:'🔥', reward:{xp:500,coins:100}, progress:{current:10,total:10}, unlocked_at:addDays(now,-8).toISOString() },
-  { id:'ach_tipster', name:'Tipster preciso', description:'Acertá 10 predicciones deportivas.', tier:'silver', status:'in_progress', icon:'🎯', reward:{xp:1200,coins:350}, progress:{current:7,total:10} },
-  { id:'ach_casino_gold', name:'Maestro casino', description:'Completá 50 misiones de casino.', tier:'gold', status:'in_progress', icon:'🎰', reward:{xp:2500,coins:800}, progress:{current:32,total:50} },
-  { id:'ach_platinum_whale', name:'Leyenda de torneos', description:'Terminá top 3 en 5 torneos.', tier:'platinum', status:'locked', icon:'🏆', reward:{xp:5000,coins:1500}, progress:{current:1,total:5} },
-  { id:'ach_secret', name:'Logro secreto', description:'?????', tier:'diamond', status:'secret', icon:'?', reward:{xp:10000,coins:5000,chest_id:'chest_legendary'}, hint:'Probá una combinación perfecta de predicciones.' },
 ];
 
 export const mockShopItems: ShopItem[] = [
