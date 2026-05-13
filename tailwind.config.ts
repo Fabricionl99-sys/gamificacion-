@@ -48,6 +48,7 @@ export default {
       },
       fontFamily: {
         urbanist: ['Urbanist', 'system-ui', 'sans-serif'],
+        mono: ['"JetBrains Mono"', 'ui-monospace', 'monospace'],
       },
       fontSize: {
         xs: ['11px', { lineHeight: '1.4' }],

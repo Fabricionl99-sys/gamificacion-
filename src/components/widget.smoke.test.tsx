@@ -13,14 +13,14 @@ describe('widget smoke', () => {
   it('renders WidgetContainer shell', async () => {
     renderWithRouter(<App />);
     expect(await screen.findByLabelText('Estado del jugador', {}, { timeout: 15000 })).toBeInTheDocument();
-    expect(screen.getByText('ver perfil')).toBeInTheDocument();
+    expect(await screen.findByText(/x2 hasta \d{1,2}:\d{2}/i)).toBeInTheDocument();
   });
 
   it('renders all 8 tabs without crashing', async () => {
     const user = userEvent.setup();
     renderWithRouter(<App />);
     await screen.findByLabelText('Estado del jugador', {}, { timeout: 15000 });
-    expect(await screen.findByText(/x2 activo/i)).toBeInTheDocument();
+    expect(await screen.findByText(/x2 hasta \d{1,2}:\d{2}/i)).toBeInTheDocument();
 
     const moreButton = screen.queryByRole('button', { name: /\+5/i });
     if (moreButton) {
