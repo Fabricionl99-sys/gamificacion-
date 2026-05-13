@@ -7,7 +7,7 @@ import { useModalsStore } from '../store/modalsStore';
 import { useUiStore } from '../store/uiStore';
 import { renderWithRouter } from '../test/render';
 
-const tabLabels = ['inicio', 'misiones', 'logros', 'tienda', 'racha', 'ranking', 'torneos', 'predicciones', 'noticias'] as const;
+const tabLabels = ['inicio', 'misiones', 'tienda', 'racha', 'ranking', 'torneos', 'predicciones', 'noticias'] as const;
 
 describe('widget smoke', () => {
   it('renders WidgetContainer shell', async () => {
@@ -16,7 +16,7 @@ describe('widget smoke', () => {
     expect(screen.getByText('ver perfil')).toBeInTheDocument();
   });
 
-  it('renders all 9 tabs without crashing', async () => {
+  it('renders all 8 tabs without crashing', async () => {
     const user = userEvent.setup();
     renderWithRouter(<App />);
     await screen.findByLabelText('Estado del jugador', {}, { timeout: 15000 });

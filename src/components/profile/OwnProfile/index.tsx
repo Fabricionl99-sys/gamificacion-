@@ -7,16 +7,15 @@ import { Button } from '../../ui/Button';
 import { Tabs } from '../../ui/Tabs';
 import { mockPlayer } from '../../../mocks';
 import { useUiStore } from '../../../store/uiStore';
-import AchievementsTab from './AchievementsTab';
 import HistoryTab from './HistoryTab';
 import { PendingPrizesTab } from './PendingPrizesTab';
 import { SocialTab } from './SocialTab';
 import { SummaryTab } from './SummaryTab';
 
-type OwnProfileTab = 'summary' | 'prizes' | 'achievements' | 'history' | 'social';
+type OwnProfileTab = 'summary' | 'prizes' | 'history' | 'social';
 
 const isOwnProfileTab = (tab: string): tab is OwnProfileTab =>
-  ['summary', 'prizes', 'achievements', 'history', 'social'].includes(tab);
+  ['summary', 'prizes', 'history', 'social'].includes(tab);
 
 export default function OwnProfile() {
   const [activeTab, setActiveTab] = useState<OwnProfileTab>('summary');
@@ -26,7 +25,6 @@ export default function OwnProfile() {
     (): Array<{ id: OwnProfileTab; label: string }> => [
       { id: 'summary', label: 'resumen' },
       { id: 'prizes', label: 'premios' },
-      { id: 'achievements', label: 'logros' },
       { id: 'history', label: 'historial' },
       { id: 'social', label: 'social' },
     ],
@@ -68,7 +66,6 @@ export default function OwnProfile() {
       <div>
         {activeTab === 'summary' ? <SummaryTab /> : null}
         {activeTab === 'prizes' ? <PendingPrizesTab /> : null}
-        {activeTab === 'achievements' ? <AchievementsTab /> : null}
         {activeTab === 'history' ? <HistoryTab /> : null}
         {activeTab === 'social' ? <SocialTab /> : null}
       </div>

@@ -4,7 +4,6 @@ import { describe, expect, it } from 'vitest';
 
 import { renderWithProviders } from '../../test/render';
 import FeedTab from './FeedTab';
-import AchievementsTab from './AchievementsTab';
 import HomeTab from './HomeTab';
 import MissionsTab from './MissionsTab';
 import NewsTab from './NewsTab';
@@ -19,7 +18,6 @@ describe('tabs smoke', () => {
   it.each([
     ['home', <HomeTab />],
     ['missions', <MissionsTab />],
-    ['achievements', <AchievementsTab />],
     ['shop', <ShopTab />],
     ['streak', <StreakTab />],
     ['ranking', <RankingTab />],
@@ -40,13 +38,6 @@ describe('key tab interactions', () => {
     expect(screen.getAllByText(/completada/i).length).toBeGreaterThan(0);
     expect(await screen.findByText(/\+100 con x2 activo/i)).toBeInTheDocument();
     expect(screen.getAllByText(/casino/i).length).toBeGreaterThan(0);
-  });
-
-  it('renders achievement grid and detail modal', async () => {
-    renderWithProviders(<AchievementsTab />);
-    expect(await screen.findByText(/desbloqueá insignias jugando/i)).toBeInTheDocument();
-    await userEvent.click(screen.getByText('Racha 10 dias'));
-    expect(screen.getByRole('dialog', { name: /Racha 10 dias/i })).toBeInTheDocument();
   });
 
   it('shows shop stock, VIP and time restrictions', async () => {
