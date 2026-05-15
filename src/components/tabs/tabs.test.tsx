@@ -72,7 +72,7 @@ describe('key tab interactions', () => {
       </>,
     );
     await userEvent.click(screen.getByRole('button', { name: /que estas pensando/i }));
-    expect(screen.getByRole('dialog', { name: /nuevo post/i })).toBeInTheDocument();
+    expect(screen.getByRole('dialog', { name: /que estas pensando/i })).toBeInTheDocument();
   });
 
   it('supports social interactions on feed posts', async () => {
@@ -82,7 +82,7 @@ describe('key tab interactions', () => {
         <PostCommentsModal />
       </>,
     );
-    expect(await screen.findByText(/River vs Palmeiras/i)).toBeInTheDocument();
+    expect((await screen.findAllByText(/River vs Palmeiras/i)).length).toBeGreaterThan(0);
 
     const likeButton = screen.getByRole('button', { name: '42' });
     await userEvent.click(likeButton);

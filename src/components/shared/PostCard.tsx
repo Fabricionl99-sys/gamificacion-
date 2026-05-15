@@ -6,7 +6,7 @@ import { useToast } from '../../hooks/useToast';
 import { useSocialStore } from '../../store/socialStore';
 import type { FeedPost } from '../../types/social';
 import { cn } from '../../utils/classnames';
-import { formatRelativeTime } from '../../utils/format';
+import { formatNumber, formatRelativeTime } from '../../utils/format';
 import { emitWidgetEvent } from '../../utils/widgetEvents';
 import { Avatar } from '../ui/Avatar';
 import { Badge } from '../ui/Badge';
@@ -25,6 +25,8 @@ export default function PostCard({ post, onUpdated }: PostCardProps) {
   const [likedByMe, setLikedByMe] = useState(Boolean(post.likedByMe));
   const [isLiking, setIsLiking] = useState(false);
   const [isCopying, setIsCopying] = useState(false);
+
+  const copyPickId = post.betSlip?.id ?? post.sharedPick?.id;
 
   const handleLike = async () => {
     if (isLiking) return;
@@ -47,18 +49,20 @@ export default function PostCard({ post, onUpdated }: PostCardProps) {
   };
 
   const handleCopyPick = async () => {
-    if (!post.sharedPick || isCopying) return;
+    if (!copyPickId || isCopying) return;
     setIsCopying(true);
     try {
-      const response = await feedApi.copyPick(post.id, post.sharedPick.id);
+      const response = await feedApi.copyPick(post.id, copyPickId);
       emitWidgetEvent('betCopied', response);
-      toast.success('Fija copiada al cupón del operador');
+      toast.success('Apuesta copiada al cupón del operador');
     } catch {
       toast.danger('No se pudo copiar la apuesta');
     } finally {
       setIsCopying(false);
     }
   };
+
+  const handleDisplay = post.username ?? post.authorName;
 
   return (
     <Card className="space-y-3">
@@ -80,12 +84,24 @@ export default function PostCard({ post, onUpdated }: PostCardProps) {
           <MoreHorizontal className="h-4 w-4" />
         </button>
       </div>
-      <p className="text-sm text-text-secondary">{post.body}</p>
-      {post.sharedPick ? (
+
+      {post.betSlip ? (
+        <BetTicketBlock caption={post.body.trim()} displayHandle={handleDisplay} post={post} />
+      ) : post.body.trim() ? (
+        <p className="text-sm text-text-secondary">{post.body}</p>
+      ) : null}
+
+      {!post.betSlip && post.sharedPick ? (
+        <p className="text-xs uppercase tracking-wide text-text-tertiary">
+          {post.sharedPick.teams} · {post.sharedPick.prediction} · cuota {post.sharedPick.odds}
+        </p>
+      ) : null}
+
+      {copyPickId ? (
         <Button
-          size="sm"
+          size="md"
           variant="secondary"
-          className="w-full"
+          className="w-full text-sm font-semibold uppercase tracking-wide"
           leftIcon={<Copy className="h-4 w-4" />}
           onClick={handleCopyPick}
           isLoading={isCopying}
@@ -93,6 +109,7 @@ export default function PostCard({ post, onUpdated }: PostCardProps) {
           copiar apuesta
         </Button>
       ) : null}
+
       {post.accuratePrediction ? (
         <div className="rounded-md border border-border-accent bg-accent-subtle p-3">
           <Badge variant="success">PREDICCION ACERTADA</Badge>
@@ -130,5 +147,39 @@ export default function PostCard({ post, onUpdated }: PostCardProps) {
         </span>
       </div>
     </Card>
+  );
+}
+
+function BetTicketBlock({
+  caption,
+  displayHandle,
+  post,
+}: {
+  caption: string;
+  displayHandle: string;
+  post: FeedPost;
+}) {
+  if (!post.betSlip) return null;
+  return (
+    <div className="rounded-lg border border-accent/35 bg-[linear-gradient(180deg,rgba(10,247,132,0.08),transparent)] p-4">
+      <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-text-tertiary">ticket de apuesta</p>
+      <p className="mt-3 font-mono text-base font-bold uppercase leading-tight tracking-tight text-text-primary">
+        {displayHandle}
+      </p>
+      {caption ? <p className="mt-2 text-xs leading-relaxed text-text-secondary">{caption}</p> : null}
+      <div className="mt-4 space-y-4 border-t border-border-subtle pt-4">
+        {post.betSlip.legs.map((leg, index) => (
+          <div key={`${leg.teams}-${index}`}>
+            <p className="font-mono text-sm font-bold uppercase leading-snug text-text-primary">{leg.teams}</p>
+            <p className="mt-1 font-mono text-xs font-semibold uppercase leading-relaxed text-accent">
+              {leg.prediction} · cuota {formatNumber(leg.odds)}
+            </p>
+          </div>
+        ))}
+      </div>
+      <p className="mt-4 border-t border-border-subtle pt-3 font-mono text-sm font-bold uppercase text-text-primary">
+        total de cuota: {formatNumber(post.betSlip.totalOdds)}
+      </p>
+    </div>
   );
 }
