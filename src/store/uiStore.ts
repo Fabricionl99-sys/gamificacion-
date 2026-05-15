@@ -3,7 +3,7 @@ import type { TabId } from '../types/navigation';
 
 export interface UiState {
   activeTab: TabId;
-  activeView: 'widget' | 'own-profile' | 'public-profile' | 'private-profile' | 'settings';
+  activeView: 'widget' | 'own-profile' | 'public-profile' | 'private-profile';
   isMobileMenuExpanded: boolean;
   setActiveTab: (tab: TabId) => void;
   setActiveView: (view: UiState['activeView']) => void;
