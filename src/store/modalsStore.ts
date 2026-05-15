@@ -7,6 +7,7 @@ export type ModalName =
   | 'scratchCard'
   | 'levelUp'
   | 'purchase'
+  | 'shopDetail'
   | 'postEditor'
   | 'notifications'
   | 'divisionPrizes'

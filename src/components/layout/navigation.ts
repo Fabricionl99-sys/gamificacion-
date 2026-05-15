@@ -12,6 +12,7 @@ import {
 } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 import { FEATURES } from '../../config/features';
+import { PILOT } from '../../config/pilot';
 import type { TabId, WidgetTabConfig } from '../../types/navigation';
 
 interface TabIcon {
@@ -43,6 +44,11 @@ export const tabs: WidgetTabConfig[] = [
   { id: 'news', label: 'Noticias', shortLabel: 'noticias' },
 ];
 
-export const visibleTabs = tabs.filter((tab) => tab.id !== 'social' || FEATURES.social_enabled);
+const baseVisibleTabs = tabs.filter((tab) => tab.id !== 'social' || FEATURES.social_enabled);
+
+export const visibleTabs =
+  PILOT.isActive() && PILOT.socialOnly
+    ? baseVisibleTabs.filter((tab) => tab.id === 'social')
+    : baseVisibleTabs;
 
 export const getTabIcon = (tabId: TabId): LucideIcon => tabIcons[tabId]?.icon ?? Bell;

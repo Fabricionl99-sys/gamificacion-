@@ -87,7 +87,7 @@ Ver guia completa en [`docs/INTEGRATION.md`](docs/INTEGRATION.md).
 
 Los flags viven en `src/config/features.ts`.
 
-- `social_enabled`: controla si el tab Social (feed) aparece en el widget. Hoy queda en `false` hasta Etapa 9; el componente `FeedTab` y mocks se conservan para reactivarlo.
+- `social_enabled`: controla si el tab Social (feed) aparece en el widget. Con `true`, los jugadores con perfil público pueden compartir apuestas (sin montos), dar me gusta, comentar y copiar fijas de otros.
 
 ## Como contribuir
 

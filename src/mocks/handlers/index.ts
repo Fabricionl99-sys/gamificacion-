@@ -7,13 +7,14 @@ import {
   mockPlayer,
   mockPredictionEvents,
   mockPredictionMarkets,
-  mockPosts,
   mockPlayerRankings,
   mockLeaderboards,
   mockShopItems,
   mockTournaments,
   mockActiveBoosts,
 } from '../index';
+import { feedState } from '../feedState';
+import type { FeedScope } from '../../types/social';
 
 const wait = () => delay(180 + Math.random() * 320);
 
@@ -46,13 +47,61 @@ export const handlers = [
     await wait();
     return HttpResponse.json(mockTournaments);
   }),
-  http.get('*/player/feed', async () => {
+  http.get('*/player/feed', async ({ request }) => {
     await wait();
-    return HttpResponse.json(mockPosts);
+    const scope = (new URL(request.url).searchParams.get('scope') ?? 'following') as FeedScope;
+    return HttpResponse.json(feedState.list(scope));
   }),
-  http.get('*/player/feed-posts', async () => {
+  http.get('*/player/feed/shareable-picks', async () => {
     await wait();
-    return HttpResponse.json(mockPosts);
+    return HttpResponse.json(feedState.getShareablePicks());
+  }),
+  http.post('*/player/feed/posts', async ({ request }) => {
+    await wait();
+    try {
+      const body = (await request.json()) as { body: string; sharePickId?: string };
+      return HttpResponse.json(feedState.createPost(body));
+    } catch (error) {
+      if (error instanceof Error && error.message === 'PROFILE_PRIVATE') {
+        return HttpResponse.json({ code: 'PROFILE_PRIVATE', message: 'Perfil privado' }, { status: 403 });
+      }
+      return HttpResponse.json({ code: 'UNKNOWN', message: 'No se pudo publicar' }, { status: 400 });
+    }
+  }),
+  http.post('*/player/feed/posts/:postId/like', async ({ params }) => {
+    await wait();
+    try {
+      return HttpResponse.json(feedState.toggleLike(String(params.postId)));
+    } catch {
+      return HttpResponse.json({ code: 'POST_NOT_FOUND' }, { status: 404 });
+    }
+  }),
+  http.get('*/player/feed/posts/:postId/comments', async ({ params }) => {
+    await wait();
+    return HttpResponse.json(feedState.getComments(String(params.postId)));
+  }),
+  http.post('*/player/feed/posts/:postId/comments', async ({ params, request }) => {
+    await wait();
+    const body = (await request.json()) as { body: string };
+    try {
+      return HttpResponse.json(feedState.addComment(String(params.postId), body.body));
+    } catch {
+      return HttpResponse.json({ code: 'POST_NOT_FOUND' }, { status: 404 });
+    }
+  }),
+  http.post('*/player/feed/posts/:postId/copy-pick', async ({ params, request }) => {
+    await wait();
+    const body = (await request.json()) as { pickId: string };
+    try {
+      return HttpResponse.json(feedState.copyPick(String(params.postId), body.pickId));
+    } catch {
+      return HttpResponse.json({ code: 'PICK_NOT_FOUND' }, { status: 404 });
+    }
+  }),
+  http.get('*/player/feed-posts', async ({ request }) => {
+    await wait();
+    const scope = (new URL(request.url).searchParams.get('scope') ?? 'following') as FeedScope;
+    return HttpResponse.json(feedState.list(scope));
   }),
   http.get('*/player/news', async () => {
     await wait();

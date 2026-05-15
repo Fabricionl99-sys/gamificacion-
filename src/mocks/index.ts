@@ -4,7 +4,7 @@ import type { Player, PublicPlayer } from '../types/player';
 import type { LeaderboardFull, LeaderboardEntry, PlayerRankingSummary } from '../types/ranking';
 import type { PredictionEvent, PredictionMarketDefinition } from '../types/prediction';
 import type { ShopItem } from '../types/reward';
-import type { AppNotification, FeedPost, NewsItem, ProfilePrize } from '../types/social';
+import type { AppNotification, FeedPost, NewsItem, ProfilePrize, ShareablePick } from '../types/social';
 import type { Tournament } from '../types/tournament';
 import type { XPBoost } from '../types/boost';
 
@@ -208,7 +208,7 @@ export const mockShopItems: ShopItem[] = [
   {
     id: 'shop-001',
     name: 'Caja misteriosa premium',
-    description: 'Puede contener XP, monedas o bonos del operador.',
+    description: 'Puede contener XP, monedas, free spins o bonos del operador. La animacion revela el premio que ya definio el server.',
     category: 'gamification',
     cost: 450,
     stock: null,
@@ -217,11 +217,12 @@ export const mockShopItems: ShopItem[] = [
     endsAt: null,
     icon: 'box',
     featured: true,
+    imageUrl: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=160&h=160&fit=crop',
   },
   {
     id: 'shop-002',
     name: '25 free spins',
-    description: 'Validos en slots seleccionados por el operador.',
+    description: 'Validos en slots seleccionados por el operador durante 48 horas.',
     category: 'operatorBonus',
     cost: 1200,
     stock: 8,
@@ -230,11 +231,12 @@ export const mockShopItems: ShopItem[] = [
     endsAt: null,
     icon: 'sparkles',
     featured: true,
+    imageUrl: 'https://images.unsplash.com/photo-1596838132731-3301c4aa4310?w=160&h=160&fit=crop',
   },
   {
     id: 'shop-003',
     name: 'Cofre relampago x2',
-    description: 'Promo de tiempo limitado con premios instantaneos.',
+    description: 'Promo de tiempo limitado con premios instantaneos y multiplicador x2 en XP.',
     category: 'gamification',
     cost: 800,
     stock: 22,
@@ -242,11 +244,12 @@ export const mockShopItems: ShopItem[] = [
     vipRequired: 'gold',
     endsAt: addDays(now, 0.17).toISOString(),
     icon: 'zap',
+    imageUrl: 'https://images.unsplash.com/photo-1639765488500-5cfd9788f437?w=160&h=160&fit=crop',
   },
   {
     id: 'shop-004',
     name: 'Hoodie edicion liga oro',
-    description: 'Producto fisico para jugadores VIP.',
+    description: 'Producto fisico exclusivo para la comunidad VIP. Envio coordinado por el operador.',
     category: 'physical',
     cost: 3600,
     stock: 0,
@@ -254,11 +257,12 @@ export const mockShopItems: ShopItem[] = [
     vipRequired: 'diamond',
     endsAt: null,
     icon: 'shirt',
+    imageUrl: 'https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=160&h=160&fit=crop',
   },
   {
     id: 'shop-005',
     name: 'Bono casino VIP silver',
-    description: 'Bono exclusivo para tiers silver o superiores.',
+    description: 'Bono exclusivo para tiers silver o superiores en juegos de mesa y slots premium.',
     category: 'operatorBonus',
     cost: 1800,
     stock: 40,
@@ -266,6 +270,7 @@ export const mockShopItems: ShopItem[] = [
     vipRequired: 'silver',
     endsAt: addDays(now, 3).toISOString(),
     icon: 'sparkles',
+    imageUrl: 'https://images.unsplash.com/photo-1511512578047-dfb367046420?w=160&h=160&fit=crop',
   },
 ];
 
@@ -417,15 +422,17 @@ export const mockTournaments: Tournament[] = [
 export const mockPosts: FeedPost[] = [
   {
     id: 'post-001',
+    authorId: 'player-002',
     authorName: 'Max Power',
     authorAvatar: 'MP',
     vipTier: 'gold',
     level: 28,
-    body: 'Me gusta el over en el partido de hoy. Sin montos, solo lectura del momentum.',
+    body: 'Me gusta el over en River vs Palmeiras. Sin montos, solo lectura del momentum.',
     createdAt: subHours(now, 2).toISOString(),
     likes: 42,
-    comments: 8,
+    comments: 2,
     sharedPick: {
+      id: 'pick-shared-001',
       teams: 'River vs Palmeiras',
       prediction: 'Over 2.5 goles',
       odds: 1.86,
@@ -434,6 +441,7 @@ export const mockPosts: FeedPost[] = [
   },
   {
     id: 'post-002',
+    authorId: 'player-003',
     authorName: 'Sofia R.',
     authorAvatar: 'SR',
     vipTier: 'diamond',
@@ -446,6 +454,44 @@ export const mockPosts: FeedPost[] = [
       detail: 'Marcador exacto Napoli 2-1',
       xp: 220,
     },
+  },
+  {
+    id: 'post-003',
+    authorId: 'player-004',
+    authorName: 'Leo G.',
+    authorAvatar: 'LG',
+    vipTier: 'silver',
+    level: 19,
+    body: 'Arranco la jornada con Real Madrid vs Barcelona. Sin stakes visibles, solo lectura.',
+    createdAt: subHours(now, 8).toISOString(),
+    likes: 17,
+    comments: 3,
+    sharedPick: {
+      id: 'pick-shared-002',
+      teams: 'Real Madrid vs Barcelona',
+      prediction: 'Ambos marcan',
+      odds: 1.72,
+      status: 'pendiente',
+    },
+  },
+];
+
+export const mockShareablePicks: ShareablePick[] = [
+  {
+    id: 'pick-001',
+    teams: 'Boca vs Racing',
+    prediction: 'Boca gana',
+    odds: 2.1,
+    status: 'pendiente',
+    placedAt: subHours(now, 1).toISOString(),
+  },
+  {
+    id: 'pick-002',
+    teams: 'Inter vs Milan',
+    prediction: 'Under 2.5 goles',
+    odds: 1.95,
+    status: 'pendiente',
+    placedAt: subHours(now, 3).toISOString(),
   },
 ];
 

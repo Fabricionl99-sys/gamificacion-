@@ -11,6 +11,8 @@ import ScratchCardModal from './ScratchCardModal';
 import StreakChestModal from './StreakChestModal';
 import WheelModal from './WheelModal';
 import { useModalsStore } from '../../store/modalsStore';
+import { useShopStore } from '../../store/shopStore';
+import { mockShopItems } from '../../mocks/index';
 import { renderWithProviders } from '../../test/render';
 
 describe('critical modals', () => {
@@ -27,6 +29,9 @@ describe('critical modals', () => {
   it.each(cases)('opens and closes $modal', async ({ modal, title, Component }) => {
     const user = userEvent.setup();
     act(() => {
+      if (modal === 'purchase') {
+        useShopStore.getState().setSelectedItem(mockShopItems[1]);
+      }
       useModalsStore.getState().openModal(modal);
     });
     renderWithProviders(<Component />);

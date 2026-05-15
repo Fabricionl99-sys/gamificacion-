@@ -20,6 +20,7 @@ export interface ShopItem {
   description: string;
   cost: number;
   icon: ShopIcon;
+  imageUrl?: string;
   featured?: boolean;
   stock: number | null;
   lowStockThreshold: number;

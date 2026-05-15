@@ -6,7 +6,10 @@ import { DesktopSidebar } from './DesktopSidebar';
 import { TabNavigation } from './TabNavigation';
 import { WidgetHeader } from './WidgetHeader';
 import { FEATURES } from '../../config/features';
+import { PILOT } from '../../config/pilot';
+import { usePlayerStore } from '../../store/playerStore';
 import { useUiStore } from '../../store/uiStore';
+import { writePublicProfile } from '../../utils/profilePrivacy';
 import type { TabId } from '../../types/navigation';
 
 const HomeTab = lazy(() => import('../tabs/HomeTab'));
@@ -23,7 +26,9 @@ const PublicProfile = lazy(() => import('../profile/PublicProfile'));
 const PrivateProfile = lazy(() => import('../profile/PrivateProfile'));
 const NotificationCenterModal = lazy(() => import('../modals/NotificationCenterModal'));
 const PurchaseConfirmModal = lazy(() => import('../modals/PurchaseConfirmModal'));
+const ShopItemDetailModal = lazy(() => import('../modals/ShopItemDetailModal'));
 const PostEditorModal = lazy(() => import('../modals/PostEditorModal'));
+const PostCommentsModal = lazy(() => import('../modals/PostCommentsModal'));
 const TournamentRegisterModal = lazy(() => import('../modals/TournamentRegisterModal'));
 const DivisionPrizesModal = lazy(() => import('../modals/DivisionPrizesModal'));
 const MysteryBoxModal = lazy(() => import('../modals/MysteryBoxModal'));
@@ -85,6 +90,15 @@ export function WidgetContainer() {
     else document.documentElement.classList.add('dark');
   }, []);
 
+  useEffect(() => {
+    if (!PILOT.isActive()) return;
+    if (PILOT.ensurePublicProfile) {
+      writePublicProfile(true);
+      usePlayerStore.getState().updatePlayer({ isPrivate: false });
+    }
+    setActiveTab(PILOT.defaultTab);
+  }, [setActiveTab]);
+
   return (
     <div className="min-h-dvh bg-bg-primary text-text-primary md:flex md:items-stretch">
       <DesktopSidebar activeTab={activeTab} onSelect={setActiveTab} />
@@ -97,7 +111,9 @@ export function WidgetContainer() {
             <MainView />
             <NotificationCenterModal />
             <PurchaseConfirmModal />
+            <ShopItemDetailModal />
             <PostEditorModal />
+            <PostCommentsModal />
             <TournamentRegisterModal />
             <DivisionPrizesModal />
             <MysteryBoxModal />

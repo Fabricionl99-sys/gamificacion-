@@ -1,16 +1,11 @@
 import { useEffect, useState } from 'react';
 
+import { usePlayerStore } from '../../store/playerStore';
+import { readPublicProfile, writePublicProfile } from '../../utils/profilePrivacy';
 import { Card } from '../ui/Card';
 
-const PUBLIC_KEY = 'wingoat_public_profile';
-const LOCALE_KEY = 'wingoat_locale';
-
 export type UiLocale = 'es' | 'en' | 'pt';
-
-function readPublic(): boolean {
-  if (typeof localStorage === 'undefined') return true;
-  return localStorage.getItem(PUBLIC_KEY) !== '0';
-}
+const LOCALE_KEY = 'wingoat_locale';
 
 function readLocale(): UiLocale {
   if (typeof localStorage === 'undefined') return 'es';
@@ -24,12 +19,14 @@ interface AccountSectionProps {
 }
 
 export function AccountSection({ onOpenAvatarPicker }: AccountSectionProps) {
-  const [publicProfile, setPublicProfile] = useState(readPublic);
+  const updatePlayer = usePlayerStore((state) => state.updatePlayer);
+  const [publicProfile, setPublicProfile] = useState(readPublicProfile);
   const [locale, setLocale] = useState<UiLocale>(readLocale);
 
   useEffect(() => {
-    localStorage.setItem(PUBLIC_KEY, publicProfile ? '1' : '0');
-  }, [publicProfile]);
+    writePublicProfile(publicProfile);
+    updatePlayer({ isPrivate: !publicProfile });
+  }, [publicProfile, updatePlayer]);
 
   useEffect(() => {
     localStorage.setItem(LOCALE_KEY, locale);
@@ -54,8 +51,12 @@ export function AccountSection({ onOpenAvatarPicker }: AccountSectionProps) {
           className="accent-accent"
           checked={publicProfile}
           onChange={(e) => setPublicProfile(e.target.checked)}
+          aria-describedby="public-profile-hint"
         />
       </label>
+      <p id="public-profile-hint" className="text-xs text-text-tertiary">
+        Con perfil público podés compartir apuestas en social. Los montos nunca se muestran.
+      </p>
       <div className="rounded-md bg-bg-tertiary px-3 py-2.5">
         <p className="mb-2 text-xs font-medium uppercase tracking-wide text-text-tertiary">idioma</p>
         <div className="flex gap-2">
