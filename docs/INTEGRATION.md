@@ -146,7 +146,7 @@ Theme overrides are intentionally limited to preserve the crypto-futurist identi
 | `tabOpened` | `{ tabId }` | Active tab changes. |
 | `notificationOpened` | `{ notificationId, kind }` | Player opens a notification. |
 | `postPublished` | `{ postId, pendingReview }` | Feed post is submitted. |
-| `betCopied` | `{ postId, pickId, teams, prediction, odds }` | Player copies a shared bet to the operator slip. |
+| `betCopied` | `{ postId, pickId, teams, prediction, odds, totalOdds?, legs? }` | Player copies a shared bet or combined ticket to the operator slip. |
 | `tournamentRegistered` | `{ tournamentId }` | Player confirms tournament registration. |
 | `error` | `{ code, message, retryable }` | Widget cannot complete an action. |
 

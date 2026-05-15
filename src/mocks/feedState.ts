@@ -82,30 +82,69 @@ export const feedState = {
     if (!isPublicPlayer()) {
       throw new Error('PROFILE_PRIVATE');
     }
-    const pick = input.sharePickId
-      ? mockShareablePicks.find((entry) => entry.id === input.sharePickId)
-      : undefined;
+    const pickIdsOrdered = [
+      ...(input.sharePickIds ?? []),
+      ...(input.sharePickId && !input.sharePickIds?.length ? [input.sharePickId] : []),
+    ];
+    const picks = pickIdsOrdered
+      .map((id) => mockShareablePicks.find((entry) => entry.id === id))
+      .filter((entry): entry is ShareablePick => Boolean(entry));
+
+    const wantsTicket = input.kind === 'bet_ticket' || (input.sharePickIds?.length ?? 0) > 0;
+    const caption = input.body.trim();
+
+    let betSlip: FeedPost['betSlip'];
+    let sharedPick: FeedPost['sharedPick'];
+    let kind: FeedPost['kind'] = 'thought';
+
+    if (wantsTicket) {
+      if (picks.length === 0) {
+        throw new Error('NO_PICKS');
+      }
+      const legs = picks.map((pick) => ({
+        teams: pick.teams,
+        prediction: pick.prediction,
+        odds: pick.odds,
+      }));
+      const totalOdds = legs.reduce((acc, leg) => acc * leg.odds, 1);
+      betSlip = {
+        id: `slip-${Date.now()}`,
+        legs,
+        totalOdds: Math.round(totalOdds * 100) / 100,
+        status: picks[0].status,
+      };
+      kind = 'bet_ticket';
+    } else if (input.sharePickId && picks.length === 1) {
+      const pick = picks[0];
+      sharedPick = {
+        id: pick.id,
+        teams: pick.teams,
+        prediction: pick.prediction,
+        odds: pick.odds,
+        status: pick.status,
+      };
+    }
+
+    if (!wantsTicket && caption.length === 0) {
+      throw new Error('EMPTY_BODY');
+    }
+
     const post: FeedPost = {
       id: `post-${Date.now()}`,
       authorId: mockPlayer.id,
       authorName: mockPlayer.name,
+      username: mockPlayer.username?.toUpperCase(),
       authorAvatar: mockPlayer.avatar,
       vipTier: mockPlayer.vipTier,
       level: mockPlayer.level,
       createdAt: new Date().toISOString(),
-      body: input.body.trim(),
+      kind,
+      body: caption,
       likes: 0,
       comments: 0,
       likedByMe: false,
-      sharedPick: pick
-        ? {
-            id: pick.id,
-            teams: pick.teams,
-            prediction: pick.prediction,
-            odds: pick.odds,
-            status: pick.status,
-          }
-        : undefined,
+      betSlip,
+      sharedPick,
       pendingReview: false,
     };
     posts = [post, ...posts];
@@ -151,7 +190,22 @@ export const feedState = {
   },
   copyPick(postId: string, pickId: string) {
     const post = posts.find((entry) => entry.id === postId);
-    if (!post?.sharedPick || post.sharedPick.id !== pickId) {
+    if (!post) throw new Error('POST_NOT_FOUND');
+
+    if (post.betSlip && post.betSlip.id === pickId) {
+      const { legs, totalOdds } = post.betSlip;
+      return {
+        postId,
+        pickId,
+        teams: legs.map((leg) => leg.teams).join(' · '),
+        prediction: legs.map((leg) => leg.prediction).join(' · '),
+        odds: totalOdds,
+        totalOdds,
+        legs,
+      };
+    }
+
+    if (!post.sharedPick || post.sharedPick.id !== pickId) {
       throw new Error('PICK_NOT_FOUND');
     }
     return {

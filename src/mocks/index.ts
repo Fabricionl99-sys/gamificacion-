@@ -474,6 +474,30 @@ export const mockPosts: FeedPost[] = [
       status: 'pendiente',
     },
   },
+  {
+    id: 'post-004',
+    authorId: 'player-007',
+    authorName: 'Juan',
+    username: 'JUAN8021',
+    authorAvatar: 'J8',
+    vipTier: 'bronze',
+    level: 8,
+    kind: 'bet_ticket',
+    body: '',
+    createdAt: subHours(now, 0.2).toISOString(),
+    likes: 91,
+    comments: 12,
+    betSlip: {
+      id: 'slip-mock-001',
+      legs: [
+        { teams: 'River vs Boca', prediction: '+2,5 goles', odds: 2.4 },
+        { teams: 'Real Madrid vs Barcelona', prediction: 'Gana Barcelona', odds: 2.8 },
+        { teams: 'Man City vs Chelsea', prediction: '+9,5 corners', odds: 3.5 },
+      ],
+      totalOdds: 23.52,
+      status: 'pendiente',
+    },
+  },
 ];
 
 export const mockShareablePicks: ShareablePick[] = [
@@ -492,6 +516,30 @@ export const mockShareablePicks: ShareablePick[] = [
     odds: 1.95,
     status: 'pendiente',
     placedAt: subHours(now, 3).toISOString(),
+  },
+  {
+    id: 'pick-003',
+    teams: 'River vs Boca',
+    prediction: '+2,5 goles',
+    odds: 2.4,
+    status: 'pendiente',
+    placedAt: subHours(now, 0.5).toISOString(),
+  },
+  {
+    id: 'pick-004',
+    teams: 'Real Madrid vs Barcelona',
+    prediction: 'Gana Barcelona',
+    odds: 2.8,
+    status: 'pendiente',
+    placedAt: subHours(now, 0.4).toISOString(),
+  },
+  {
+    id: 'pick-005',
+    teams: 'Man City vs Chelsea',
+    prediction: '+9,5 corners',
+    odds: 3.5,
+    status: 'pendiente',
+    placedAt: subHours(now, 0.3).toISOString(),
   },
 ];
 

@@ -1,6 +1,16 @@
 export type WidgetEventMap = {
   postPublished: { postId: string; pendingReview: boolean };
-  betCopied: { postId: string; pickId: string; teams: string; prediction: string; odds: number };
+  betCopied: {
+    postId: string;
+    pickId: string;
+    teams: string;
+    prediction: string;
+    odds: number;
+    totalOdds?: number;
+    legs?: { teams: string; prediction: string; odds: number }[];
+  };
+  missionNavigate: { missionId: string; category: string; ruleId?: string };
+  missionClaimed: { missionId: string; rewardXP: number; rewardCoins: number };
 };
 
 export function emitWidgetEvent<K extends keyof WidgetEventMap>(

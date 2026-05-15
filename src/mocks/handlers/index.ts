@@ -1,7 +1,6 @@
 import { delay, http, HttpResponse } from 'msw';
 
 import {
-  mockMissions,
   mockNews,
   mockNotifications,
   mockPlayer,
@@ -14,7 +13,8 @@ import {
   mockActiveBoosts,
 } from '../index';
 import { feedState } from '../feedState';
-import type { FeedScope } from '../../types/social';
+import { missionState } from '../missionState';
+import type { CreatePostInput, FeedScope } from '../../types/social';
 
 const wait = () => delay(180 + Math.random() * 320);
 
@@ -25,7 +25,21 @@ export const handlers = [
   }),
   http.get('*/player/missions', async () => {
     await wait();
-    return HttpResponse.json(mockMissions);
+    return HttpResponse.json(missionState.list());
+  }),
+  http.post('*/player/missions/:id/claim', async ({ params }) => {
+    await wait();
+    try {
+      return HttpResponse.json(missionState.claim(String(params.id)));
+    } catch (error) {
+      if (error instanceof Error && error.message === 'MISSION_NOT_FOUND') {
+        return HttpResponse.json({ code: 'MISSION_NOT_FOUND' }, { status: 404 });
+      }
+      if (error instanceof Error && error.message === 'MISSION_NOT_CLAIMABLE') {
+        return HttpResponse.json({ code: 'MISSION_NOT_CLAIMABLE' }, { status: 409 });
+      }
+      return HttpResponse.json({ code: 'UNKNOWN' }, { status: 400 });
+    }
   }),
   http.get('*/player/shop-products', async () => {
     await wait();
@@ -59,11 +73,14 @@ export const handlers = [
   http.post('*/player/feed/posts', async ({ request }) => {
     await wait();
     try {
-      const body = (await request.json()) as { body: string; sharePickId?: string };
+      const body = (await request.json()) as CreatePostInput;
       return HttpResponse.json(feedState.createPost(body));
     } catch (error) {
       if (error instanceof Error && error.message === 'PROFILE_PRIVATE') {
         return HttpResponse.json({ code: 'PROFILE_PRIVATE', message: 'Perfil privado' }, { status: 403 });
+      }
+      if (error instanceof Error && (error.message === 'EMPTY_BODY' || error.message === 'NO_PICKS')) {
+        return HttpResponse.json({ code: error.message, message: 'Datos invalidos' }, { status: 400 });
       }
       return HttpResponse.json({ code: 'UNKNOWN', message: 'No se pudo publicar' }, { status: 400 });
     }
