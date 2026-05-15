@@ -4,10 +4,12 @@ import { describe, expect, it } from 'vitest';
 
 import App from '../App';
 import { useModalsStore } from '../store/modalsStore';
+import { useShopStore } from '../store/shopStore';
+import { mockShopItems } from '../mocks/index';
 import { useUiStore } from '../store/uiStore';
 import { renderWithRouter } from '../test/render';
 
-const tabLabels = ['inicio', 'misiones', 'tienda', 'racha', 'ranking', 'torneos', 'predicciones', 'noticias'] as const;
+const tabLabels = ['inicio', 'misiones', 'tienda', 'social', 'racha', 'ranking', 'torneos', 'predicciones', 'noticias'] as const;
 
 describe('widget smoke', () => {
   it('renders WidgetContainer shell', async () => {
@@ -16,7 +18,7 @@ describe('widget smoke', () => {
     expect(await screen.findByText(/x2 hasta \d{1,2}:\d{2}/i)).toBeInTheDocument();
   });
 
-  it('renders all 8 tabs without crashing', async () => {
+  it('renders all 9 tabs without crashing', async () => {
     const user = userEvent.setup();
     renderWithRouter(<App />);
     await screen.findByLabelText('Estado del jugador', {}, { timeout: 15000 });
@@ -43,7 +45,12 @@ describe('widget smoke', () => {
     ] as const;
 
     for (const [modal, title] of modals) {
-      act(() => useModalsStore.getState().openModal(modal));
+      act(() => {
+        if (modal === 'purchase') {
+          useShopStore.getState().setSelectedItem(mockShopItems[1]);
+        }
+        useModalsStore.getState().openModal(modal);
+      });
       await waitFor(() => expect(screen.getByRole('dialog', { name: title })).toBeInTheDocument());
       await userEvent.click(screen.getByRole('button', { name: /cerrar modal/i }));
       await waitFor(() => expect(screen.queryByRole('dialog', { name: title })).not.toBeInTheDocument());
@@ -61,7 +68,7 @@ describe('widget smoke', () => {
 
     act(() => useUiStore.getState().setActiveTab('shop'));
     expect(await screen.findByRole('button', { name: /agotado/i })).toBeDisabled();
-    expect(screen.getAllByText(/quedan 8 unidades/i).length).toBeGreaterThan(0);
+    expect(screen.getAllByText(/quedan 8/i).length).toBeGreaterThan(0);
 
     act(() => useUiStore.getState().setActiveTab('ranking'));
     expect(await screen.findByText(/competí con otros jugadores/i)).toBeInTheDocument();

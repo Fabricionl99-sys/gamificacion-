@@ -1,3 +1,3 @@
 export const FEATURES = {
-  social_enabled: false,
+  social_enabled: true,
 } as const;

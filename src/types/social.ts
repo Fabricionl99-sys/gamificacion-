@@ -3,9 +3,19 @@ import type { Reward } from './reward';
 export type NewsCategory = 'promo' | 'evento' | 'anuncio' | 'sistema';
 export type PredictionStatus = 'pendiente' | 'ganada' | 'perdida';
 export type NotificationKind = 'reward' | 'mission' | 'social' | 'tournament' | 'system' | 'system_event';
+export type FeedScope = 'following' | 'explore';
+
+export interface SharedPick {
+  id: string;
+  teams: string;
+  prediction: string;
+  odds: number;
+  status: PredictionStatus;
+}
 
 export interface FeedPost {
   id: string;
+  authorId: string;
   authorName: string;
   authorAvatar: string;
   vipTier?: string;
@@ -14,18 +24,52 @@ export interface FeedPost {
   body: string;
   imageUrl?: string;
   likes: number;
+  likedByMe?: boolean;
   comments: number;
-  sharedPick?: {
-    teams: string;
-    prediction: string;
-    odds: number;
-    status: PredictionStatus;
-  };
+  sharedPick?: SharedPick;
   accuratePrediction?: {
     detail: string;
     xp: number;
   };
   pendingReview?: boolean;
+}
+
+export interface FeedComment {
+  id: string;
+  postId: string;
+  authorId: string;
+  authorName: string;
+  authorAvatar: string;
+  body: string;
+  createdAt: string;
+}
+
+export interface ShareablePick {
+  id: string;
+  teams: string;
+  prediction: string;
+  odds: number;
+  status: PredictionStatus;
+  placedAt: string;
+}
+
+export interface CreatePostInput {
+  body: string;
+  sharePickId?: string;
+}
+
+export interface LikePostResponse {
+  postId: string;
+  likes: number;
+  likedByMe: boolean;
+}
+
+export interface CopyPickResponse {
+  postId: string;
+  pickId: string;
+  teams: string;
+  prediction: string;
+  odds: number;
 }
 
 export interface NewsItem {

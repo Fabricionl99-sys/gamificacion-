@@ -22,6 +22,16 @@ export function FollowingFeedEmptyState() {
   );
 }
 
+export function ExploreFeedEmptyState() {
+  return (
+    <EmptyState
+      icon={<Users className="h-8 w-8" />}
+      title="no hay novedades para explorar"
+      description="volvé más tarde o seguí a más jugadores"
+    />
+  );
+}
+
 export function NotificationsEmptyState() {
   return (
     <EmptyState

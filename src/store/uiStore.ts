@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+import { PILOT } from '../config/pilot';
 import type { TabId } from '../types/navigation';
 
 export interface UiState {
@@ -9,7 +10,7 @@ export interface UiState {
 }
 
 export const useUiStore = create<UiState>((set) => ({
-  activeTab: 'home',
+  activeTab: PILOT.isActive() ? PILOT.defaultTab : 'home',
   activeView: 'widget',
   setActiveTab: (tab) => set({ activeTab: tab, activeView: 'widget' }),
   setActiveView: (view) => set({ activeView: view }),

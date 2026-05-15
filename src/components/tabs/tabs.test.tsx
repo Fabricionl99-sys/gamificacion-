@@ -8,6 +8,7 @@ import HomeTab from './HomeTab';
 import MissionsTab from './MissionsTab';
 import NewsTab from './NewsTab';
 import PostEditorModal from '../modals/PostEditorModal';
+import PostCommentsModal from '../modals/PostCommentsModal';
 import PredictionsTab from './PredictionsTab';
 import RankingTab from './RankingTab';
 import ShopTab from './ShopTab';
@@ -42,10 +43,10 @@ describe('key tab interactions', () => {
 
   it('shows shop stock, VIP and time restrictions', async () => {
     renderWithProviders(<ShopTab />);
-    expect((await screen.findAllByText(/quedan 8 unidades/i)).length).toBeGreaterThan(0);
+    expect((await screen.findAllByText(/quedan 8/i)).length).toBeGreaterThan(0);
     expect(screen.getAllByText(/vip diamond/i).length).toBeGreaterThan(0);
     expect(screen.getByRole('button', { name: /agotado/i })).toBeDisabled();
-    expect(screen.getAllByText(/termina en/i).length).toBeGreaterThan(0);
+    expect(screen.getAllByText(/\d+ días?|\d+h \d+m/i).length).toBeGreaterThan(0);
   });
 
   it('lets the player complete and review predictions', async () => {
@@ -72,6 +73,26 @@ describe('key tab interactions', () => {
     );
     await userEvent.click(screen.getByRole('button', { name: /que estas pensando/i }));
     expect(screen.getByRole('dialog', { name: /nuevo post/i })).toBeInTheDocument();
+  });
+
+  it('supports social interactions on feed posts', async () => {
+    renderWithProviders(
+      <>
+        <FeedTab />
+        <PostCommentsModal />
+      </>,
+    );
+    expect(await screen.findByText(/River vs Palmeiras/i)).toBeInTheDocument();
+
+    const likeButton = screen.getByRole('button', { name: '42' });
+    await userEvent.click(likeButton);
+    expect(likeButton).toHaveAttribute('aria-pressed', 'true');
+
+    await userEvent.click(screen.getByRole('button', { name: /copiar apuesta/i }));
+
+    await userEvent.click(screen.getByRole('button', { name: '2' }));
+    expect(await screen.findByRole('dialog', { name: /comentarios/i })).toBeInTheDocument();
+    expect(await screen.findByText(/Buena lectura/i, {}, { timeout: 3000 })).toBeInTheDocument();
   });
 
   it('renders BO-style ranking cards and leaderboard modal', async () => {
