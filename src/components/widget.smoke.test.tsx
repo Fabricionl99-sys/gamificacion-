@@ -22,11 +22,6 @@ describe('widget smoke', () => {
     await screen.findByLabelText('Estado del jugador', {}, { timeout: 15000 });
     expect(await screen.findByText(/x2 hasta \d{1,2}:\d{2}/i)).toBeInTheDocument();
 
-    const moreButton = screen.queryByRole('button', { name: /\+5/i });
-    if (moreButton) {
-      await user.click(moreButton);
-    }
-
     for (const label of tabLabels) {
       await user.click(screen.getAllByRole('button', { name: new RegExp(label, 'i') })[0]);
       expect(screen.getByLabelText('Estado del jugador')).toBeInTheDocument();

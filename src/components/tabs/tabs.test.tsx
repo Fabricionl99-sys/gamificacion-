@@ -23,7 +23,7 @@ describe('tabs smoke', () => {
     ['ranking', <RankingTab />],
     ['tournaments', <TournamentsTab />],
     ['predictions', <PredictionsTab />],
-    ['feed', <FeedTab />],
+    ['social', <FeedTab />],
     ['news', <NewsTab />],
   ])('renders %s tab without crashing', (_name, element) => {
     renderWithProviders(element);
