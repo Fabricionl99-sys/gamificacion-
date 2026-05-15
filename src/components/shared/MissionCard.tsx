@@ -20,6 +20,7 @@ interface MissionCardProps {
   boosts?: import('../../types/boost').XPBoost[];
   onClaimed?: () => void;
   onNavigate?: (mission: Mission) => void;
+  onDetail?: (mission: Mission) => void;
 }
 
 const navigateLabels: Record<MissionCategory, string> = {
@@ -32,7 +33,7 @@ const navigateLabels: Record<MissionCategory, string> = {
   social: 'ir a social',
 };
 
-export function MissionCard({ mission, compact = false, boosts = [], onClaimed, onNavigate }: MissionCardProps) {
+export function MissionCard({ mission, compact = false, boosts = [], onClaimed, onNavigate, onDetail }: MissionCardProps) {
   const toast = useToast();
   const player = usePlayerStore((state) => state.player);
   const updatePlayer = usePlayerStore((state) => state.updatePlayer);
@@ -112,7 +113,12 @@ export function MissionCard({ mission, compact = false, boosts = [], onClaimed, 
           {isLocked ? mission.lockReason : isClaimed ? 'reclamada' : isCompleted ? 'lista para reclamar' : deadline}
         </p>
         {!compact ? (
-          <div className="flex shrink-0 gap-2">
+          <div className="flex shrink-0 flex-wrap justify-end gap-2">
+            {onDetail ? (
+              <Button size="sm" variant="ghost" onClick={() => onDetail(mission)}>
+                ver detalle
+              </Button>
+            ) : null}
             {isLocked ? (
               <Button size="sm" variant="secondary" onClick={handleNavigate}>
                 ver requisito
@@ -129,6 +135,13 @@ export function MissionCard({ mission, compact = false, boosts = [], onClaimed, 
           </div>
         ) : null}
       </div>
+      {compact && onDetail ? (
+        <div className="mt-2 flex justify-end border-t border-border-subtle pt-2">
+          <Button size="sm" variant="ghost" onClick={() => onDetail(mission)}>
+            ver detalle
+          </Button>
+        </div>
+      ) : null}
     </Card>
   );
 }

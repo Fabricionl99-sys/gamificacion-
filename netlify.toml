@@ -1,0 +1,17 @@
+# Demo del widget (IIFE + MSW) — https://docs.netlify.com/configure-builds/file-based-configuration/
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "20"
+  # Mocks activos en la demo publicada (API simulada con MSW)
+  VITE_USE_MOCKS = "true"
+  # Piloto social: abre en Social, perfil público, banner
+  VITE_PILOT_SOCIAL = "true"
+
+# React Router (BrowserRouter) + rutas como /demo
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200

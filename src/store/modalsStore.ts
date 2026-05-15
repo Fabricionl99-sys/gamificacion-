@@ -8,6 +8,7 @@ export type ModalName =
   | 'levelUp'
   | 'purchase'
   | 'shopDetail'
+  | 'missionDetail'
   | 'postEditor'
   | 'notifications'
   | 'divisionPrizes'

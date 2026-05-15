@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { feedApi } from '../../api/feed';
 import { useToast } from '../../hooks/useToast';
 import { useSocialStore } from '../../store/socialStore';
-import type { FeedPost } from '../../types/social';
+import type { BetSlipShare, FeedPost } from '../../types/social';
 import { cn } from '../../utils/classnames';
 import { formatNumber, formatRelativeTime } from '../../utils/format';
 import { emitWidgetEvent } from '../../utils/widgetEvents';
@@ -26,7 +26,11 @@ export default function PostCard({ post, onUpdated }: PostCardProps) {
   const [isLiking, setIsLiking] = useState(false);
   const [isCopying, setIsCopying] = useState(false);
 
-  const copyPickId = post.betSlip?.id ?? post.sharedPick?.id;
+  const betSlip = post.betSlip;
+  const isProviderTicket = post.kind === 'provider_ticket';
+  const isUserSharedTicket = post.kind === 'bet_ticket';
+  const copyPickId = betSlip?.id;
+  const showThoughtBody = !betSlip && Boolean(post.body.trim());
 
   const handleLike = async () => {
     if (isLiking) return;
@@ -54,7 +58,11 @@ export default function PostCard({ post, onUpdated }: PostCardProps) {
     try {
       const response = await feedApi.copyPick(post.id, copyPickId);
       emitWidgetEvent('betCopied', response);
-      toast.success('Apuesta copiada al cupón del operador');
+      toast.success(
+        response.bookingCode
+          ? `Ticket listo · código ${response.bookingCode}`
+          : 'Apuesta copiada al cupón del operador',
+      );
     } catch {
       toast.danger('No se pudo copiar la apuesta');
     } finally {
@@ -62,7 +70,7 @@ export default function PostCard({ post, onUpdated }: PostCardProps) {
     }
   };
 
-  const handleDisplay = post.username ?? post.authorName;
+  const handleDisplay = (post.username ?? post.authorName).toUpperCase();
 
   return (
     <Card className="space-y-3">
@@ -73,6 +81,16 @@ export default function PostCard({ post, onUpdated }: PostCardProps) {
             <p className="text-sm font-semibold text-text-primary">{post.authorName}</p>
             {post.vipTier ? <Badge variant="warning">{post.vipTier}</Badge> : null}
             <span className="text-xs text-text-tertiary">nivel {post.level}</span>
+            {isProviderTicket ? (
+              <Badge tone="accent" className="normal-case tracking-normal">
+                apuesta publicada
+              </Badge>
+            ) : null}
+            {isUserSharedTicket ? (
+              <Badge tone="neutral" className="normal-case tracking-normal">
+                ticket compartido
+              </Badge>
+            ) : null}
           </div>
           <p className="text-xs text-text-tertiary">{formatRelativeTime(post.createdAt)}</p>
         </div>
@@ -85,17 +103,16 @@ export default function PostCard({ post, onUpdated }: PostCardProps) {
         </button>
       </div>
 
-      {post.betSlip ? (
-        <BetTicketBlock caption={post.body.trim()} displayHandle={handleDisplay} post={post} />
-      ) : post.body.trim() ? (
-        <p className="text-sm text-text-secondary">{post.body}</p>
+      {betSlip ? (
+        <BetTicketBlock
+          betSlip={betSlip}
+          caption={post.body.trim()}
+          displayHandle={handleDisplay}
+          isProvider={isProviderTicket}
+        />
       ) : null}
 
-      {!post.betSlip && post.sharedPick ? (
-        <p className="text-xs uppercase tracking-wide text-text-tertiary">
-          {post.sharedPick.teams} · {post.sharedPick.prediction} · cuota {post.sharedPick.odds}
-        </p>
-      ) : null}
+      {showThoughtBody ? <p className="text-sm text-text-secondary">{post.body}</p> : null}
 
       {copyPickId ? (
         <Button
@@ -143,7 +160,8 @@ export default function PostCard({ post, onUpdated }: PostCardProps) {
           <MessageCircle className="h-4 w-4" /> {post.comments}
         </button>
         <span className="ml-auto inline-flex items-center gap-1">
-          <ShieldCheck className="h-3 w-3" /> sin montos visibles
+          <ShieldCheck className="h-3 w-3" />
+          {betSlip ? 'sin montos apostados visibles' : 'comunidad responsable'}
         </span>
       </div>
     </Card>
@@ -151,24 +169,32 @@ export default function PostCard({ post, onUpdated }: PostCardProps) {
 }
 
 function BetTicketBlock({
+  betSlip,
   caption,
   displayHandle,
-  post,
+  isProvider,
 }: {
+  betSlip: BetSlipShare;
   caption: string;
   displayHandle: string;
-  post: FeedPost;
+  isProvider: boolean;
 }) {
-  if (!post.betSlip) return null;
   return (
     <div className="rounded-lg border border-accent/35 bg-[linear-gradient(180deg,rgba(10,247,132,0.08),transparent)] p-4">
-      <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-text-tertiary">ticket de apuesta</p>
+      <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-text-tertiary">
+        {isProvider ? 'ticket del proveedor' : 'ticket compartido'}
+      </p>
       <p className="mt-3 font-mono text-base font-bold uppercase leading-tight tracking-tight text-text-primary">
         {displayHandle}
       </p>
       {caption ? <p className="mt-2 text-xs leading-relaxed text-text-secondary">{caption}</p> : null}
+      {betSlip.bookingCode ? (
+        <p className="mt-2 font-mono text-xs text-accent">
+          booking: <span className="font-semibold">{betSlip.bookingCode}</span>
+        </p>
+      ) : null}
       <div className="mt-4 space-y-4 border-t border-border-subtle pt-4">
-        {post.betSlip.legs.map((leg, index) => (
+        {betSlip.legs.map((leg, index) => (
           <div key={`${leg.teams}-${index}`}>
             <p className="font-mono text-sm font-bold uppercase leading-snug text-text-primary">{leg.teams}</p>
             <p className="mt-1 font-mono text-xs font-semibold uppercase leading-relaxed text-accent">
@@ -178,8 +204,9 @@ function BetTicketBlock({
         ))}
       </div>
       <p className="mt-4 border-t border-border-subtle pt-3 font-mono text-sm font-bold uppercase text-text-primary">
-        total de cuota: {formatNumber(post.betSlip.totalOdds)}
+        total de cuota: {formatNumber(betSlip.totalOdds)}
       </p>
+      {betSlip.payoutNote ? <p className="mt-2 text-[11px] leading-relaxed text-text-tertiary">{betSlip.payoutNote}</p> : null}
     </div>
   );
 }

@@ -23,7 +23,7 @@ export default function FeedTab() {
   const feedRefreshKey = useSocialStore((state) => state.feedRefreshKey);
   const bumpFeed = useSocialStore((state) => state.bumpFeed);
   const { player } = usePlayer();
-  const [activeFeed, setActiveFeed] = useState<FeedScope>('following');
+  const [activeFeed, setActiveFeed] = useState<FeedScope>(() => (PILOT.isActive() ? 'explore' : 'following'));
   const isPublicProfile = readPublicProfile() && !player.isPrivate;
   const { data: posts = [], isLoading } = useAsyncData(
     () => feedApi.list(activeFeed),

@@ -6,6 +6,7 @@ import { useAsyncData } from '../../hooks/useAsyncData';
 import { useToast } from '../../hooks/useToast';
 import type { Mission, MissionCategory } from '../../types/mission';
 import type { TabId } from '../../types/navigation';
+import { useModalsStore } from '../../store/modalsStore';
 import { useMissionsStore } from '../../store/missionsStore';
 import { useUiStore } from '../../store/uiStore';
 import { getProgressPercent } from '../../utils/format';
@@ -47,6 +48,8 @@ const missionTabMap: Partial<Record<MissionCategory, TabId>> = {
 export default function MissionsTab() {
   const refreshToken = useMissionsStore((state) => state.refreshToken);
   const bumpRefresh = useMissionsStore((state) => state.bumpRefresh);
+  const setSelectedMission = useMissionsStore((state) => state.setSelectedMission);
+  const openModal = useModalsStore((state) => state.openModal);
   const setActiveTab = useUiStore((state) => state.setActiveTab);
   const toast = useToast();
   const [activeGroup, setActiveGroup] = useState<MissionGroupTab>('daily');
@@ -86,6 +89,11 @@ export default function MissionsTab() {
 
   const handleLockedNavigate = (mission: Mission) => {
     toast.info(mission.lockReason ?? 'Esta misión todavía está bloqueada');
+  };
+
+  const openMissionDetail = (mission: Mission) => {
+    setSelectedMission(mission);
+    openModal('missionDetail');
   };
 
   if (isLoading) return <Skeleton className="h-40" />;
@@ -159,6 +167,7 @@ export default function MissionsTab() {
             boosts={boosts}
             onClaimed={bumpRefresh}
             onNavigate={mission.status === 'locked' ? handleLockedNavigate : handleNavigate}
+            onDetail={openMissionDetail}
           />
         ))}
       </div>

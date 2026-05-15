@@ -82,13 +82,14 @@ describe('key tab interactions', () => {
         <PostCommentsModal />
       </>,
     );
-    expect((await screen.findAllByText(/River vs Palmeiras/i)).length).toBeGreaterThan(0);
+    await userEvent.click(screen.getByRole('tab', { name: /siguiendo/i }));
+    expect((await screen.findAllByText(/Manchester City|City o Chelsea/i)).length).toBeGreaterThan(0);
 
     const likeButton = screen.getByRole('button', { name: '42' });
     await userEvent.click(likeButton);
     expect(likeButton).toHaveAttribute('aria-pressed', 'true');
 
-    await userEvent.click(screen.getByRole('button', { name: /copiar apuesta/i }));
+    await userEvent.click(screen.getAllByRole('button', { name: /copiar apuesta/i })[0]);
 
     await userEvent.click(screen.getByRole('button', { name: '2' }));
     expect(await screen.findByRole('dialog', { name: /comentarios/i })).toBeInTheDocument();
