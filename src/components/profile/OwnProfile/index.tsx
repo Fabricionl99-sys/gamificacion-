@@ -1,12 +1,20 @@
 import { useMemo, useState } from 'react';
-import { ArrowLeft, Settings } from 'lucide-react';
+import { ArrowLeft, Shield } from 'lucide-react';
 
+import { AccountSection } from '../../settings/AccountSection';
+import { AppearanceSection } from '../../settings/AppearanceSection';
+import { NotificationsSection } from '../../settings/NotificationsSection';
+import { OperatorPlatformCard, SupportSection } from '../../settings/SupportSection';
 import { Avatar } from '../../ui/Avatar';
 import { Badge } from '../../ui/Badge';
 import { Button } from '../../ui/Button';
+import { Card } from '../../ui/Card';
+import { Modal } from '../../ui/Modal';
 import { Tabs } from '../../ui/Tabs';
-import { mockPlayer } from '../../../mocks';
+import { usePlayer } from '../../../hooks/usePlayer';
+import { usePlayerStore } from '../../../store/playerStore';
 import { useUiStore } from '../../../store/uiStore';
+import { getAvatarBackgroundFromName } from '../../../utils/avatarHashColor';
 import HistoryTab from './HistoryTab';
 import { PendingPrizesTab } from './PendingPrizesTab';
 import { SocialTab } from './SocialTab';
@@ -17,9 +25,15 @@ type OwnProfileTab = 'summary' | 'prizes' | 'history' | 'social';
 const isOwnProfileTab = (tab: string): tab is OwnProfileTab =>
   ['summary', 'prizes', 'history', 'social'].includes(tab);
 
+/** Opciones visuales de avatar hasta que exista galería por API. */
+const AVATAR_OPTIONS = ['JM', 'LA', 'RK', 'MX', 'CP', 'ZD'] as const;
+
 export default function OwnProfile() {
   const [activeTab, setActiveTab] = useState<OwnProfileTab>('summary');
+  const [avatarPickerOpen, setAvatarPickerOpen] = useState(false);
   const setActiveView = useUiStore((state) => state.setActiveView);
+  const { player } = usePlayer();
+  const updatePlayer = usePlayerStore((state) => state.updatePlayer);
 
   const tabs = useMemo(
     (): Array<{ id: OwnProfileTab; label: string }> => [
@@ -33,27 +47,51 @@ export default function OwnProfile() {
 
   return (
     <div className="space-y-4">
-      <div className="card-glass rounded-xl p-4">
-        <div className="mb-4 flex items-center justify-between">
-          <Button variant="ghost" size="sm" leftIcon={<ArrowLeft className="h-3 w-3" />} onClick={() => setActiveView('widget')}>
-            volver
-          </Button>
-          <Button variant="ghost" size="icon" aria-label="abrir configuracion" onClick={() => setActiveView('settings')}>
-            <Settings className="h-4 w-4" />
-          </Button>
+      <div className="flex items-center justify-between">
+        <Button variant="ghost" size="sm" leftIcon={<ArrowLeft className="h-3 w-3" />} onClick={() => setActiveView('widget')}>
+          volver
+        </Button>
+        <h1 className="text-lg font-semibold text-text-primary">Mi perfil</h1>
+        <span className="w-14" aria-hidden />
+      </div>
+
+      <Card className="border-info/30 bg-info/10">
+        <div className="flex gap-3">
+          <Shield className="h-5 w-5 shrink-0 text-info" />
+          <p className="text-sm text-text-secondary">
+            Datos de cuenta sensibles los gestiona el operador. Desde acá ajustás preferencias del widget, avisos y
+            apariencia.
+          </p>
         </div>
-        <div className="flex items-center gap-4">
-          <Avatar initials={mockPlayer.avatar} size="lg" status="online" />
+      </Card>
+
+      <div className="card-glass rounded-xl p-4">
+        <div className="flex items-start gap-4">
+          <button
+            type="button"
+            className="shrink-0 rounded-full transition hover:opacity-95 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+            aria-label="Elegir avatar"
+            onClick={() => setAvatarPickerOpen(true)}
+          >
+            <Avatar initials={player.avatar} size="lg" status="online" />
+          </button>
           <div className="min-w-0 flex-1">
             <div className="flex flex-wrap items-center gap-2">
-              <h1 className="text-xl font-semibold text-text-primary">{mockPlayer.name}</h1>
-              <Badge variant="warning">VIP {mockPlayer.vipTier}</Badge>
+              <h2 className="text-xl font-semibold text-text-primary">{player.name}</h2>
+              <Badge variant="warning">VIP {player.vipTier}</Badge>
             </div>
-            <p className="text-sm text-text-tertiary">@{mockPlayer.username}</p>
-            <p className="mt-2 text-sm text-text-secondary">{mockPlayer.bio}</p>
+            <p className="text-sm text-text-tertiary">@{player.username}</p>
+            <p className="mt-2 text-sm text-text-secondary">{player.bio}</p>
           </div>
         </div>
       </div>
+
+      <AccountSection onOpenAvatarPicker={() => setAvatarPickerOpen(true)} />
+      <NotificationsSection />
+      <AppearanceSection />
+      <SupportSection />
+      <OperatorPlatformCard />
+
       <Tabs
         tabs={tabs}
         activeTab={activeTab}
@@ -69,6 +107,31 @@ export default function OwnProfile() {
         {activeTab === 'history' ? <HistoryTab /> : null}
         {activeTab === 'social' ? <SocialTab /> : null}
       </div>
+
+      <p className="pb-2 text-center text-xs text-text-tertiary">widget de gamificacion · v1.0.0</p>
+
+      <Modal isOpen={avatarPickerOpen} title="Elegí tu avatar" onClose={() => setAvatarPickerOpen(false)}>
+        <p className="mb-3 text-sm text-text-secondary">Opciones de ejemplo. Con el backend se cargarán las imágenes del operador.</p>
+        <div className="grid grid-cols-3 gap-3">
+          {AVATAR_OPTIONS.map((code) => (
+            <button
+              key={code}
+              type="button"
+              className="flex aspect-square flex-col items-center justify-center rounded-xl border border-border-default transition hover:border-accent"
+              style={{
+                background: getAvatarBackgroundFromName(`avatar-${code}`),
+                boxShadow: '0 0 0 1px rgba(10, 247, 132, 0.2)',
+              }}
+              onClick={() => {
+                updatePlayer({ avatar: code });
+                setAvatarPickerOpen(false);
+              }}
+            >
+              <span className="font-mono text-lg font-bold text-white">{code}</span>
+            </button>
+          ))}
+        </div>
+      </Modal>
     </div>
   );
 }

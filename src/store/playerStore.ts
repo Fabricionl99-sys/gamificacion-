@@ -7,6 +7,7 @@ interface PlayerStore {
   player: Player;
   claimPrize: () => void;
   resetPlayer: () => void;
+  updatePlayer: (partial: Partial<Player>) => void;
 }
 
 export const usePlayerStore = create<PlayerStore>((set) => ({
@@ -19,4 +20,8 @@ export const usePlayerStore = create<PlayerStore>((set) => ({
       },
     })),
   resetPlayer: () => set({ player: mockPlayer }),
+  updatePlayer: (partial) =>
+    set((state) => ({
+      player: { ...state.player, ...partial },
+    })),
 }));

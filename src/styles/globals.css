@@ -99,3 +99,20 @@
     pointer-events: none;
   }
 }
+
+/* Tema claro (preferencia local; refinable con API de branding) */
+html:not(.dark) {
+  color-scheme: light;
+  --bg-primary: #eceff2;
+  --bg-secondary: #ffffff;
+  --bg-tertiary: #dfe4ea;
+  --bg-elevated: #f5f7fa;
+  --bg-overlay: rgba(240, 242, 245, 0.92);
+  --text-primary: #0a0e13;
+  --text-secondary: #3a424d;
+  --text-tertiary: #5a6270;
+  --glass-surface: rgba(255, 255, 255, 0.88);
+  --border-subtle: rgba(10, 14, 19, 0.06);
+  --border-default: rgba(10, 14, 19, 0.12);
+  --border-strong: rgba(10, 14, 19, 0.2);
+}

@@ -14,7 +14,7 @@ describe('stores', () => {
   });
 
   it('switches tabs and returns to widget view', () => {
-    useUiStore.getState().setActiveView('settings');
+    useUiStore.getState().setActiveView('own-profile');
     useUiStore.getState().setActiveTab('ranking');
     expect(useUiStore.getState().activeTab).toBe('ranking');
     expect(useUiStore.getState().activeView).toBe('widget');

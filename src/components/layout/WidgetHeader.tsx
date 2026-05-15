@@ -1,4 +1,4 @@
-import { Bell, ChevronRight, Coins, Gift, Settings, User, Zap } from 'lucide-react';
+import { Bell, ChevronRight, Coins, Gift, User, Zap } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 import { useActiveBoosts } from '../../hooks/useActiveBoosts';
@@ -25,10 +25,6 @@ function handleNotificationsClick(): void {
   /* intentionally empty */
 }
 
-/** Placeholder: conectar con vista de perfil del jugador. */
-function handleProfileClick(): void {
-  /* intentionally empty */
-}
 
 function HeaderIconWithBadge({
   icon: Icon,
@@ -67,7 +63,7 @@ export function WidgetHeader() {
   const levelName = resolveLevelDisplayName(player.level, tiers);
   const levelTitle = `${levelName.toUpperCase()} · NIVEL ${player.level}`;
 
-  const initials = getPlayerInitials(player.name);
+  const initials = (player.avatar?.trim() || getPlayerInitials(player.name)).slice(0, 2);
   const avatarBg = getAvatarBackgroundFromName(player.name);
 
   const { progressPercent, displayCurrent, displayNext } = resolveXpSegment(player);
@@ -125,7 +121,7 @@ export function WidgetHeader() {
           <button
             type="button"
             className="inline-flex items-center gap-0.5 font-urbanist text-[13px] font-medium text-white/80 transition hover:text-accent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent md:text-sm"
-            onClick={handleProfileClick}
+            onClick={() => setActiveView('own-profile')}
           >
             Mi perfil
             <ChevronRight className="h-3.5 w-3.5 shrink-0 opacity-90" aria-hidden strokeWidth={2.5} />
@@ -151,14 +147,6 @@ export function WidgetHeader() {
                   </span>
                 </motion.span>
               ) : null}
-              <button
-                type="button"
-                className="rounded-full p-1.5 text-text-tertiary transition hover:bg-bg-tertiary hover:text-text-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
-                onClick={() => setActiveView('settings')}
-                aria-label="Abrir configuracion"
-              >
-                <Settings className="h-4 w-4" strokeWidth={2} />
-              </button>
             </div>
           </div>
 

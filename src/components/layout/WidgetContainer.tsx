@@ -1,4 +1,4 @@
-import { Suspense, lazy, type LazyExoticComponent, type ReactElement } from 'react';
+import { Suspense, lazy, useEffect, type LazyExoticComponent, type ReactElement } from 'react';
 import { Skeleton } from '../ui/Skeleton';
 import { ToastViewport } from '../ui/Toast';
 import { BoostToastTrigger } from '../boost/BoostToast';
@@ -21,7 +21,6 @@ const NewsTab = lazy(() => import('../tabs/NewsTab'));
 const OwnProfile = lazy(() => import('../profile/OwnProfile'));
 const PublicProfile = lazy(() => import('../profile/PublicProfile'));
 const PrivateProfile = lazy(() => import('../profile/PrivateProfile'));
-const SettingsScreen = lazy(() => import('../settings/SettingsScreen'));
 const NotificationCenterModal = lazy(() => import('../modals/NotificationCenterModal'));
 const PurchaseConfirmModal = lazy(() => import('../modals/PurchaseConfirmModal'));
 const PostEditorModal = lazy(() => import('../modals/PostEditorModal'));
@@ -67,8 +66,6 @@ function MainView() {
   if (activeView === 'own-profile') return <OwnProfile />;
   if (activeView === 'public-profile') return <PublicProfile />;
   if (activeView === 'private-profile') return <PrivateProfile />;
-  if (activeView === 'settings') return <SettingsScreen />;
-
   return (
     <>
       <TabNavigation />
@@ -81,6 +78,12 @@ function MainView() {
 
 export function WidgetContainer() {
   const { activeTab, setActiveTab } = useUiStore();
+
+  useEffect(() => {
+    const t = localStorage.getItem('wingoat_theme');
+    if (t === 'light') document.documentElement.classList.remove('dark');
+    else document.documentElement.classList.add('dark');
+  }, []);
 
   return (
     <div className="min-h-dvh bg-bg-primary text-text-primary md:flex md:items-stretch">

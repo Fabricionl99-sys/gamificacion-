@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import { ArrowLeft, Settings } from 'lucide-react';
+import { ArrowLeft } from 'lucide-react';
 import { Avatar } from '../ui/Avatar';
 import { Badge } from '../ui/Badge';
 import { Button } from '../ui/Button';
@@ -19,9 +19,6 @@ export function ProfileShell({ children }: ProfileShellProps) {
       <div className="flex items-center justify-between">
         <Button variant="ghost" size="sm" onClick={() => setActiveView('widget')} leftIcon={<ArrowLeft className="h-4 w-4" />}>
           volver
-        </Button>
-        <Button aria-label="abrir configuracion" variant="ghost" size="icon" onClick={() => setActiveView('settings')}>
-          <Settings className="h-4 w-4" />
         </Button>
       </div>
       <section className="card-glass rounded-xl p-5">
