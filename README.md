@@ -87,7 +87,7 @@ Ver guia completa en [`docs/INTEGRATION.md`](docs/INTEGRATION.md).
 
 Los flags viven en `src/config/features.ts`.
 
-- `feed_enabled`: controla si el tab Feed y sus accesos aparecen en el widget. Hoy queda en `false` porque Feed Social fue movido a Etapa 9; el codigo, mocks y tests del Feed se conservan para reactivarlo sin reconstruir la feature.
+- `social_enabled`: controla si el tab Social (feed) aparece en el widget. Hoy queda en `false` hasta Etapa 9; el componente `FeedTab` y mocks se conservan para reactivarlo.
 
 ## Como contribuir
 

@@ -1,5 +1,5 @@
 import { useCallback, useRef, type TouchEvent } from 'react';
-import { tabs } from '../components/layout/navigation';
+import { visibleTabs } from '../components/layout/navigation';
 import { useUiStore } from '../store/uiStore';
 
 interface SwipeHandlers {
@@ -23,9 +23,10 @@ export const useSwipeNavigation = (): SwipeHandlers => {
       if (Math.abs(delta) < 48) {
         return;
       }
-      const currentIndex = tabs.findIndex((tab) => tab.id === activeTab);
+      const currentIndex = visibleTabs.findIndex((tab) => tab.id === activeTab);
+      if (currentIndex < 0) return;
       const nextIndex = delta < 0 ? currentIndex + 1 : currentIndex - 1;
-      const nextTab = tabs[nextIndex];
+      const nextTab = visibleTabs[nextIndex];
       if (nextTab) {
         setActiveTab(nextTab.id);
       }

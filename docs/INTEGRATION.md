@@ -72,7 +72,7 @@ Mounts the widget into a DOM node or selector.
 window.WingoatGamificationWidget.init('[data-wingoat-widget]', {
   operatorId: 'operator-caliente',
   locale: 'es-MX',
-  tabsOrder: ['home', 'missions', 'shop', 'streak', 'ranking', 'tournaments', 'predictions', 'feed', 'news'],
+  tabsOrder: ['home', 'missions', 'shop', 'social', 'streak', 'ranking', 'tournaments', 'predictions', 'news'],
 });
 ```
 

@@ -2,11 +2,11 @@ export type WidgetTabId =
   | 'home'
   | 'missions'
   | 'shop'
+  | 'social'
   | 'streak'
   | 'ranking'
   | 'tournaments'
   | 'predictions'
-  | 'feed'
   | 'news';
 
 export type TabId = WidgetTabId;

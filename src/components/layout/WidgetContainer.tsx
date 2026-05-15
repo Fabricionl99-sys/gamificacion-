@@ -40,7 +40,7 @@ const tabComponents: Record<TabId, LazyExoticComponent<() => ReactElement>> = {
   ranking: RankingTab,
   tournaments: TournamentsTab,
   predictions: PredictionsTab,
-  feed: FeedTab,
+  social: FeedTab,
   news: NewsTab,
 };
 
@@ -56,7 +56,7 @@ function LoadingPanel() {
 
 function MainView() {
   const { activeTab, activeView, setActiveTab } = useUiStore();
-  const safeActiveTab = !FEATURES.feed_enabled && activeTab === 'feed' ? 'home' : activeTab;
+  const safeActiveTab = !FEATURES.social_enabled && activeTab === 'social' ? 'home' : activeTab;
   const ActiveTab = tabComponents[safeActiveTab];
 
   if (safeActiveTab !== activeTab) {
