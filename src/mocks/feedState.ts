@@ -10,7 +10,7 @@ import type {
 import { mockPlayer, mockPosts, mockShareablePicks } from './index';
 import { readPublicProfile } from '../utils/profilePrivacy';
 
-const followingAuthorIds = new Set(['player-002', 'player-003']);
+const followingAuthorIds = new Set(['player-002', 'player-003', 'player-004']);
 
 const seedComments: FeedComment[] = [
   {
@@ -73,7 +73,11 @@ export const feedState = {
     commentCounter = seedComments.length;
   },
   list(scope: FeedScope) {
-    return withLikeState(filterByScope(scope));
+    return withLikeState(
+      filterByScope(scope).sort(
+        (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+      ),
+    );
   },
   getShareablePicks(): ShareablePick[] {
     return structuredClone(mockShareablePicks);
@@ -94,7 +98,6 @@ export const feedState = {
     const caption = input.body.trim();
 
     let betSlip: FeedPost['betSlip'];
-    let sharedPick: FeedPost['sharedPick'];
     let kind: FeedPost['kind'] = 'thought';
 
     if (wantsTicket) {
@@ -114,15 +117,6 @@ export const feedState = {
         status: picks[0].status,
       };
       kind = 'bet_ticket';
-    } else if (input.sharePickId && picks.length === 1) {
-      const pick = picks[0];
-      sharedPick = {
-        id: pick.id,
-        teams: pick.teams,
-        prediction: pick.prediction,
-        odds: pick.odds,
-        status: pick.status,
-      };
     }
 
     if (!wantsTicket && caption.length === 0) {
@@ -144,7 +138,6 @@ export const feedState = {
       comments: 0,
       likedByMe: false,
       betSlip,
-      sharedPick,
       pendingReview: false,
     };
     posts = [post, ...posts];
@@ -193,7 +186,7 @@ export const feedState = {
     if (!post) throw new Error('POST_NOT_FOUND');
 
     if (post.betSlip && post.betSlip.id === pickId) {
-      const { legs, totalOdds } = post.betSlip;
+      const { legs, totalOdds, bookingCode } = post.betSlip;
       return {
         postId,
         pickId,
@@ -202,6 +195,7 @@ export const feedState = {
         odds: totalOdds,
         totalOdds,
         legs,
+        bookingCode,
       };
     }
 

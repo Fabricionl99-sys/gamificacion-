@@ -27,6 +27,7 @@ const PrivateProfile = lazy(() => import('../profile/PrivateProfile'));
 const NotificationCenterModal = lazy(() => import('../modals/NotificationCenterModal'));
 const PurchaseConfirmModal = lazy(() => import('../modals/PurchaseConfirmModal'));
 const ShopItemDetailModal = lazy(() => import('../modals/ShopItemDetailModal'));
+const MissionDetailModal = lazy(() => import('../modals/MissionDetailModal'));
 const PostEditorModal = lazy(() => import('../modals/PostEditorModal'));
 const PostCommentsModal = lazy(() => import('../modals/PostCommentsModal'));
 const TournamentRegisterModal = lazy(() => import('../modals/TournamentRegisterModal'));
@@ -112,6 +113,7 @@ export function WidgetContainer() {
             <NotificationCenterModal />
             <PurchaseConfirmModal />
             <ShopItemDetailModal />
+            <MissionDetailModal />
             <PostEditorModal />
             <PostCommentsModal />
             <TournamentRegisterModal />

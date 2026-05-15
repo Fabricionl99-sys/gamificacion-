@@ -12,18 +12,27 @@ import { getTournaments } from '../../api/tournaments';
 import { useActiveBoosts } from '../../hooks/useActiveBoosts';
 import { useAsyncData } from '../../hooks/useAsyncData';
 import { useModalsStore } from '../../store/modalsStore';
+import { useMissionsStore } from '../../store/missionsStore';
 import { useUiStore } from '../../store/uiStore';
+import type { Mission } from '../../types/mission';
 import { formatNumber } from '../../utils/format';
 
 export default function HomeTab() {
   const openModal = useModalsStore((state) => state.openModal);
+  const setSelectedMission = useMissionsStore((state) => state.setSelectedMission);
+  const bumpRefresh = useMissionsStore((state) => state.bumpRefresh);
+  const refreshToken = useMissionsStore((state) => state.refreshToken);
   const { setActiveTab, setActiveView } = useUiStore();
-  const { data: missions = [] } = useAsyncData(getMissions, []);
+  const { data: missions = [] } = useAsyncData(getMissions, [], [refreshToken]);
   const { boosts } = useActiveBoosts();
   const { data: tournaments = [] } = useAsyncData(getTournaments, []);
   const { data: news = [] } = useAsyncData(getNews, []);
   const { data: player } = useAsyncData(getPlayer);
   const dailyMissions = missions.filter((mission) => mission.group === 'daily').slice(0, 3);
+  const openMissionDetail = (mission: Mission) => {
+    setSelectedMission(mission);
+    openModal('missionDetail');
+  };
   const featuredTournament = tournaments[0];
   const latestNews = news[0];
 
@@ -47,7 +56,14 @@ export default function HomeTab() {
         <SectionHeader title="Misiones del dia" actionLabel="ver todas" onAction={() => setActiveTab('missions')} />
         <div className="space-y-2">
           {dailyMissions.map((mission) => (
-            <MissionCard key={mission.id} mission={mission} boosts={boosts} compact />
+            <MissionCard
+              key={mission.id}
+              mission={mission}
+              boosts={boosts}
+              compact
+              onClaimed={bumpRefresh}
+              onDetail={openMissionDetail}
+            />
           ))}
         </div>
       </section>

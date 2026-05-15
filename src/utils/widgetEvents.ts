@@ -8,6 +8,7 @@ export type WidgetEventMap = {
     odds: number;
     totalOdds?: number;
     legs?: { teams: string; prediction: string; odds: number }[];
+    bookingCode?: string;
   };
   missionNavigate: { missionId: string; category: string; ruleId?: string };
   missionClaimed: { missionId: string; rewardXP: number; rewardCoins: number };

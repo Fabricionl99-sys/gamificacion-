@@ -13,7 +13,8 @@ export interface SharedPick {
   status: PredictionStatus;
 }
 
-export type FeedPostKind = 'thought' | 'bet_ticket';
+/** Pensamiento libre · ticket del proveedor (perfil público + apuesta) · ticket compartido desde el editor. */
+export type FeedPostKind = 'thought' | 'provider_ticket' | 'bet_ticket';
 
 export interface BetSlipLeg {
   teams: string;
@@ -21,12 +22,16 @@ export interface BetSlipLeg {
   odds: number;
 }
 
-/** Combined ticket (provider auto-post or user publishing several picks). */
+/** Combinada o simple: cuotas visibles; nunca monto apostado ni premio en dinero. */
 export interface BetSlipShare {
   id: string;
   legs: BetSlipLeg[];
   totalOdds: number;
   status: PredictionStatus;
+  /** Código del proveedor para abrir el mismo ticket en el cupón (copiar apuesta). */
+  bookingCode?: string;
+  /** Texto fijo sin importes, ej. relación cuota total vs pago potencial. */
+  payoutNote?: string;
 }
 
 export interface FeedPost {
@@ -80,7 +85,8 @@ export interface CreatePostInput {
   sharePickId?: string;
   /** Build a combined ticket (1+ legs). Prefer over sharePickId when multiple. */
   sharePickIds?: string[];
-  kind?: FeedPostKind;
+  /** Solo `thought` o `bet_ticket` desde el widget; `provider_ticket` lo crea el backend. */
+  kind?: Extract<FeedPostKind, 'thought' | 'bet_ticket'>;
 }
 
 export interface LikePostResponse {
@@ -97,6 +103,7 @@ export interface CopyPickResponse {
   odds: number;
   totalOdds?: number;
   legs?: BetSlipLeg[];
+  bookingCode?: string;
 }
 
 export interface NewsItem {
