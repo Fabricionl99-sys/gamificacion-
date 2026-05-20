@@ -13,6 +13,16 @@ const vendorChunk = (id: string): string | undefined => {
 
 export default defineConfig({
   plugins: [react()],
+  server: {
+    port: 5175,
+    strictPort: true,
+    proxy: {
+      '/api': {
+        target: 'http://localhost:5173',
+        changeOrigin: true,
+      },
+    },
+  },
   build: {
     lib: {
       entry: 'src/main.tsx',

@@ -1,3 +1,4 @@
+import { getTenantIdFromUrl } from '../lib/demoTenant';
 import { mockPlayer } from '../mocks';
 
 interface UseAuthResult {
@@ -8,6 +9,6 @@ interface UseAuthResult {
 
 export const useAuth = (): UseAuthResult => ({
   playerId: mockPlayer.id,
-  tenantId: 'tenant-demo',
+  tenantId: getTenantIdFromUrl(),
   isAuthenticated: true,
 });

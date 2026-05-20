@@ -2,6 +2,7 @@ import { StrictMode } from 'react';
 import ReactDOM from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
 import App from './App';
+import { BrandingBootstrap } from './components/BrandingBootstrap';
 import './styles/globals.css';
 
 const rootElement = document.getElementById('root');
@@ -21,7 +22,9 @@ enableMocking().then(() => {
   ReactDOM.createRoot(rootElement).render(
     <StrictMode>
       <BrowserRouter>
-        <App />
+        <BrandingBootstrap>
+          <App />
+        </BrandingBootstrap>
       </BrowserRouter>
     </StrictMode>,
   );

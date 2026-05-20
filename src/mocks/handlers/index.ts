@@ -1,5 +1,6 @@
 import { delay, http, HttpResponse } from 'msw';
 
+import { resolveBrandingSample } from '../data/brandingSamples';
 import {
   mockNews,
   mockNotifications,
@@ -19,6 +20,12 @@ import type { CreatePostInput, FeedScope } from '../../types/social';
 const wait = () => delay(180 + Math.random() * 320);
 
 export const handlers = [
+  http.get('*/v1/public/branding/:tenantId', async ({ params }) => {
+    await wait();
+    const tenantId = String(params.tenantId);
+    return HttpResponse.json({ data: resolveBrandingSample(tenantId) });
+  }),
+
   http.get('*/player/me', async () => {
     await wait();
     return HttpResponse.json(mockPlayer);
