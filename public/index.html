@@ -21,10 +21,16 @@
         margin: 0;
       }
 
+      /*
+        Sprint #6 fix: usar var() con fallback en vez de valores hardcoded.
+        Antes el background/color/font hardcoded sobrescribía las CSS vars
+        que applyBranding setea en :root → el operador cambiaba branding
+        pero el body seguía con verde-negro original.
+      */
       body {
-        background: #0a0e13;
-        color: #ffffff;
-        font-family: Urbanist, system-ui, sans-serif;
+        background: var(--bg-primary, #0a0e13);
+        color: var(--text-primary, #ffffff);
+        font-family: var(--font-family, Urbanist, system-ui, sans-serif);
       }
     </style>
   </head>
