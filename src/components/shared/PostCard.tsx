@@ -76,7 +76,7 @@ export default function PostCard({ post, onUpdated }: PostCardProps) {
           <div className="flex flex-wrap items-center gap-2">
             <p className="text-sm font-semibold text-text-primary">{post.authorName}</p>
             {post.vipTier ? <Badge variant="warning">{post.vipTier}</Badge> : null}
-            <span className="text-xs text-text-tertiary">nivel {post.level}</span>
+            <span className="text-metadata text-text-tertiary">nivel {post.level}</span>
             {isProviderTicket ? (
               <Badge tone="accent" className="normal-case tracking-normal">
                 apuesta publicada
@@ -88,7 +88,7 @@ export default function PostCard({ post, onUpdated }: PostCardProps) {
               </Badge>
             ) : null}
           </div>
-          <p className="text-xs text-text-tertiary">{formatRelativeTime(post.createdAt)}</p>
+          <p className="text-metadata text-text-tertiary">{formatRelativeTime(post.createdAt)}</p>
         </div>
         <button
           type="button"
@@ -127,15 +127,15 @@ export default function PostCard({ post, onUpdated }: PostCardProps) {
         <div className="rounded-md border border-border-accent bg-accent-subtle p-3">
           <Badge variant="success">PREDICCION ACERTADA</Badge>
           <p className="mt-2 text-sm font-semibold text-text-primary">{post.accuratePrediction.detail}</p>
-          <p className="text-xs font-semibold text-accent">+{post.accuratePrediction.xp} XP</p>
+          <p className="text-metadata font-semibold text-accent">+{post.accuratePrediction.xp} XP</p>
         </div>
       ) : null}
       {post.pendingReview ? (
-        <p className="rounded-md bg-warning/10 p-2 text-xs text-warning">
+        <p className="rounded-md bg-warning/10 p-2 text-metadata text-warning">
           pendiente de revision · visible solo para vos
         </p>
       ) : null}
-      <div className="flex items-center gap-4 border-t border-border-subtle pt-3 text-xs text-text-tertiary">
+      <div className="flex items-center gap-4 border-t border-border-subtle pt-3 text-metadata text-text-tertiary">
         <button
           type="button"
           className={cn(
@@ -183,12 +183,12 @@ function BetTicketBlock({
       <p className="mt-3 font-mono text-base font-bold uppercase leading-tight tracking-tight text-text-primary">
         {displayHandle}
       </p>
-      {caption ? <p className="mt-2 text-xs leading-relaxed text-text-secondary">{caption}</p> : null}
+      {caption ? <p className="mt-2 text-module-body leading-relaxed text-text-secondary">{caption}</p> : null}
       <div className="mt-4 space-y-4 border-t border-border-subtle pt-4">
         {betSlip.legs.map((leg, index) => (
           <div key={`${leg.teams}-${index}`}>
             <p className="font-mono text-sm font-bold uppercase leading-snug text-text-primary">{leg.teams}</p>
-            <p className="mt-1 font-mono text-xs font-semibold uppercase leading-relaxed text-accent">
+            <p className="mt-1 font-mono text-metadata font-semibold uppercase leading-relaxed text-accent">
               {leg.prediction} · cuota {formatNumber(leg.odds)}
             </p>
           </div>

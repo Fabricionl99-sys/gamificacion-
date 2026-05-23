@@ -36,7 +36,7 @@ export default function FeedTab() {
       {PILOT.isActive() && PILOT.showBanner ? (
         <div className="flex flex-wrap items-center gap-2 rounded-lg border border-accent/30 bg-accent/10 px-3 py-2">
           <Badge variant="success">piloto social</Badge>
-          <p className="text-xs text-text-secondary">
+          <p className="text-module-body text-text-secondary">
             Datos mock · compartir, like, comentar y copiar fijas sin montos
           </p>
         </div>

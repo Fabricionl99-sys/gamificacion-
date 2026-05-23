@@ -111,7 +111,7 @@ export function OpeningAnimation({ onCollect }: OpeningAnimationProps) {
           </Button>
         </motion.div>
       ) : (
-        <p className="text-center text-xs text-text-tertiary">Abriendo cofre…</p>
+        <p className="text-center text-metadata text-text-tertiary">Abriendo cofre…</p>
       )}
     </div>
   );

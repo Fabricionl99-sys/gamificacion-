@@ -91,7 +91,7 @@ function DetailBody({
         </Badge>
       ) : null}
       {isLowStock ? (
-        <div className="flex items-center gap-2 rounded-md border border-warning/30 bg-warning/10 p-3 text-xs text-warning">
+        <div className="flex items-center gap-2 rounded-md border border-warning/30 bg-warning/10 p-3 text-metadata text-warning">
           <AlertTriangle className="h-4 w-4" />
           quedan pocas unidades, podría agotarse
         </div>

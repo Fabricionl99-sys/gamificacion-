@@ -42,7 +42,7 @@ export default function PublicProfile() {
           ].map(([label, value]) => (
             <div key={label} className="rounded-md bg-bg-tertiary p-3 text-center">
               <p className="text-lg font-semibold">{value}</p>
-              <p className="text-xs text-text-tertiary">{label}</p>
+              <p className="text-metadata text-text-tertiary">{label}</p>
             </div>
           ))}
         </div>

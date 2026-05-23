@@ -71,7 +71,7 @@ export default function PostCommentsModal() {
                 <div className="min-w-0 flex-1">
                   <div className="flex flex-wrap items-center gap-2">
                     <p className="text-sm font-semibold text-text-primary">{comment.authorName}</p>
-                    <span className="text-xs text-text-tertiary">{formatRelativeTime(comment.createdAt)}</span>
+                    <span className="text-metadata text-text-tertiary">{formatRelativeTime(comment.createdAt)}</span>
                   </div>
                   <p className="mt-1 text-sm text-text-secondary">{comment.body}</p>
                 </div>

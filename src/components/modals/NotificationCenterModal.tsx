@@ -54,7 +54,7 @@ export default function NotificationCenterModal() {
         <div aria-live="polite" className="space-y-5">
           {['HOY', 'AYER', 'esta semana · 4 mas'].map((section, sectionIndex) => (
             <section key={section}>
-              <p className="mb-2 text-xs font-semibold uppercase tracking-widest text-text-tertiary">{section}</p>
+              <p className="mb-2 text-metadata font-semibold uppercase tracking-widest text-text-tertiary">{section}</p>
               <div className="space-y-2">
                 {allNotifications.slice(sectionIndex, sectionIndex + 2).map((notification) => (
                   <button
@@ -67,8 +67,8 @@ export default function NotificationCenterModal() {
                     </span>
                     <span className="min-w-0 flex-1">
                       <span className="block text-sm font-semibold text-text-primary">{notification.title}</span>
-                      <span className="block text-xs text-text-secondary">{notification.detail}</span>
-                      <span className="text-xs text-text-tertiary">
+                      <span className="block text-metadata text-text-secondary">{notification.detail}</span>
+                      <span className="text-metadata text-text-tertiary">
                         {formatDistanceToNow(new Date(notification.createdAt), { addSuffix: true, locale: es })}
                       </span>
                     </span>

@@ -106,7 +106,7 @@ export default function ShopTab() {
   return (
     <div className="space-y-4">
       <Card className="space-y-3">
-        <p className="text-xs font-medium uppercase tracking-wide text-text-tertiary">tu saldo</p>
+        <p className="text-metadata font-medium uppercase tracking-wide text-text-tertiary">tu saldo</p>
         <WalletBalances player={player} />
       </Card>
 

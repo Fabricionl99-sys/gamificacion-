@@ -9,7 +9,7 @@ export function PreScratchView({ onStart }: PreScratchViewProps) {
     <div className="space-y-4 text-center">
       <div className="grid grid-cols-3 gap-2">
         {['rascar', 'rascar', 'rascar'].map((label, index) => (
-          <div key={`${label}-${index}`} className="rounded-lg border border-warning/40 bg-warning/10 px-3 py-8 text-xs font-semibold uppercase tracking-widest text-warning">
+          <div key={`${label}-${index}`} className="rounded-lg border border-warning/40 bg-warning/10 px-3 py-8 text-metadata font-semibold uppercase tracking-widest text-warning">
             {label}
           </div>
         ))}

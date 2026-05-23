@@ -38,7 +38,7 @@ export function TournamentCard({ tournament, onAction }: TournamentCardProps) {
         </div>
         <p className="text-right text-lg font-semibold text-coins">{tournament.prizePool}</p>
       </div>
-      <div className="mt-4 grid grid-cols-3 gap-2 text-xs text-text-tertiary">
+      <div className="mt-4 grid grid-cols-3 gap-2 text-module-body text-text-tertiary">
         <span>{tournament.endsIn ?? tournament.startsIn ?? 'proximo'}</span>
         <span className="flex items-center gap-1">
           <Users className="h-3 w-3" /> {tournament.participants}/{tournament.capacity}

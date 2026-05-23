@@ -108,7 +108,7 @@ export default function MissionDetailModal() {
             {formatNumber(mission.progress)} / {formatNumber(mission.target)}
           </span>
         </div>
-        <div className="mb-1 flex justify-between gap-2 text-xs text-text-tertiary">
+        <div className="mb-1 flex justify-between gap-2 text-metadata text-text-tertiary">
           <span>recompensa</span>
           <span className="text-right">
             <MissionRewardWithBoost mission={mission} boosts={boosts} />
@@ -122,7 +122,7 @@ export default function MissionDetailModal() {
           </Badge>
         ) : null}
         {isLocked && mission.lockReason ? (
-          <p className="rounded-md border border-border-subtle bg-bg-tertiary p-3 text-xs text-text-secondary">
+          <p className="rounded-md border border-border-subtle bg-bg-tertiary p-3 text-metadata text-text-secondary">
             {mission.lockReason}
           </p>
         ) : null}
@@ -150,7 +150,7 @@ export default function MissionDetailModal() {
         )}
       </div>
       {!isLocked && !isCompleted && !isClaimed ? (
-        <p className="mt-2 text-center text-xs text-text-tertiary">{deadline}</p>
+        <p className="mt-2 text-center text-metadata text-text-tertiary">{deadline}</p>
       ) : null}
     </Modal>
   );

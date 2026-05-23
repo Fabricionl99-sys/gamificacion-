@@ -36,7 +36,7 @@ export function AnimationView({ onSkip, onComplete }: AnimationViewProps) {
     return (
       <div className="space-y-4 text-center">
         <p className="text-sm text-text-secondary">+450 monedas</p>
-        <button type="button" className="text-xs text-accent" onClick={onSkip}>
+        <button type="button" className="text-metadata text-accent" onClick={onSkip}>
           continuar
         </button>
       </div>
@@ -45,7 +45,7 @@ export function AnimationView({ onSkip, onComplete }: AnimationViewProps) {
 
   return (
     <div className="space-y-5 text-center">
-      <p className="text-xs font-medium uppercase tracking-[0.2em] text-accent">abriendo caja</p>
+      <p className="text-metadata font-medium uppercase tracking-[0.2em] text-accent">abriendo caja</p>
       <div className="relative overflow-hidden rounded-xl border border-accent/30 bg-[radial-gradient(circle_at_top,rgba(10,247,132,0.12),rgba(10,14,19,0.95))] py-6 shadow-glow">
         <div className="pointer-events-none absolute left-1/2 top-0 z-10 h-full w-[3px] -translate-x-1/2 bg-accent shadow-glow" />
         <motion.div
@@ -68,7 +68,7 @@ export function AnimationView({ onSkip, onComplete }: AnimationViewProps) {
                 style={{ width: 120 }}
               >
                 <Icon className="mx-auto h-8 w-8 text-accent" />
-                <p className="mt-2 text-xs font-semibold text-text-primary">{prize.label}</p>
+                <p className="mt-2 text-metadata font-semibold text-text-primary">{prize.label}</p>
               </div>
             );
           })}
@@ -77,7 +77,7 @@ export function AnimationView({ onSkip, onComplete }: AnimationViewProps) {
         <div className="pointer-events-none absolute inset-y-0 right-0 w-10 bg-gradient-to-r from-bg-primary to-transparent" />
       </div>
       <button
-        className="text-xs font-semibold text-text-secondary hover:text-text-primary"
+        className="text-metadata font-semibold text-text-secondary hover:text-text-primary"
         type="button"
         onClick={onSkip}
       >

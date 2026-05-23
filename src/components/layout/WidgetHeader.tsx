@@ -102,7 +102,7 @@ export function WidgetHeader() {
       </div>
 
       <div className="flex items-stretch gap-3 md:gap-3.5">
-        <div className="flex w-16 shrink-0 flex-col justify-between md:w-20">
+        <div className="flex shrink-0 flex-col justify-between">
           <div
             className="relative flex h-16 w-16 items-center justify-center rounded-full md:h-20 md:w-20"
             style={{
@@ -121,11 +121,11 @@ export function WidgetHeader() {
           </div>
           <button
             type="button"
-            className="mt-3 inline-flex items-center gap-0.5 self-start font-urbanist text-sm font-semibold text-white/85 transition hover:text-accent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent md:text-[15px]"
+            className="mt-3 inline-flex items-center gap-0.5 self-start whitespace-nowrap font-urbanist text-base font-semibold leading-none text-white/85 transition hover:text-accent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent md:text-[17px]"
             onClick={() => navigateToProfile()}
           >
             Mi perfil
-            <ChevronRight className="h-4 w-4 shrink-0 opacity-90" aria-hidden strokeWidth={2.5} />
+            <ChevronRight className="h-[1.125rem] w-[1.125rem] shrink-0 opacity-90" aria-hidden strokeWidth={2.5} />
           </button>
         </div>
 

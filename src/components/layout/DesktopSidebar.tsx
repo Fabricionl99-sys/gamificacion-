@@ -26,7 +26,7 @@ export function DesktopSidebar({ activeTab, onSelect }: DesktopSidebarProps) {
             <p className="truncate text-sm font-medium text-text-primary">
               {branding?.operator_name ?? 'Gamificacion'}
             </p>
-            <p className="mt-0.5 truncate text-xs text-text-tertiary">
+            <p className="mt-0.5 truncate text-metadata text-text-tertiary">
               {branding?.welcome_text ?? 'Widget jugador'}
             </p>
           </div>

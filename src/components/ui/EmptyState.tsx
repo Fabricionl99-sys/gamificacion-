@@ -16,7 +16,7 @@ export function EmptyState({ icon, title, description, action }: EmptyStateProps
         {icon}
       </div>
       <h3 className="text-md font-medium text-text-primary">{title}</h3>
-      <p className="mt-2 max-w-60 text-sm text-text-secondary">{description}</p>
+      <p className="mt-2 max-w-60 text-module-body text-text-secondary">{description}</p>
       {action ? <div className="mt-5">{action}</div> : null}
     </Card>
   );

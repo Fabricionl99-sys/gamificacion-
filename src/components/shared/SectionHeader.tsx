@@ -16,17 +16,17 @@ export function SectionHeader({ title, eyebrow, description, action, actionLabel
   return (
     <div className="mb-3 flex items-start justify-between gap-3">
       <div>
-        {eyebrow ? <p className="text-xs font-medium uppercase tracking-widest text-text-tertiary">{eyebrow}</p> : null}
+        {eyebrow ? <p className="text-metadata font-medium uppercase tracking-widest text-text-tertiary">{eyebrow}</p> : null}
         <h2 className="text-sm font-semibold text-text-primary">{title}</h2>
-        {description ? <p className="mt-1 text-xs text-text-tertiary">{description}</p> : null}
+        {description ? <p className="mt-1 text-module-body text-text-tertiary">{description}</p> : null}
       </div>
       {finalActionLabel ? (
         <Button
           aria-label={finalActionLabel}
-          className="h-auto px-0 text-xs font-semibold text-accent hover:bg-transparent"
+          className="h-auto px-0 text-sm font-semibold text-accent hover:bg-transparent"
           disabled={!onAction}
           onClick={onAction}
-          rightIcon={<ChevronRight className="h-3 w-3" />}
+          rightIcon={<ChevronRight className="h-3.5 w-3.5" />}
           size="sm"
           variant="ghost"
         >

@@ -120,12 +120,12 @@ export default function MissionsTab() {
   return (
     <div className="space-y-4">
       <Card className="card-gradient-surface-missions space-y-3">
-        <p className="text-xs font-medium uppercase tracking-wide text-text-secondary">progreso de hoy</p>
+        <p className="text-metadata font-medium uppercase tracking-wide text-text-secondary">progreso de hoy</p>
         <p className="text-lg font-semibold text-text-primary">
           {stats.done} de {stats.total} diarias completadas
         </p>
         <ProgressBar value={getProgressPercent(stats.done, Math.max(stats.total, 1))} />
-        <div className="flex flex-wrap gap-2 text-xs text-text-secondary">
+        <div className="flex flex-wrap gap-2 text-module-body text-text-secondary">
           <span>+{stats.earnedXP} XP ganado</span>
           {stats.claimable > 0 ? (
             <span className="font-medium text-accent">{stats.claimable} listas para reclamar</span>

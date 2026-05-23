@@ -47,7 +47,7 @@ export default function HomeTab() {
           <Gift className="h-5 w-5 text-danger" />
           <span className="flex-1">
             <span className="block text-sm font-semibold text-text-primary">tenes {player.pendingPrizes} premios sin reclamar</span>
-            <span className="text-xs text-text-secondary">tocá para ver tus premios pendientes</span>
+            <span className="text-module-body text-text-secondary">tocá para ver tus premios pendientes</span>
           </span>
         </button>
       ) : null}
@@ -78,7 +78,7 @@ export default function HomeTab() {
       </section>
 
       <Card variant="neon" className="card-gradient-surface-promo scan-effect overflow-hidden">
-        <p className="text-xs font-medium uppercase tracking-widest text-text-tertiary">promo destacada</p>
+        <p className="text-metadata font-medium uppercase tracking-widest text-text-tertiary">promo destacada</p>
         <h2 className="mt-2 text-xl font-semibold text-text-primary">Weekend boost x2 XP</h2>
         <p className="mt-2 text-sm text-text-secondary">Activa el multiplicador desde la tienda y suma doble XP en deportes.</p>
         <Button className="mt-4" variant="primary" onClick={() => navigateToTab('shop')}>
@@ -111,7 +111,7 @@ export default function HomeTab() {
             <Newspaper className="h-5 w-5 text-info" />
             <div>
               <p className="text-sm font-semibold">{latestNews.title}</p>
-              <p className="mt-1 text-xs text-text-secondary">{latestNews.body}</p>
+              <p className="mt-1 text-module-body text-text-secondary">{latestNews.body}</p>
             </div>
           </Card>
         ) : null}

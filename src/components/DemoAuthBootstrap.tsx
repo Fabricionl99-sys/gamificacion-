@@ -28,7 +28,7 @@ export function DemoAuthBootstrap({ children }: { children: ReactNode }) {
     return (
       <div className="flex min-h-dvh flex-col items-center justify-center gap-4 bg-bg-primary px-6 text-center text-text-primary">
         <p className="text-sm text-text-secondary">No pudimos conectar con el servidor demo.</p>
-        {error ? <p className="text-xs text-danger">{error}</p> : null}
+        {error ? <p className="text-metadata text-danger">{error}</p> : null}
         <button
           type="button"
           className="rounded-lg bg-accent-primary px-4 py-2 text-sm font-semibold text-bg-primary"

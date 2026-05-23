@@ -101,7 +101,13 @@ export default function PredictionsTab() {
 
       <div className="grid grid-cols-3 gap-2 rounded-lg bg-bg-secondary p-1">
         {tabs.map((item) => (
-          <Button key={item.id} size="sm" variant={tab === item.id ? 'primary' : 'ghost'} onClick={() => setTab(item.id)}>
+          <Button
+            key={item.id}
+            size="sm"
+            className="text-submenu"
+            variant={tab === item.id ? 'primary' : 'ghost'}
+            onClick={() => setTab(item.id)}
+          >
             {item.label}
           </Button>
         ))}
@@ -148,7 +154,7 @@ function EventCard({ event, mode, onOpen }: { event: PredictionEvent; mode: Tab;
             {predicted ? <Badge tone="success">predicho</Badge> : null}
           </div>
           <p className="mt-1 text-sm text-text-secondary">{event.description}</p>
-          <p className="mt-2 text-xs text-text-tertiary">
+          <p className="mt-2 text-module-body text-text-tertiary">
             {items.length} items · {formatNumber(event.participants_count)} jugadores · pool {formatCompactNumber(event.pool_accumulated)}
           </p>
         </div>
@@ -203,7 +209,7 @@ function PredictionDetailModal({
         </div>
 
         {event.entry_cost > 0 ? (
-          <div className="rounded-md border border-coins/30 bg-coins/10 p-3 text-xs text-coins">
+          <div className="rounded-md border border-coins/30 bg-coins/10 p-3 text-metadata text-coins">
             Costo de entrada: {formatNumber(event.entry_cost)} monedas. Se confirma al enviar.
           </div>
         ) : null}
@@ -259,7 +265,7 @@ function PredictionItemCard({
           <p className="font-semibold">
             #{item.position} {item.name}
           </p>
-          <p className="text-xs text-text-tertiary">{marketLabels[item.market]} · premio +{formatNumber(item.prize_amount)}</p>
+          <p className="text-module-body text-text-tertiary">{marketLabels[item.market]} · premio +{formatNumber(item.prize_amount)}</p>
         </div>
         {item.result ? (
           selected === item.result ? <CheckCircle2 className="h-5 w-5 text-accent" /> : <XCircle className="h-5 w-5 text-danger" />
@@ -283,7 +289,7 @@ function PredictionItemCard({
           );
         })}
       </div>
-      {item.result ? <p className="text-xs text-text-tertiary">Resultado real: {item.result}</p> : null}
+      {item.result ? <p className="text-module-body text-text-tertiary">Resultado real: {item.result}</p> : null}
     </Card>
   );
 }

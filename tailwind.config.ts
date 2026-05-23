@@ -76,6 +76,9 @@ export default {
       },
       fontSize: {
         xs: ['11px', { lineHeight: '1.4' }],
+        metadata: ['var(--text-metadata, 13px)', { lineHeight: '1.4' }],
+        'module-body': ['var(--text-module-body, 14px)', { lineHeight: '1.5' }],
+        submenu: ['var(--text-submenu, 14px)', { lineHeight: '1.45' }],
         sm: ['13px', { lineHeight: '1.5' }],
         base: ['14px', { lineHeight: '1.5' }],
         md: ['16px', { lineHeight: '1.5' }],

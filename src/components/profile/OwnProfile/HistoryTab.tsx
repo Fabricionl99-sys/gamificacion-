@@ -13,7 +13,7 @@ export default function HistoryTab() {
     <div className="space-y-3">
       <Card className="flex items-center justify-between">
         <div>
-          <p className="text-xs uppercase tracking-widest text-text-tertiary">rating tipster</p>
+          <p className="text-metadata uppercase tracking-widest text-text-tertiary">rating tipster</p>
           <p className="text-2xl font-semibold text-text-primary">68%</p>
         </div>
         <Star className="h-6 w-6 text-coins" aria-hidden="true" />
@@ -25,7 +25,7 @@ export default function HistoryTab() {
           </div>
           <div className="flex-1">
             <p className="text-sm font-medium text-text-primary">{event}</p>
-            <p className="text-xs text-text-tertiary">hace unas horas</p>
+            <p className="text-metadata text-text-tertiary">hace unas horas</p>
           </div>
           <Badge variant="neutral">historial</Badge>
         </Card>

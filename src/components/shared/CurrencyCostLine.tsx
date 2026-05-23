@@ -9,7 +9,7 @@ export function CurrencyCostLine({
   currencyName,
   amount,
   suffix = 'por entrada',
-  className = 'flex items-center gap-1 text-xs font-medium text-accent',
+  className = 'flex items-center gap-1 text-metadata font-medium text-accent',
 }: {
   currencyId: string;
   currencyCode?: string | null;

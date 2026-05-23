@@ -86,7 +86,7 @@ export default function RafflesTab() {
               <Card key={w.id} className="p-4">
                 <p className="font-semibold text-text-primary">{w.raffleName}</p>
                 <p className="mt-1 text-sm text-text-secondary">Ganaste posición #{w.position} · {w.prizeLabel}</p>
-                <p className="mt-2 text-xs text-text-tertiary">
+                <p className="mt-2 text-module-body text-text-tertiary">
                   {w.prizeType === 'bonus'
                     ? 'Bono acreditado en tu cuenta'
                     : w.physicalDeliveredAt
