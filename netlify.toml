@@ -5,8 +5,10 @@
 
 [build.environment]
   NODE_VERSION = "20"
-  # Mocks activos en la demo publicada (API simulada con MSW)
-  VITE_USE_MOCKS = "true"
+  # Netlify legacy; prod demo usa demo.social2game.com (S3) con API real
+  VITE_API_BASE_URL = "https://api.social2game.com"
+  VITE_DEMO_TENANT_ID = "6b67e761-b833-402b-8d59-81c478ac782b"
+  VITE_USE_MOCKS = "false"
   # Piloto social: abre en Social, perfil público, banner
   VITE_PILOT_SOCIAL = "true"
 

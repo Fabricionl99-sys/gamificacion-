@@ -1,5 +1,22 @@
 import type { Config } from 'tailwindcss';
 
+/**
+ * Sprint #6 fix CRÍTICO del branding del operador:
+ *
+ * ANTES: colors tenía valores hex hardcoded (`'#0AF784'`, `'#0A0E13'`, etc.).
+ * Tailwind bakea esos hex en compile time en las clases `.bg-accent`,
+ * `.text-primary`, etc. → cuando applyBranding seteaba CSS vars en :root,
+ * las clases Tailwind seguían usando el hex original → botones, tabs,
+ * "Ver más", etc. NUNCA cambiaban color.
+ *
+ * AHORA: usamos `var(--token, fallback)`. El fallback es el valor default
+ * del dark theme (compat con SSR / antes de que applyBranding corra). El
+ * var() permite que applyBranding pise los colores en runtime.
+ *
+ * Tokens semánticos (success/warning/danger/info/streak/coins/vip) quedan
+ * con valores fijos porque son colores con SIGNIFICADO (verde = ok, rojo =
+ * error, dorado = vip). El operador no los customiza.
+ */
 export default {
   content: ['./index.html', './src/**/*.{ts,tsx}'],
   darkMode: 'class',
@@ -7,32 +24,36 @@ export default {
     extend: {
       colors: {
         border: {
-          subtle: 'rgba(255, 255, 255, 0.06)',
-          DEFAULT: 'rgba(255, 255, 255, 0.10)',
-          default: 'rgba(255, 255, 255, 0.10)',
-          strong: 'rgba(255, 255, 255, 0.20)',
-          accent: 'rgba(10, 247, 132, 0.3)',
-          'accent-strong': '#0AF784',
+          subtle: 'var(--border-subtle, rgba(255, 255, 255, 0.06))',
+          DEFAULT: 'var(--border-default, rgba(255, 255, 255, 0.10))',
+          default: 'var(--border-default, rgba(255, 255, 255, 0.10))',
+          strong: 'var(--border-strong, rgba(255, 255, 255, 0.20))',
+          accent: 'var(--border-accent, rgba(10, 247, 132, 0.3))',
+          'accent-strong': 'var(--border-accent-strong, #0AF784)',
         },
         bg: {
-          primary: '#0A0E13',
-          secondary: '#13181F',
-          tertiary: '#1E252F',
-          elevated: '#242C38',
-          overlay: 'rgba(10, 14, 19, 0.85)',
+          primary: 'var(--bg-primary, #0A0E13)',
+          secondary: 'var(--bg-secondary, #13181F)',
+          tertiary: 'var(--bg-tertiary, #1E252F)',
+          elevated: 'var(--bg-elevated, #242C38)',
+          overlay: 'var(--bg-overlay, rgba(10, 14, 19, 0.85))',
         },
         accent: {
-          DEFAULT: '#0AF784',
-          hover: '#08D971',
-          active: '#06B85F',
-          subtle: 'rgba(10, 247, 132, 0.08)',
+          DEFAULT: 'var(--accent-primary, #0AF784)',
+          hover: 'var(--accent-hover, #08D971)',
+          active: 'var(--accent-active, #06B85F)',
+          subtle: 'var(--accent-subtle, rgba(10, 247, 132, 0.08))',
         },
         text: {
-          primary: '#FFFFFF',
-          secondary: '#A0A8B5',
-          tertiary: '#6B7380',
-          disabled: '#3D434E',
+          primary: 'var(--text-primary, #FFFFFF)',
+          secondary: 'var(--text-secondary, #A0A8B5)',
+          tertiary: 'var(--text-tertiary, #6B7380)',
+          disabled: 'var(--text-disabled, #3D434E)',
+          onAccent: 'var(--text-on-accent, #0A0E13)',
         },
+        // Status colors fijos (significado semántico — NO customizables por
+        // el operador). Si el operador necesita cambiar success/danger/etc,
+        // arme un módulo separado de palette extendida.
         success: '#0AF784',
         warning: '#FFB020',
         danger: '#FF4D6D',
@@ -47,7 +68,10 @@ export default {
         },
       },
       fontFamily: {
-        urbanist: ['Urbanist', 'system-ui', 'sans-serif'],
+        // Sprint #6: ahora respeta --font-family seteado por applyBranding.
+        // Fallback Urbanist para que dev/preview sin branding funcione.
+        urbanist: ['var(--font-family, Urbanist)', 'system-ui', 'sans-serif'],
+        sans: ['var(--font-family, Urbanist)', 'system-ui', 'sans-serif'],
         mono: ['"JetBrains Mono"', 'ui-monospace', 'monospace'],
       },
       fontSize: {
@@ -86,9 +110,10 @@ export default {
         md: '0 8px 24px rgba(0, 0, 0, 0.4)',
         lg: '0 16px 48px rgba(0, 0, 0, 0.5)',
         xl: '0 24px 64px rgba(0, 0, 0, 0.6)',
-        glow: '0 0 20px rgba(10, 247, 132, 0.3)',
-        'glow-strong': '0 0 32px rgba(10, 247, 132, 0.5)',
-        'glow-intense': '0 0 48px rgba(10, 247, 132, 0.7)',
+        // Glows ahora derivados del accent del operador.
+        glow: 'var(--glow-accent, 0 0 20px rgba(10, 247, 132, 0.3))',
+        'glow-strong': 'var(--glow-accent-strong, 0 0 32px rgba(10, 247, 132, 0.5))',
+        'glow-intense': 'var(--glow-accent-intense, 0 0 48px rgba(10, 247, 132, 0.7))',
         card: '0 8px 24px rgba(0, 0, 0, 0.4)',
         modal: '0 24px 64px rgba(0, 0, 0, 0.6)',
       },

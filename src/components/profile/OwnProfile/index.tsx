@@ -13,7 +13,7 @@ import { Modal } from '../../ui/Modal';
 import { Tabs } from '../../ui/Tabs';
 import { usePlayer } from '../../../hooks/usePlayer';
 import { usePlayerStore } from '../../../store/playerStore';
-import { useUiStore } from '../../../store/uiStore';
+import { useWidgetNavigation } from '../../../hooks/useWidgetNavigation';
 import { getAvatarBackgroundFromName } from '../../../utils/avatarHashColor';
 import HistoryTab from './HistoryTab';
 import { PendingPrizesTab } from './PendingPrizesTab';
@@ -31,7 +31,7 @@ const AVATAR_OPTIONS = ['JM', 'LA', 'RK', 'MX', 'CP', 'ZD'] as const;
 export default function OwnProfile() {
   const [activeTab, setActiveTab] = useState<OwnProfileTab>('summary');
   const [avatarPickerOpen, setAvatarPickerOpen] = useState(false);
-  const setActiveView = useUiStore((state) => state.setActiveView);
+  const { navigateBackFromProfile } = useWidgetNavigation();
   const { player } = usePlayer();
   const updatePlayer = usePlayerStore((state) => state.updatePlayer);
 
@@ -48,7 +48,7 @@ export default function OwnProfile() {
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
-        <Button variant="ghost" size="sm" leftIcon={<ArrowLeft className="h-3 w-3" />} onClick={() => setActiveView('widget')}>
+        <Button variant="ghost" size="sm" leftIcon={<ArrowLeft className="h-3 w-3" />} onClick={() => navigateBackFromProfile()}>
           volver
         </Button>
         <h1 className="text-lg font-semibold text-text-primary">Mi perfil</h1>

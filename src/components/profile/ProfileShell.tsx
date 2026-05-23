@@ -4,7 +4,7 @@ import { Avatar } from '../ui/Avatar';
 import { Badge } from '../ui/Badge';
 import { Button } from '../ui/Button';
 import { usePlayer } from '../../hooks/usePlayer';
-import { useUiStore } from '../../store/uiStore';
+import { useWidgetNavigation } from '../../hooks/useWidgetNavigation';
 
 interface ProfileShellProps {
   children: ReactNode;
@@ -12,12 +12,12 @@ interface ProfileShellProps {
 
 export function ProfileShell({ children }: ProfileShellProps) {
   const { player } = usePlayer();
-  const setActiveView = useUiStore((state) => state.setActiveView);
+  const { navigateBackFromProfile } = useWidgetNavigation();
 
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
-        <Button variant="ghost" size="sm" onClick={() => setActiveView('widget')} leftIcon={<ArrowLeft className="h-4 w-4" />}>
+        <Button variant="ghost" size="sm" onClick={() => navigateBackFromProfile()} leftIcon={<ArrowLeft className="h-4 w-4" />}>
           volver
         </Button>
       </div>

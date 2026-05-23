@@ -1,4 +1,5 @@
 import { Button } from '../../ui/Button';
+import { WheelDisc } from './WheelDisc';
 
 interface PreSpinViewProps {
   onSpin: () => void;
@@ -7,9 +8,9 @@ interface PreSpinViewProps {
 export function PreSpinView({ onSpin }: PreSpinViewProps) {
   return (
     <div className="space-y-5 text-center">
-      <div className="wheel-surface relative mx-auto grid h-48 w-48 place-items-center rounded-full border border-border-accent shadow-card">
-        <div className="grid h-20 w-20 place-items-center rounded-full bg-bg-primary text-sm font-semibold text-text-primary">rueda</div>
-        <div className="absolute -top-2 h-6 w-4 rounded-sm bg-accent shadow-glow" />
+      <div className="relative mx-auto w-fit">
+        <div className="absolute left-1/2 top-0 z-10 h-0 w-0 -translate-x-1/2 border-x-[10px] border-t-[18px] border-x-transparent border-t-accent" />
+        <WheelDisc size="md" centerLabel="rueda" />
       </div>
       <div>
         <h3 className="text-lg font-semibold text-text-primary">Rueda de la fortuna</h3>

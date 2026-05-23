@@ -59,7 +59,7 @@ export default function RankingTab() {
 
 function SectionIntro({ activeCount, bestPosition }: { activeCount: number; bestPosition: number }) {
   return (
-    <Card variant="neon" className="scan-effect">
+    <Card variant="neon" className="card-gradient-surface-promo scan-effect">
       <div className="flex items-center gap-3">
         <div className="grid h-12 w-12 place-items-center rounded-xl bg-coins/15 text-coins">
           <Trophy className="h-6 w-6" />

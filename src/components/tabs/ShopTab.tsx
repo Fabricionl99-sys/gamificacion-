@@ -1,10 +1,11 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { ShoppingBag } from 'lucide-react';
 
 import { getPlayer } from '../../api/player';
 import { getShopItems } from '../../api/shop';
 import { useAsyncData } from '../../hooks/useAsyncData';
 import { useToast } from '../../hooks/useToast';
+import { useWidgetNavigation } from '../../hooks/useWidgetNavigation';
 import type { Player } from '../../types/player';
 import { useModalsStore } from '../../store/modalsStore';
 import { useShopStore } from '../../store/shopStore';
@@ -51,6 +52,7 @@ export default function ShopTab() {
   const openModal = useModalsStore((state) => state.openModal);
   const setSelectedItem = useShopStore((state) => state.setSelectedItem);
   const toast = useToast();
+  const { route, openDetail: navigateToProduct, closeDetail } = useWidgetNavigation();
   const [activeFilter, setActiveFilter] = useState<ShopFilter>('all');
   const { data: player } = useAsyncData(getPlayer);
   const { data: shopItems, isLoading, error } = useAsyncData(getShopItems, []);
@@ -60,23 +62,34 @@ export default function ShopTab() {
     [shopItems],
   );
 
+  const detailId = route.tab === 'shop' ? route.detailId : undefined;
+
+  useEffect(() => {
+    if (!detailId) return;
+    const item = allItems.find((entry) => entry.id === detailId);
+    if (item) {
+      setSelectedItem(item);
+      if (route.action === 'buy') {
+        openModal(item.icon === 'box' ? 'mysteryBox' : 'purchase');
+      } else {
+        openModal('shopDetail');
+      }
+      return;
+    }
+    if (!isLoading) closeDetail('shop');
+  }, [detailId, route.action, allItems, isLoading, setSelectedItem, openModal, closeDetail]);
+
   const items = useMemo(() => {
     if (activeFilter === 'all') return allItems;
     return allItems.filter((item) => item.category === activeFilter);
   }, [activeFilter, allItems]);
 
   const openDetail = (item: ShopItem) => {
-    setSelectedItem(item);
-    openModal('shopDetail');
+    navigateToProduct('tienda', item.id);
   };
 
   const openRedeem = (item: ShopItem) => {
-    setSelectedItem(item);
-    if (item.icon === 'box') {
-      openModal('mysteryBox');
-      return;
-    }
-    openModal('purchase');
+    navigateToProduct('tienda', item.id, 'buy');
   };
 
   if (isLoading) return <Skeleton className="h-40" />;

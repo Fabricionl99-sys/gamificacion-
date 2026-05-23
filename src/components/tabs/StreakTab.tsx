@@ -13,7 +13,7 @@ export default function StreakTab() {
 
   return (
     <div className="space-y-4">
-      <Card variant="neon" className="overflow-hidden bg-streak-hero">
+      <Card variant="neon" className="card-gradient-surface-streak overflow-hidden">
         <div className="relative z-10">
           <div className="mb-3 flex items-center gap-2 text-streak">
             <Flame className="h-5 w-5" />

@@ -3,12 +3,13 @@ import { motion } from 'framer-motion';
 
 import { useActiveBoosts } from '../../hooks/useActiveBoosts';
 import { usePlayer } from '../../hooks/usePlayer';
-import { useUiStore } from '../../store/uiStore';
+import { useWidgetNavigation } from '../../hooks/useWidgetNavigation';
 import { getAvatarBackgroundFromName } from '../../utils/avatarHashColor';
 import { formatBoostEndClock, formatNumber } from '../../utils/format';
 import { resolveLevelDisplayName } from '../../utils/levelDisplay';
 import { getPlayerInitials } from '../../utils/playerInitials';
 import { resolveXpSegment } from '../../utils/xpLevelSegment';
+import { DemoResetButton } from '../DemoResetButton';
 
 function formatMultiplierLabel(m: number): string {
   if (Number.isInteger(m)) return `x${m}`;
@@ -57,7 +58,7 @@ function HeaderIconWithBadge({
 export function WidgetHeader() {
   const { player, isLoading } = usePlayer();
   const { boosts } = useActiveBoosts();
-  const setActiveView = useUiStore((state) => state.setActiveView);
+  const { navigateToProfile } = useWidgetNavigation();
 
   const tiers = player.levelDefinitions ?? [];
   const levelName = resolveLevelDisplayName(player.level, tiers);
@@ -100,10 +101,10 @@ export function WidgetHeader() {
         />
       </div>
 
-      <div className="flex gap-2.5 md:gap-3">
-        <div className="flex shrink-0 flex-col items-start gap-1.5">
+      <div className="flex items-stretch gap-3 md:gap-3.5">
+        <div className="flex w-16 shrink-0 flex-col justify-between md:w-20">
           <div
-            className="relative flex h-16 w-16 shrink-0 items-center justify-center rounded-full md:h-20 md:w-20"
+            className="relative flex h-16 w-16 items-center justify-center rounded-full md:h-20 md:w-20"
             style={{
               background: avatarBg,
               boxShadow: '0 0 0 1px rgba(10, 247, 132, 0.25), 0 0 20px rgba(10, 247, 132, 0.18)',
@@ -120,11 +121,11 @@ export function WidgetHeader() {
           </div>
           <button
             type="button"
-            className="inline-flex items-center gap-0.5 font-urbanist text-[13px] font-medium text-white/80 transition hover:text-accent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent md:text-sm"
-            onClick={() => setActiveView('own-profile')}
+            className="mt-3 inline-flex items-center gap-0.5 self-start font-urbanist text-sm font-semibold text-white/85 transition hover:text-accent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent md:text-[15px]"
+            onClick={() => navigateToProfile()}
           >
             Mi perfil
-            <ChevronRight className="h-3.5 w-3.5 shrink-0 opacity-90" aria-hidden strokeWidth={2.5} />
+            <ChevronRight className="h-4 w-4 shrink-0 opacity-90" aria-hidden strokeWidth={2.5} />
           </button>
         </div>
 
@@ -166,8 +167,8 @@ export function WidgetHeader() {
                 style={{ width: `${progressPercent}%` }}
               />
             </div>
-            <div className="mt-1 flex justify-end pr-0.5">
-              <div className="inline-flex items-center gap-1.5 font-mono text-sm font-bold text-text-primary md:text-base">
+            <div className="mt-1.5 flex justify-end pr-0.5">
+              <div className="inline-flex max-w-full items-center gap-1.5 font-mono text-sm font-bold text-text-primary md:text-base">
                 {primaryCoin?.imageUrl ? (
                   <img src={primaryCoin.imageUrl} alt="" className="h-5 w-5 shrink-0 rounded-full object-cover" />
                 ) : (
@@ -178,6 +179,9 @@ export function WidgetHeader() {
             </div>
           </div>
         </div>
+      </div>
+      <div className="mt-2 flex justify-end border-t border-border-default/40 pt-2">
+        <DemoResetButton />
       </div>
     </header>
   );

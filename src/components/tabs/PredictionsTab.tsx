@@ -1,8 +1,9 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { CheckCircle2, Clock, Coins, Trophy, XCircle } from 'lucide-react';
 
 import { getPredictionEvent, getPredictionEvents, submitPrediction } from '../../api/predictions';
 import { useAsyncData } from '../../hooks/useAsyncData';
+import { useWidgetNavigation } from '../../hooks/useWidgetNavigation';
 import type { PredictionEvent, PredictionItem, PredictionMarket } from '../../types/prediction';
 import { formatCompactNumber, formatNumber, formatTimeRemaining } from '../../utils/format';
 import { Badge } from '../ui/Badge';
@@ -61,8 +62,28 @@ const optionLabels: Record<PredictionMarket, { value: string; label: string }[]>
 export default function PredictionsTab() {
   const [tab, setTab] = useState<Tab>('active');
   const [selectedId, setSelectedId] = useState<string | null>(null);
+  const { route, openDetail, closeDetail } = useWidgetNavigation();
   const { data: events = [], isLoading, error } = useAsyncData(() => getPredictionEvents(tab), [], [tab]);
   const selected = useAsyncData(() => (selectedId ? getPredictionEvent(selectedId) : Promise.resolve(null)), null, [selectedId]);
+
+  const detailId = route.tab === 'predictions' ? route.detailId : undefined;
+
+  useEffect(() => {
+    if (!detailId) {
+      setSelectedId(null);
+      return;
+    }
+    setSelectedId(detailId);
+  }, [detailId]);
+
+  useEffect(() => {
+    if (!detailId || isLoading) return;
+    const exists = events.some((event) => event.id === detailId);
+    if (exists) return;
+    void getPredictionEvent(detailId).then((event) => {
+      if (!event) closeDetail('predictions');
+    });
+  }, [detailId, events, isLoading, closeDetail]);
 
   const tabs = [
     { id: 'active', label: `Activos · ${tab === 'active' ? events.length : 4}` },
@@ -98,24 +119,29 @@ export default function PredictionsTab() {
       ) : (
         <div className="space-y-3">
           {events.map((event) => (
-            <EventCard key={event.id} event={event} mode={tab} onOpen={() => setSelectedId(event.id)} />
+            <EventCard key={event.id} event={event} mode={tab} onOpen={() => openDetail('predicciones', event.id)} />
           ))}
         </div>
       )}
 
-      <PredictionDetailModal event={selected.data} onClose={() => setSelectedId(null)} readonly={tab !== 'active'} />
+      <PredictionDetailModal event={selected.data} onClose={() => closeDetail('predictions')} readonly={tab !== 'active'} />
     </div>
   );
 }
 
 function EventCard({ event, mode, onOpen }: { event: PredictionEvent; mode: Tab; onOpen: () => void }) {
-  const predicted = event.items.every((item) => item.player_prediction);
-  const hits = event.items.filter((item) => item.result && item.player_prediction === item.result).length;
+  // Defensive: backend `/v1/player/predictions` (list) no incluye `items` —
+  // viven en el detail endpoint. Si items es undefined/[], renderizamos card
+  // sin la lógica de "predicho/aciertos" en vez de crashear con .every().
+  const items = event.items ?? [];
+  const predicted = items.length > 0 && items.every((item) => item.player_prediction);
+  const hits = items.filter((item) => item.result && item.player_prediction === item.result).length;
+  const emoji = sportEmoji[event.sport] ?? sportEmoji.other;
 
   return (
     <Card className="overflow-hidden">
       <div className="flex gap-3">
-        <div className="grid h-20 w-20 shrink-0 place-items-center rounded-xl bg-accent-subtle text-4xl">{sportEmoji[event.sport]}</div>
+        <div className="grid h-20 w-20 shrink-0 place-items-center rounded-xl bg-accent-subtle text-4xl">{emoji}</div>
         <div className="min-w-0 flex-1">
           <div className="flex items-center gap-2">
             <h3 className="font-semibold text-text-primary">{event.name}</h3>
@@ -123,7 +149,7 @@ function EventCard({ event, mode, onOpen }: { event: PredictionEvent; mode: Tab;
           </div>
           <p className="mt-1 text-sm text-text-secondary">{event.description}</p>
           <p className="mt-2 text-xs text-text-tertiary">
-            {event.items.length} items · {formatNumber(event.participants_count)} jugadores · pool {formatCompactNumber(event.pool_accumulated)}
+            {items.length} items · {formatNumber(event.participants_count)} jugadores · pool {formatCompactNumber(event.pool_accumulated)}
           </p>
         </div>
       </div>

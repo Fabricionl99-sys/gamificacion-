@@ -20,7 +20,12 @@ const statusMap: Record<Tournament['status'], { label: string; tone: 'warning' |
 
 export function TournamentCard({ tournament, onAction }: TournamentCardProps) {
   const openModal = useModalsStore((state) => state.openModal);
-  const status = statusMap[tournament.status];
+  // Defensive fallback: si llega un status que no está en el map (ej. backend
+  // manda 'active' sin que el adapter lo transforme), evitamos crash en
+  // `status.tone` y renderizamos como 'open'. Antes esto crasheaba el Home
+  // tab entero. Ver chip "Realinear cliente Predicciones" para fix completo
+  // de shapes backend→widget.
+  const status = statusMap[tournament.status] ?? statusMap.open;
   const isDisabled = tournament.status === 'vip';
 
   return (

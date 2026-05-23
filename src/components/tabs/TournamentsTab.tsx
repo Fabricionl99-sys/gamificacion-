@@ -42,7 +42,7 @@ export default function TournamentsTab() {
 
   return (
     <div className="space-y-4">
-      <Card variant="neon" className="overflow-hidden bg-[linear-gradient(135deg,var(--accent-subtle),var(--bg-secondary))]">
+      <Card variant="neon" className="card-gradient-surface-tournaments overflow-hidden">
         <div className="flex items-center gap-3">
           <div className="grid h-12 w-12 place-items-center rounded-lg bg-warning/15 text-warning">
             <Trophy className="h-6 w-6" />

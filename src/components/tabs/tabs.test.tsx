@@ -6,6 +6,7 @@ import { renderWithProviders } from '../../test/render';
 import FeedTab from './FeedTab';
 import HomeTab from './HomeTab';
 import MissionsTab from './MissionsTab';
+import RewardsTab from './RewardsTab';
 import NewsTab from './NewsTab';
 import PostEditorModal from '../modals/PostEditorModal';
 import PostCommentsModal from '../modals/PostCommentsModal';
@@ -14,16 +15,19 @@ import RankingTab from './RankingTab';
 import ShopTab from './ShopTab';
 import StreakTab from './StreakTab';
 import TournamentsTab from './TournamentsTab';
+import RafflesTab from './RafflesTab';
 
 describe('tabs smoke', () => {
   it.each([
     ['home', <HomeTab />],
     ['missions', <MissionsTab />],
+    ['rewards', <RewardsTab />],
     ['shop', <ShopTab />],
     ['streak', <StreakTab />],
     ['ranking', <RankingTab />],
     ['tournaments', <TournamentsTab />],
     ['predictions', <PredictionsTab />],
+    ['raffles', <RafflesTab />],
     ['social', <FeedTab />],
     ['news', <NewsTab />],
   ])('renders %s tab without crashing', (_name, element) => {

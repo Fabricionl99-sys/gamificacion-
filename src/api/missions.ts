@@ -2,7 +2,7 @@ import { apiClient } from './client';
 import type { Mission } from '../types/mission';
 
 export async function getMissions() {
-  const response = await apiClient.get<Mission[]>('/player/missions');
+  const response = await apiClient.get<Mission[]>('/v1/player/missions');
   return response.data;
 }
 
@@ -13,6 +13,6 @@ export interface ClaimMissionResult {
 }
 
 export async function claimMission(missionId: string) {
-  const response = await apiClient.post<ClaimMissionResult>(`/player/missions/${missionId}/claim`);
+  const response = await apiClient.post<ClaimMissionResult>(`/v1/player/missions/${missionId}/claim`);
   return response.data;
 }

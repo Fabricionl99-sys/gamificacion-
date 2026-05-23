@@ -13,16 +13,20 @@ const vendorChunk = (id: string): string | undefined => {
 
 export default defineConfig({
   plugins: [react()],
-  build: {
-    lib: {
-      entry: 'src/main.tsx',
-      name: 'GamificationWidget',
-      formats: ['es'],
-      fileName: (format) => `gamification-widget.${format}.js`,
+  server: {
+    port: 5175,
+    strictPort: true,
+    proxy: {
+      '/api': {
+        target: 'https://api.social2game.com',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api/, ''),
+      },
     },
+  },
+  build: {
     rollupOptions: {
       output: {
-        assetFileNames: 'gamification-widget.[ext]',
         manualChunks: vendorChunk,
       },
     },
