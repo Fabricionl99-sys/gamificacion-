@@ -1,6 +1,8 @@
 import {
   Bell,
+  Box,
   Flame,
+  Gift,
   Home,
   Megaphone,
   MessageCircle,
@@ -22,12 +24,14 @@ interface TabIcon {
 const tabIcons: Record<TabId, TabIcon> = {
   home: { icon: Home },
   missions: { icon: Zap },
+  rewards: { icon: Box },
   shop: { icon: ShoppingBag },
   social: { icon: MessageCircle },
   streak: { icon: Flame },
   ranking: { icon: Trophy },
   tournaments: { icon: Sparkles },
   predictions: { icon: Package },
+  raffles: { icon: Gift },
   news: { icon: Megaphone },
 };
 
@@ -35,12 +39,14 @@ const tabIcons: Record<TabId, TabIcon> = {
 export const tabs: WidgetTabConfig[] = [
   { id: 'home', label: 'Inicio', shortLabel: 'inicio' },
   { id: 'missions', label: 'Misiones', shortLabel: 'misiones' },
+  { id: 'rewards', label: 'Cofres', shortLabel: 'cofres' },
   { id: 'shop', label: 'Tienda', shortLabel: 'tienda' },
   { id: 'social', label: 'Social', shortLabel: 'social' },
   { id: 'streak', label: 'Asistencia/Racha', shortLabel: 'racha' },
   { id: 'ranking', label: 'Ranking', shortLabel: 'ranking' },
   { id: 'tournaments', label: 'Torneos', shortLabel: 'torneos' },
   { id: 'predictions', label: 'Predicciones', shortLabel: 'predicciones' },
+  { id: 'raffles', label: 'Sorteos', shortLabel: 'sorteos' },
   { id: 'news', label: 'Noticias', shortLabel: 'noticias' },
 ];
 

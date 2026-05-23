@@ -15,6 +15,18 @@
   </head>
   <body>
     <div id="root"></div>
+    <script>
+      // SW kill switch: en prod NO usamos service workers (MSW es solo dev).
+      // Visitors que cargaron el widget cuando MSW estaba activo dejaron
+      // mockServiceWorker.js registrado que sigue interceptando requests con
+      // data mockeada — rompe la entrega de cambios del BO al widget. Limpiamos
+      // inmediatamente al cargar la página, antes de que el bundle haga fetch.
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.getRegistrations().then(function (regs) {
+          regs.forEach(function (r) { r.unregister(); });
+        }).catch(function () { /* no-op */ });
+      }
+    </script>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

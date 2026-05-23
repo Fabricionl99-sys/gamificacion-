@@ -11,9 +11,9 @@ import { getPlayer } from '../../api/player';
 import { getTournaments } from '../../api/tournaments';
 import { useActiveBoosts } from '../../hooks/useActiveBoosts';
 import { useAsyncData } from '../../hooks/useAsyncData';
+import { useWidgetNavigation } from '../../hooks/useWidgetNavigation';
 import { useModalsStore } from '../../store/modalsStore';
 import { useMissionsStore } from '../../store/missionsStore';
-import { useUiStore } from '../../store/uiStore';
 import type { Mission } from '../../types/mission';
 import { formatNumber } from '../../utils/format';
 
@@ -22,7 +22,7 @@ export default function HomeTab() {
   const setSelectedMission = useMissionsStore((state) => state.setSelectedMission);
   const bumpRefresh = useMissionsStore((state) => state.bumpRefresh);
   const refreshToken = useMissionsStore((state) => state.refreshToken);
-  const { setActiveTab, setActiveView } = useUiStore();
+  const { navigateToTab, navigateToProfile } = useWidgetNavigation();
   const { data: missions = [] } = useAsyncData(getMissions, [], [refreshToken]);
   const { boosts } = useActiveBoosts();
   const { data: tournaments = [] } = useAsyncData(getTournaments, []);
@@ -41,7 +41,7 @@ export default function HomeTab() {
       {player ? (
         <button
           type="button"
-          onClick={() => setActiveView('own-profile')}
+          onClick={() => navigateToProfile()}
           className="flex w-full items-center gap-3 rounded-lg border border-danger/30 bg-danger/10 p-3 text-left transition-transform hover:-translate-y-0.5"
         >
           <Gift className="h-5 w-5 text-danger" />
@@ -53,7 +53,7 @@ export default function HomeTab() {
       ) : null}
 
       <section>
-        <SectionHeader title="Misiones del dia" actionLabel="ver todas" onAction={() => setActiveTab('missions')} />
+        <SectionHeader title="Misiones del dia" actionLabel="ver todas" onAction={() => navigateToTab('missions')} />
         <div className="space-y-2">
           {dailyMissions.map((mission) => (
             <MissionCard
@@ -77,17 +77,17 @@ export default function HomeTab() {
         </div>
       </section>
 
-      <Card variant="neon" className="scan-effect overflow-hidden">
+      <Card variant="neon" className="card-gradient-surface-promo scan-effect overflow-hidden">
         <p className="text-xs font-medium uppercase tracking-widest text-text-tertiary">promo destacada</p>
         <h2 className="mt-2 text-xl font-semibold text-text-primary">Weekend boost x2 XP</h2>
         <p className="mt-2 text-sm text-text-secondary">Activa el multiplicador desde la tienda y suma doble XP en deportes.</p>
-        <Button className="mt-4" variant="primary" onClick={() => setActiveTab('shop')}>
+        <Button className="mt-4" variant="primary" onClick={() => navigateToTab('shop')}>
           ir a tienda
         </Button>
       </Card>
 
       <section>
-        <SectionHeader title="Tu posicion en ranking" actionLabel="ver ranking" onAction={() => setActiveTab('ranking')} />
+        <SectionHeader title="Tu posicion en ranking" actionLabel="ver ranking" onAction={() => navigateToTab('ranking')} />
         <Card className="flex items-center justify-between">
           <div>
             <p className="text-sm text-text-secondary">Mejores en XP · ranking mensual</p>
@@ -98,14 +98,14 @@ export default function HomeTab() {
       </section>
 
       <section>
-        <SectionHeader title="Torneos activos" actionLabel="ver todos" onAction={() => setActiveTab('tournaments')} />
+        <SectionHeader title="Torneos activos" actionLabel="ver todos" onAction={() => navigateToTab('tournaments')} />
         {featuredTournament ? (
           <TournamentCard tournament={featuredTournament} onAction={() => openModal('tournamentRegister')} />
         ) : null}
       </section>
 
       <section>
-        <SectionHeader title="Ultimas noticias" actionLabel="ver noticias" onAction={() => setActiveTab('news')} />
+        <SectionHeader title="Ultimas noticias" actionLabel="ver noticias" onAction={() => navigateToTab('news')} />
         {latestNews ? (
           <Card className="flex gap-3">
             <Newspaper className="h-5 w-5 text-info" />

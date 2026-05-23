@@ -1,12 +1,14 @@
 export type WidgetTabId =
   | 'home'
   | 'missions'
+  | 'rewards'
   | 'shop'
   | 'social'
   | 'streak'
   | 'ranking'
   | 'tournaments'
   | 'predictions'
+  | 'raffles'
   | 'news';
 
 export type TabId = WidgetTabId;

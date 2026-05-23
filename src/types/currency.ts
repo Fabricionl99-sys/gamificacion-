@@ -3,4 +3,5 @@ export interface WalletCurrency {
   name: string;
   balance: number;
   imageUrl?: string;
+  code?: string;
 }

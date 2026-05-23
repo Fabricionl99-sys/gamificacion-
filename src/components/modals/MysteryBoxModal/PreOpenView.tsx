@@ -25,7 +25,7 @@ export function PreOpenView({ onOpen }: PreOpenViewProps) {
             <Gift className="h-16 w-16 text-accent" />
           </div>
         )}
-        <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(120deg,transparent,rgba(10,247,132,0.18),transparent)]" />
+        <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(300deg,transparent,rgba(10,247,132,0.18),transparent)]" />
       </div>
       <div>
         <h3 className="text-xl font-semibold text-text-primary">{title}</h3>

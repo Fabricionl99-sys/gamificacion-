@@ -1,12 +1,13 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { motion, useAnimation, useReducedMotion } from 'framer-motion';
 
 import {
   WHEEL_SPIN_DURATION_S,
+  WHEEL_SPIN_EASE,
   WHEEL_SPIN_POST_STOP_MS,
-  buildSpinRotationKeyframes,
   computeWheelLandDelta,
 } from '../../../lib/wheelSpin';
+import { WheelDisc } from './WheelDisc';
 
 const wheelSegments = ['50 XP', 'bono', 'x2', 'coins', 'caja', 'free bet', 'racha', 'misterio'];
 const PRIZE_INDEX = 0;
@@ -22,8 +23,6 @@ interface SpinningViewProps {
 export function SpinningView({ onComplete }: SpinningViewProps) {
   const reduceMotion = useReducedMotion();
   const controls = useAnimation();
-  const wobbleControls = useAnimation();
-  const wheelRef = useRef<HTMLDivElement>(null);
   const [rotation, setRotation] = useState(0);
   const [done, setDone] = useState(false);
 
@@ -36,32 +35,17 @@ export function SpinningView({ onComplete }: SpinningViewProps) {
     let cancelled = false;
 
     const run = async () => {
-      void wobbleControls.start({
-        rotate: [0, 1, -1, 0.8, -0.8, 0],
-        transition: { duration: 0.11, repeat: Infinity, ease: 'linear' },
-      });
-
       const landDelta = computeWheelLandDelta(PRIZE_INDEX, rotation);
-      const keyframes = buildSpinRotationKeyframes(rotation, landDelta);
-      const finalRot = keyframes[keyframes.length - 1]!;
+      const finalRot = rotation + landDelta;
 
       await controls.start({
-        rotate: keyframes,
+        rotate: finalRot,
         transition: {
           duration: WHEEL_SPIN_DURATION_S,
-          times: [0, 0.06, 0.4, 0.91, 0.97, 1],
-          ease: [
-            [0.35, 0, 1, 1],
-            'linear',
-            [0.17, 0.67, 0.21, 0.98],
-            [0.33, 1.35, 0.58, 1],
-            [0.22, 1, 0.36, 1],
-          ],
+          ease: WHEEL_SPIN_EASE,
         },
       });
 
-      wobbleControls.stop();
-      void wobbleControls.set({ rotate: 0 });
       if (cancelled) return;
 
       setRotation(finalRot);
@@ -76,7 +60,7 @@ export function SpinningView({ onComplete }: SpinningViewProps) {
       cancelled = true;
     };
   // eslint-disable-next-line react-hooks/exhaustive-deps -- single spin on mount
-  }, [controls, wobbleControls, onComplete, reduceMotion]);
+  }, [controls, onComplete, reduceMotion]);
 
   if (reduceMotion) {
     return (
@@ -88,33 +72,24 @@ export function SpinningView({ onComplete }: SpinningViewProps) {
 
   return (
     <div className="space-y-5 text-center">
-      <div className="relative mx-auto h-56 w-56">
+      <div className="relative mx-auto w-fit">
         <motion.div
           className="absolute left-1/2 top-0 z-10 h-0 w-0 -translate-x-1/2 border-x-[12px] border-t-[20px] border-x-transparent border-t-accent"
           animate={
             done
               ? { scale: 1 }
               : {
-                  scale: [1, 1.12, 1],
-                  filter: [
-                    'drop-shadow(0 0 0 transparent)',
-                    'drop-shadow(0 0 10px var(--accent-primary))',
-                    'drop-shadow(0 0 0 transparent)',
-                  ],
+                  scale: [1, 1.08, 1],
+                  transition: { duration: 0.5, repeat: Infinity, ease: 'easeInOut' },
                 }
           }
-          transition={done ? { duration: 0.2 } : { duration: 0.55, repeat: Infinity }}
         />
-        <motion.div ref={wheelRef} animate={wobbleControls} style={{ rotate: 0 }}>
-          <motion.div
-            className="grid h-full w-full place-items-center rounded-full border border-border-accent bg-wheel-segments shadow-card will-change-transform"
-            animate={controls}
-            style={{ rotate: rotation }}
-          >
-            <div className="grid h-24 w-24 place-items-center rounded-full border border-border-default bg-bg-primary text-sm font-semibold text-text-secondary">
-              {done ? 'listo' : 'girando'}
-            </div>
-          </motion.div>
+        <motion.div
+          className="origin-center will-change-transform"
+          animate={controls}
+          style={{ rotate: rotation }}
+        >
+          <WheelDisc size="lg" centerLabel={done ? 'listo' : 'girando'} />
         </motion.div>
       </div>
       <div className="grid grid-cols-4 gap-2">

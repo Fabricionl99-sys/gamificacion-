@@ -6,11 +6,11 @@ import { useMemo } from 'react';
 import { buildCaseReelKeyframes } from '../../../lib/caseReel';
 
 const prizes: { label: string; icon: LucideIcon; tone: string }[] = [
-  { label: '+50 XP', icon: Star, tone: 'from-violet-500/20 to-bg-tertiary' },
-  { label: '15 free spins', icon: Sparkles, tone: 'from-coins/25 to-bg-tertiary' },
-  { label: '+450 monedas', icon: Coins, tone: 'from-accent/25 to-bg-tertiary' },
-  { label: 'x2 XP 1h', icon: Zap, tone: 'from-warning/20 to-bg-tertiary' },
-  { label: 'bono sorpresa', icon: Gift, tone: 'from-info/20 to-bg-tertiary' },
+  { label: '+50 XP', icon: Star, tone: 'from-bg-tertiary to-violet-500/20' },
+  { label: '15 free spins', icon: Sparkles, tone: 'from-bg-tertiary to-coins/25' },
+  { label: '+450 monedas', icon: Coins, tone: 'from-bg-tertiary to-accent/25' },
+  { label: 'x2 XP 1h', icon: Zap, tone: 'from-bg-tertiary to-warning/20' },
+  { label: 'bono sorpresa', icon: Gift, tone: 'from-bg-tertiary to-info/20' },
 ];
 
 /** Premio mock — en prod lo define el server antes de animar. */
@@ -64,7 +64,7 @@ export function AnimationView({ onSkip, onComplete }: AnimationViewProps) {
             return (
               <div
                 key={`${prize.label}-${index}`}
-                className={`min-w-[7.5rem] shrink-0 rounded-xl border border-border-accent/40 bg-gradient-to-b ${prize.tone} p-4 shadow-card`}
+                className={`min-w-[7.5rem] shrink-0 rounded-xl border border-border-accent/40 bg-gradient-to-l ${prize.tone} p-4 shadow-card`}
                 style={{ width: 120 }}
               >
                 <Icon className="mx-auto h-8 w-8 text-accent" />
@@ -73,8 +73,8 @@ export function AnimationView({ onSkip, onComplete }: AnimationViewProps) {
             );
           })}
         </motion.div>
-        <div className="pointer-events-none absolute inset-y-0 left-0 w-10 bg-gradient-to-r from-bg-primary to-transparent" />
-        <div className="pointer-events-none absolute inset-y-0 right-0 w-10 bg-gradient-to-l from-bg-primary to-transparent" />
+        <div className="pointer-events-none absolute inset-y-0 left-0 w-10 bg-gradient-to-l from-bg-primary to-transparent" />
+        <div className="pointer-events-none absolute inset-y-0 right-0 w-10 bg-gradient-to-r from-bg-primary to-transparent" />
       </div>
       <button
         className="text-xs font-semibold text-text-secondary hover:text-text-primary"

@@ -13,23 +13,31 @@
     min-width: 320px;
     background: var(--bg-primary);
     color: var(--text-primary);
-    font-family: 'Urbanist', system-ui, sans-serif;
-    font-weight: 400;
+    /* Operator-Branding-v2: var(--font-family) override-able por applyBranding.
+       Default = 'Urbanist' (sin operator override). Wrap fallback en case
+       que CSS var no esté set (no debería pasar, está en tokens.css). */
+    font-family: var(--font-family, 'Urbanist', system-ui, sans-serif);
+    font-weight: var(--font-weight-body, 400);
   }
 
   body {
     min-height: 100vh;
     margin: 0;
     background:
-      radial-gradient(circle at 20% 0%, var(--accent-subtle), transparent 28rem),
-      radial-gradient(circle at 90% 10%, var(--info-faint), transparent 24rem),
+      radial-gradient(circle at 80% 0%, var(--accent-subtle), transparent 28rem),
+      radial-gradient(circle at 10% 10%, var(--info-faint), transparent 24rem),
       var(--bg-primary);
     color: var(--text-primary);
-    font-family: 'Urbanist', system-ui, sans-serif;
-    font-size: var(--text-base);
+    font-family: var(--font-family, 'Urbanist', system-ui, sans-serif);
+    font-size: var(--font-size-base, var(--text-base));
     line-height: var(--leading-normal);
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
+  }
+
+  /* Headings respetan font_weight_heading que el operator setea en branding. */
+  h1, h2, h3, h4, h5, h6 {
+    font-weight: var(--font-weight-heading, 700);
   }
 
   button,
@@ -77,7 +85,7 @@
     position: absolute;
     inset: 0;
     padding: 1px;
-    background: linear-gradient(135deg, var(--accent-primary), transparent 60%);
+    background: linear-gradient(225deg, var(--accent-primary), transparent 60%);
     border-radius: inherit;
     -webkit-mask: linear-gradient(var(--mask-solid) 0 0) content-box, linear-gradient(var(--mask-solid) 0 0);
     -webkit-mask-composite: xor;
@@ -97,6 +105,32 @@
     background: linear-gradient(180deg, transparent, var(--accent-scan), transparent);
     animation: scan 4s ease-in-out infinite;
     pointer-events: none;
+  }
+
+  /** Fondos de tarjetas: brillo a la derecha, zona de texto más limpia a la izquierda */
+  .card-gradient-surface-missions {
+    background: linear-gradient(270deg, var(--accent-subtle), var(--color-info-soft));
+  }
+
+  .card-gradient-surface-tournaments {
+    background: linear-gradient(270deg, var(--bg-secondary), var(--accent-subtle));
+  }
+
+  .card-gradient-surface-streak {
+    background: linear-gradient(270deg, var(--bg-secondary), var(--warning-glow));
+  }
+
+  .card-gradient-surface-promo {
+    background: linear-gradient(270deg, var(--bg-secondary), var(--accent-subtle));
+  }
+
+  /** Barra de tabs móvil: scroll horizontal con inercia, sin cambiar de tab al deslizar */
+  .tab-nav-scroll {
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-x: contain;
+    scroll-behavior: smooth;
+    scroll-snap-type: x proximity;
+    touch-action: pan-x;
   }
 }
 

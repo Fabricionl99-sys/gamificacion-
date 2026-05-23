@@ -9,6 +9,8 @@ export interface ColorPalette {
 
 export interface BrandingTypography {
   font_family: string;
+  /** sm | md | lg | xl — mapeado a 12/14/16/18 px base por applyBranding. */
+  font_size_base?: string;
   heading_weight: string;
   body_weight: string;
 }
@@ -18,9 +20,12 @@ export interface PublicBrandingConfig {
   operator_name?: string;
   color_palette: ColorPalette;
   typography: BrandingTypography;
+  /** light | dark | auto. auto sigue prefers-color-scheme. Default dark. */
+  theme_mode?: string;
   logo_url: string | null;
   favicon_url: string | null;
   background_image_url: string | null;
   welcome_text: string;
   custom_css?: string | null;
+  last_updated_at?: string | null;
 }

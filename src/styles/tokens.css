@@ -78,4 +78,41 @@
   --radius-lg: 16px;
   --radius-xl: 24px;
   --radius-full: 999px;
+
+  /* Sub-etapa Operator-Branding-v2: vars overridable por applyBranding desde
+     /v1/public/branding. Defaults coinciden con el dark theme actual. */
+  --font-family: 'Urbanist', system-ui, sans-serif;
+  --font-size-base: 14px;
+  --font-weight-heading: 700;
+  --font-weight-body: 500;
+}
+
+/*
+  Theme light. Activado vía <html data-theme="light"> que applyBranding
+  setea cuando el operator elige theme_mode='light' (o 'auto' + browser en
+  light). Overrides solo los tokens que cambian — accent colors / espaciado /
+  tipografía se heredan del :root dark base.
+
+  Decisión: NO swap accent colors automáticamente — el operator eligió esos
+  colores en branding, los respetamos en ambos themes. Solo invertimos
+  backgrounds + textos para legibilidad.
+*/
+[data-theme="light"] {
+  --bg-primary: #FFFFFF;
+  --bg-secondary: #F4F6FA;
+  --bg-tertiary: #E9EDF3;
+  --bg-elevated: #FFFFFF;
+  --bg-overlay: rgba(255, 255, 255, 0.85);
+  --text-primary: #0A0E13;
+  --text-secondary: #475569;
+  --text-tertiary: #94A3B8;
+  --text-disabled: #CBD5E1;
+  --border-subtle: rgba(0, 0, 0, 0.06);
+  --border-default: rgba(0, 0, 0, 0.10);
+  --border-strong: rgba(0, 0, 0, 0.20);
+  --glass-surface: rgba(255, 255, 255, 0.6);
+  --shadow-sm: 0 2px 8px rgba(15, 23, 42, 0.08);
+  --shadow-md: 0 8px 24px rgba(15, 23, 42, 0.10);
+  --shadow-lg: 0 16px 48px rgba(15, 23, 42, 0.12);
+  --shadow-xl: 0 24px 64px rgba(15, 23, 42, 0.14);
 }

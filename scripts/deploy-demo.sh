@@ -56,5 +56,9 @@ aws --region "$AWS_REGION" cloudfront create-invalidation \
   --paths '/*' \
   --query 'Invalidation.{id:Id,status:Status}' --output table
 
+if command -v jq >/dev/null 2>&1; then
+  bash "$ROOT/scripts/configure-cloudfront-spa.sh" "$CF_DISTRIBUTION_ID" || echo "⚠ CloudFront SPA config skipped (needs jq + IAM UpdateDistribution)"
+fi
+
 echo "✓ Deploy completo → https://demo.social2game.com"
 echo "  (CloudFront propagación puede tardar 5-10 min en algunos edges)"

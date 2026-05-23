@@ -2,15 +2,14 @@ import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 
 import { Button } from '../ui/Button';
-import { useSwipeNavigation } from '../../hooks/useSwipeNavigation';
+import { useWidgetNavigation } from '../../hooks/useWidgetNavigation';
 import { useUiStore } from '../../store/uiStore';
 import { visibleTabs } from './navigation';
 import { cn } from '../../utils/classnames';
 
 export function TabNavigation() {
   const activeTab = useUiStore((state) => state.activeTab);
-  const setActiveTab = useUiStore((state) => state.setActiveTab);
-  const swipeHandlers = useSwipeNavigation();
+  const { navigateToTab } = useWidgetNavigation();
   const scrollRef = useRef<HTMLDivElement>(null);
   const [fadeLeft, setFadeLeft] = useState(false);
   const [fadeRight, setFadeRight] = useState(true);
@@ -59,10 +58,8 @@ export function TabNavigation() {
 
   return (
     <nav
-      className="sticky top-[104px] z-20 border-b border-border-default bg-bg-primary/92 px-3 py-3 backdrop-blur-xl md:hidden"
+      className="sticky top-[96px] z-20 -mt-0.5 border-b border-border-default bg-bg-primary/92 px-3 py-2 backdrop-blur-xl md:hidden"
       aria-label="Navegacion principal"
-      onTouchStart={swipeHandlers.onTouchStart}
-      onTouchEnd={swipeHandlers.onTouchEnd}
     >
       <div className="relative">
         <div
@@ -93,7 +90,11 @@ export function TabNavigation() {
         <div
           ref={scrollRef}
           onScroll={updateFades}
-          className="flex gap-2 overflow-x-auto overflow-y-hidden pb-1 pt-0.5 [-ms-overflow-style:none] [scrollbar-width:thin] [&::-webkit-scrollbar]:h-1 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-border-strong [&::-webkit-scrollbar-track]:bg-transparent"
+          className={cn(
+            'tab-nav-scroll flex gap-2 overflow-x-auto overflow-y-hidden pb-1 pt-0.5',
+            '[-ms-overflow-style:none] [scrollbar-width:thin]',
+            '[&::-webkit-scrollbar]:h-1 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-border-strong [&::-webkit-scrollbar-track]:bg-transparent',
+          )}
         >
           {visibleTabs.map((item) => (
             <Button
@@ -101,8 +102,8 @@ export function TabNavigation() {
               data-tab-id={item.id}
               size="md"
               variant={activeTab === item.id ? 'primary' : 'ghost'}
-              className="h-auto min-h-[42px] shrink-0 whitespace-nowrap px-3 py-2 text-sm font-semibold capitalize leading-tight"
-              onClick={() => setActiveTab(item.id)}
+              className="h-auto min-h-[42px] shrink-0 snap-center whitespace-nowrap px-3 py-2 text-sm font-semibold capitalize leading-tight"
+              onClick={() => navigateToTab(item.id)}
               aria-pressed={activeTab === item.id}
             >
               {item.shortLabel}

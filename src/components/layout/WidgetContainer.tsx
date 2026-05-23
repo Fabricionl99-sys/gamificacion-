@@ -1,4 +1,5 @@
 import { Suspense, lazy, useEffect, type LazyExoticComponent, type ReactElement } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Skeleton } from '../ui/Skeleton';
 import { ToastViewport } from '../ui/Toast';
 import { BoostToastTrigger } from '../boost/BoostToast';
@@ -7,6 +8,8 @@ import { TabNavigation } from './TabNavigation';
 import { WidgetHeader } from './WidgetHeader';
 import { FEATURES } from '../../config/features';
 import { PILOT } from '../../config/pilot';
+import { useWidgetNavigation } from '../../hooks/useWidgetNavigation';
+import { buildTabPath } from '../../routes/widgetPaths';
 import { usePlayerStore } from '../../store/playerStore';
 import { useUiStore } from '../../store/uiStore';
 import { writePublicProfile } from '../../utils/profilePrivacy';
@@ -14,11 +17,13 @@ import type { TabId } from '../../types/navigation';
 
 const HomeTab = lazy(() => import('../tabs/HomeTab'));
 const MissionsTab = lazy(() => import('../tabs/MissionsTab'));
+const RewardsTab = lazy(() => import('../tabs/RewardsTab'));
 const ShopTab = lazy(() => import('../tabs/ShopTab'));
 const StreakTab = lazy(() => import('../tabs/StreakTab'));
 const RankingTab = lazy(() => import('../tabs/RankingTab'));
 const TournamentsTab = lazy(() => import('../tabs/TournamentsTab'));
 const PredictionsTab = lazy(() => import('../tabs/PredictionsTab'));
+const RafflesTab = lazy(() => import('../tabs/RafflesTab'));
 const FeedTab = lazy(() => import('../tabs/FeedTab'));
 const NewsTab = lazy(() => import('../tabs/NewsTab'));
 const OwnProfile = lazy(() => import('../profile/OwnProfile'));
@@ -41,11 +46,13 @@ const LevelUpModal = lazy(() => import('../modals/LevelUpModal'));
 const tabComponents: Record<TabId, LazyExoticComponent<() => ReactElement>> = {
   home: HomeTab,
   missions: MissionsTab,
+  rewards: RewardsTab,
   shop: ShopTab,
   streak: StreakTab,
   ranking: RankingTab,
   tournaments: TournamentsTab,
   predictions: PredictionsTab,
+  raffles: RafflesTab,
   social: FeedTab,
   news: NewsTab,
 };
@@ -61,12 +68,13 @@ function LoadingPanel() {
 }
 
 function MainView() {
-  const { activeTab, activeView, setActiveTab } = useUiStore();
+  const { activeTab, activeView } = useUiStore();
+  const { navigateToTab } = useWidgetNavigation();
   const safeActiveTab = !FEATURES.social_enabled && activeTab === 'social' ? 'home' : activeTab;
   const ActiveTab = tabComponents[safeActiveTab];
 
   if (safeActiveTab !== activeTab) {
-    setTimeout(() => setActiveTab(safeActiveTab), 0);
+    setTimeout(() => navigateToTab(safeActiveTab), 0);
   }
 
   if (activeView === 'own-profile') return <OwnProfile />;
@@ -83,7 +91,9 @@ function MainView() {
 }
 
 export function WidgetContainer() {
-  const { activeTab, setActiveTab } = useUiStore();
+  const { activeTab } = useUiStore();
+  const { navigateToTab } = useWidgetNavigation();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const t = localStorage.getItem('wingoat_theme');
@@ -97,17 +107,19 @@ export function WidgetContainer() {
       writePublicProfile(true);
       usePlayerStore.getState().updatePlayer({ isPrivate: false });
     }
-    setActiveTab(PILOT.defaultTab);
-  }, [setActiveTab]);
+    if (window.location.pathname === '/' || window.location.pathname === '') {
+      navigate(buildTabPath(PILOT.defaultTab), { replace: true });
+    }
+  }, [navigate]);
 
   return (
     <div className="min-h-dvh bg-bg-primary text-text-primary md:flex md:items-stretch">
-      <DesktopSidebar activeTab={activeTab} onSelect={setActiveTab} />
-      <main className="mx-auto flex min-h-dvh w-full max-w-[460px] flex-col border-x border-border-subtle bg-[radial-gradient(circle_at_top,var(--accent-subtle),transparent_34%),var(--bg-primary)] md:max-w-none md:flex-1 md:border-x-0">
+      <DesktopSidebar activeTab={activeTab} onSelect={navigateToTab} />
+      <main className="mx-auto flex min-h-dvh w-full max-w-[460px] flex-col border-x border-border-subtle bg-[radial-gradient(circle_at_85%_0%,var(--accent-subtle),transparent_34%),var(--bg-primary)] md:max-w-none md:flex-1 md:border-x-0">
         <div className="sticky top-0 z-30 border-b border-border-subtle bg-bg-primary/85 px-4 pb-3 pt-4 backdrop-blur-xl md:px-6">
           <WidgetHeader />
         </div>
-        <section className="flex-1 px-4 pb-8 pt-4 md:px-6">
+        <section className="flex-1 px-4 pb-8 pt-2 md:px-6 md:pt-4">
           <Suspense fallback={<LoadingPanel />}>
             <MainView />
             <NotificationCenterModal />

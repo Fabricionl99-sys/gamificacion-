@@ -12,23 +12,23 @@ import type {
 
 export const feedApi = {
   list: async (scope: FeedScope = 'following') =>
-    apiClient.get('/player/feed', { params: { scope } }).then((response) => response.data as FeedPost[]),
+    apiClient.get('/v1/player/feed', { params: { scope } }).then((response) => response.data as FeedPost[]),
   getShareablePicks: async () =>
-    apiClient.get('/player/feed/shareable-picks').then((response) => response.data as ShareablePick[]),
+    apiClient.get('/v1/player/feed/shareable-picks').then((response) => response.data as ShareablePick[]),
   createPost: async (input: CreatePostInput) =>
-    apiClient.post('/player/feed/posts', input).then((response) => response.data as FeedPost),
+    apiClient.post('/v1/player/feed/posts', input).then((response) => response.data as FeedPost),
   toggleLike: async (postId: string) =>
-    apiClient.post(`/player/feed/posts/${postId}/like`).then((response) => response.data as LikePostResponse),
+    apiClient.post(`/v1/player/feed/posts/${postId}/like`).then((response) => response.data as LikePostResponse),
   getComments: async (postId: string) =>
-    apiClient.get(`/player/feed/posts/${postId}/comments`).then((response) => response.data as FeedComment[]),
+    apiClient.get(`/v1/player/feed/posts/${postId}/comments`).then((response) => response.data as FeedComment[]),
   addComment: async (postId: string, body: string) =>
     apiClient
-      .post(`/player/feed/posts/${postId}/comments`, { body })
+      .post(`/v1/player/feed/posts/${postId}/comments`, { body })
       .then((response) => response.data as FeedComment),
   copyPick: async (postId: string, pickId: string) =>
     apiClient
-      .post(`/player/feed/posts/${postId}/copy-pick`, { pickId })
+      .post(`/v1/player/feed/posts/${postId}/copy-pick`, { pickId })
       .then((response) => response.data as CopyPickResponse),
 };
 
-export const getNews = async () => apiClient.get('/player/news').then((response) => response.data as NewsItem[]);
+export const getNews = async () => apiClient.get('/v1/player/news').then((response) => response.data as NewsItem[]);

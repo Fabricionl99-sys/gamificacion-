@@ -4,11 +4,11 @@ import { Card } from '../ui/Card';
 import { Avatar } from '../ui/Avatar';
 import PostCard from '../shared/PostCard';
 import { mockPosts, mockRanking } from '../../mocks';
-import { useUiStore } from '../../store/uiStore';
+import { useWidgetNavigation } from '../../hooks/useWidgetNavigation';
 import { formatNumber } from '../../utils/format';
 
 export default function PublicProfile() {
-  const setActiveView = useUiStore((state) => state.setActiveView);
+  const { navigateBackFromProfile } = useWidgetNavigation();
   const player = mockRanking[1] ?? mockRanking[0];
 
   if (!player) {
@@ -17,7 +17,7 @@ export default function PublicProfile() {
 
   return (
     <div className="space-y-4">
-      <Button variant="ghost" size="sm" onClick={() => setActiveView('widget')}>
+      <Button variant="ghost" size="sm" onClick={() => navigateBackFromProfile()}>
         volver
       </Button>
       <Card variant="glass" className="space-y-4">

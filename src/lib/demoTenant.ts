@@ -1,11 +1,17 @@
-const DEFAULT_TENANT = 'social2game';
+const LEGACY_DEFAULT = 'social2game';
 
-/** `?tenant=` desde el BO («Ver mi demo»). */
+/** Tenant demo en prod (`VITE_DEMO_TENANT_ID`) o `?tenant=` desde el BO. */
 export function getTenantIdFromUrl(): string {
-  if (typeof window === 'undefined') return DEFAULT_TENANT;
-  return new URLSearchParams(window.location.search).get('tenant')?.trim() || DEFAULT_TENANT;
+  if (typeof window === 'undefined') {
+    return import.meta.env.VITE_DEMO_TENANT_ID?.trim() || LEGACY_DEFAULT;
+  }
+  const fromQuery = new URLSearchParams(window.location.search).get('tenant')?.trim();
+  if (fromQuery) return fromQuery;
+  return import.meta.env.VITE_DEMO_TENANT_ID?.trim() || LEGACY_DEFAULT;
 }
 
 export function isDefaultTenant(tenantId: string): boolean {
-  return tenantId === DEFAULT_TENANT || tenantId === 'tenant-demo';
+  const demoTenant = import.meta.env.VITE_DEMO_TENANT_ID?.trim();
+  if (demoTenant && tenantId === demoTenant) return true;
+  return tenantId === LEGACY_DEFAULT || tenantId === 'tenant-demo';
 }

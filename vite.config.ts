@@ -18,21 +18,15 @@ export default defineConfig({
     strictPort: true,
     proxy: {
       '/api': {
-        target: 'http://localhost:5173',
+        target: 'https://api.social2game.com',
         changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api/, ''),
       },
     },
   },
   build: {
-    lib: {
-      entry: 'src/main.tsx',
-      name: 'GamificationWidget',
-      formats: ['es'],
-      fileName: (format) => `gamification-widget.${format}.js`,
-    },
     rollupOptions: {
       output: {
-        assetFileNames: 'gamification-widget.[ext]',
         manualChunks: vendorChunk,
       },
     },

@@ -58,11 +58,7 @@ export default function PostCard({ post, onUpdated }: PostCardProps) {
     try {
       const response = await feedApi.copyPick(post.id, copyPickId);
       emitWidgetEvent('betCopied', response);
-      toast.success(
-        response.bookingCode
-          ? `Ticket listo · código ${response.bookingCode}`
-          : 'Apuesta copiada al cupón del operador',
-      );
+      toast.success('Apuesta copiada al cupón del operador');
     } catch {
       toast.danger('No se pudo copiar la apuesta');
     } finally {
@@ -180,7 +176,7 @@ function BetTicketBlock({
   isProvider: boolean;
 }) {
   return (
-    <div className="rounded-lg border border-accent/35 bg-[linear-gradient(180deg,rgba(10,247,132,0.08),transparent)] p-4">
+    <div className="rounded-lg border border-accent/35 bg-[linear-gradient(270deg,rgba(10,247,132,0.08),transparent)] p-4">
       <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-text-tertiary">
         {isProvider ? 'ticket del proveedor' : 'ticket compartido'}
       </p>
@@ -188,11 +184,6 @@ function BetTicketBlock({
         {displayHandle}
       </p>
       {caption ? <p className="mt-2 text-xs leading-relaxed text-text-secondary">{caption}</p> : null}
-      {betSlip.bookingCode ? (
-        <p className="mt-2 font-mono text-xs text-accent">
-          booking: <span className="font-semibold">{betSlip.bookingCode}</span>
-        </p>
-      ) : null}
       <div className="mt-4 space-y-4 border-t border-border-subtle pt-4">
         {betSlip.legs.map((leg, index) => (
           <div key={`${leg.teams}-${index}`}>

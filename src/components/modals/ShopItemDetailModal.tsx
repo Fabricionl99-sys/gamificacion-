@@ -2,6 +2,7 @@ import { AlertTriangle, Clock } from 'lucide-react';
 
 import { usePlayer } from '../../hooks/usePlayer';
 import { useToast } from '../../hooks/useToast';
+import { useWidgetNavigation } from '../../hooks/useWidgetNavigation';
 import { useModalsStore } from '../../store/modalsStore';
 import { useShopStore } from '../../store/shopStore';
 import type { ShopItem } from '../../types/reward';
@@ -18,6 +19,14 @@ export default function ShopItemDetailModal() {
   const setSelectedItem = useShopStore((state) => state.setSelectedItem);
   const { player } = usePlayer();
   const toast = useToast();
+  const { route, closeDetail } = useWidgetNavigation();
+
+  const handleClose = () => {
+    closeModal();
+    if (route.tab === 'shop' && route.detailId) {
+      closeDetail('shop');
+    }
+  };
 
   if (!selectedItem) return null;
 
@@ -33,7 +42,7 @@ export default function ShopItemDetailModal() {
   };
 
   return (
-    <Modal isOpen={activeModal === 'shopDetail'} onClose={closeModal} title={selectedItem.name} description="detalle del producto">
+    <Modal isOpen={activeModal === 'shopDetail'} onClose={handleClose} title={selectedItem.name} description="detalle del producto">
       <DetailBody item={selectedItem} playerCoins={player?.coins ?? 0} vipLocked={vipLocked} isLowStock={isLowStock} />
       <DetailActions
         soldOut={soldOut}
@@ -41,7 +50,7 @@ export default function ShopItemDetailModal() {
         disabled={disabled}
         reason={reason}
         vipRequired={selectedItem.vipRequired}
-        onClose={closeModal}
+        onClose={handleClose}
         onRedeem={handleRedeem}
         onNotify={() => toast.info('Te avisaremos cuando vuelva el stock')}
         onVipInfo={() => toast.info(`Necesitás VIP ${selectedItem.vipRequired} o superior`)}
