@@ -20,7 +20,7 @@ export default function TournamentRegisterModal() {
           <Trophy className="mb-3 h-7 w-7 text-coins" />
           <h3 className="text-lg font-semibold">{tournament.name}</h3>
           <p className="mt-1 text-sm text-text-secondary">{tournament.description}</p>
-          <div className="mt-3 grid grid-cols-3 gap-2 text-center text-xs text-text-secondary">
+          <div className="mt-3 grid grid-cols-3 gap-2 text-center text-metadata text-text-secondary">
             <span>{tournament.prizePool}<br />premio</span>
             <span>{tournament.participants}<br />inscritos</span>
             <span>{tournament.startsIn}<br />inicio</span>

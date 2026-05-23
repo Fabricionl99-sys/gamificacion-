@@ -28,7 +28,7 @@ export function PlayerListItem({ player, rightSlot }: PlayerListItemProps) {
           {player.position === 1 ? <Crown className="h-4 w-4 text-coins" aria-hidden="true" /> : null}
           {player.isSelf ? <Badge variant="info">vos</Badge> : null}
         </div>
-        <p className="text-xs text-text-tertiary">nivel {player.level} · VIP {player.vipTier}</p>
+        <p className="text-metadata text-text-tertiary">nivel {player.level} · VIP {player.vipTier}</p>
       </div>
       {rightSlot ?? <p className="text-sm font-semibold text-text-primary">{formatNumber(player.weeklyXP ?? 0)} XP</p>}
     </div>

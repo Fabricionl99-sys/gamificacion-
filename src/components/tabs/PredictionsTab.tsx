@@ -209,7 +209,7 @@ function PredictionDetailModal({
         </div>
 
         {event.entry_cost > 0 ? (
-          <div className="rounded-md border border-coins/30 bg-coins/10 p-3 text-xs text-coins">
+          <div className="rounded-md border border-coins/30 bg-coins/10 p-3 text-metadata text-coins">
             Costo de entrada: {formatNumber(event.entry_cost)} monedas. Se confirma al enviar.
           </div>
         ) : null}

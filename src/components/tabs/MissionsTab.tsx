@@ -120,7 +120,7 @@ export default function MissionsTab() {
   return (
     <div className="space-y-4">
       <Card className="card-gradient-surface-missions space-y-3">
-        <p className="text-xs font-medium uppercase tracking-wide text-text-secondary">progreso de hoy</p>
+        <p className="text-metadata font-medium uppercase tracking-wide text-text-secondary">progreso de hoy</p>
         <p className="text-lg font-semibold text-text-primary">
           {stats.done} de {stats.total} diarias completadas
         </p>

@@ -48,7 +48,7 @@ export default function TournamentsTab() {
             <Trophy className="h-6 w-6" />
           </div>
           <div className="min-w-0 flex-1">
-            <p className="text-xs uppercase tracking-widest text-warning">torneo destacado</p>
+            <p className="text-metadata uppercase tracking-widest text-warning">torneo destacado</p>
             <h2 className="text-lg font-semibold text-text-primary">{featured.name}</h2>
             <p className="text-sm text-text-secondary">{featured.prizePool} en premios · {featured.endsIn}</p>
           </div>

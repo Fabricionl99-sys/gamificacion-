@@ -98,7 +98,7 @@ export function ShopProductCard({ item, player, onDetail, onRedeem, onNotify, on
         </div>
         <div className="min-w-0 flex-1">
           <h3 className="text-sm font-semibold text-text-primary">{item.name}</h3>
-          <p className="mt-1 line-clamp-2 text-xs leading-relaxed text-text-secondary">{item.description}</p>
+          <p className="mt-1 line-clamp-2 text-module-body leading-relaxed text-text-secondary">{item.description}</p>
           <ProductBadges item={item} locked={vipLocked} />
         </div>
       </div>

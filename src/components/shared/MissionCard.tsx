@@ -92,7 +92,7 @@ export function MissionCard({ mission, compact = false, boosts = [], onClaimed, 
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0">
           <h3 className="text-sm font-medium text-text-primary">{mission.title}</h3>
-          <p className="mt-1 line-clamp-2 text-xs leading-relaxed text-text-secondary">{mission.description}</p>
+          <p className="mt-1 line-clamp-2 text-module-body leading-relaxed text-text-secondary">{mission.description}</p>
         </div>
         <Badge variant={isClaimed ? 'success' : mission.group === 'event' ? 'warning' : 'default'}>{mission.category}</Badge>
       </div>
@@ -104,9 +104,9 @@ export function MissionCard({ mission, compact = false, boosts = [], onClaimed, 
         <p
           className={
             isClaimed
-              ? 'text-xs font-medium text-success'
+              ? 'text-metadata font-medium text-success'
               : isCompleted
-                ? 'text-xs font-medium text-accent'
+                ? 'text-metadata font-medium text-accent'
                 : 'text-module-body text-text-tertiary'
           }
         >

@@ -26,11 +26,11 @@ export function AppearanceSection() {
     <Card className="space-y-3">
       <h2 className="text-md font-semibold text-text-primary">apariencia</h2>
       <div className="rounded-md bg-bg-tertiary px-3 py-2.5">
-        <p className="mb-2 text-xs font-medium uppercase tracking-wide text-text-tertiary">tema</p>
+        <p className="mb-2 text-metadata font-medium uppercase tracking-wide text-text-tertiary">tema</p>
         <div className="flex gap-2">
           <button
             type="button"
-            className={`flex-1 rounded-md border px-2 py-1.5 text-center text-xs font-medium transition ${
+            className={`flex-1 rounded-md border px-2 py-1.5 text-center text-metadata font-medium transition ${
               theme === 'dark'
                 ? 'border-accent bg-accent/15 text-accent'
                 : 'border-border-default text-text-secondary hover:border-border-strong hover:text-text-primary'
@@ -41,7 +41,7 @@ export function AppearanceSection() {
           </button>
           <button
             type="button"
-            className={`flex-1 rounded-md border px-2 py-1.5 text-center text-xs font-medium transition ${
+            className={`flex-1 rounded-md border px-2 py-1.5 text-center text-metadata font-medium transition ${
               theme === 'light'
                 ? 'border-accent bg-accent/15 text-accent'
                 : 'border-border-default text-text-secondary hover:border-border-strong hover:text-text-primary'

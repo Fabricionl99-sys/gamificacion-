@@ -20,7 +20,7 @@ export function PendingPrizesTab() {
                 <p className="font-medium">{prize.label}</p>
                 {prize.urgent ? <Badge variant="danger">vence pronto</Badge> : null}
               </div>
-              <p className="mt-1 flex items-center gap-1 text-xs text-text-tertiary">
+              <p className="mt-1 flex items-center gap-1 text-metadata text-text-tertiary">
                 <Clock className="h-3 w-3" /> expira pronto
               </p>
             </div>

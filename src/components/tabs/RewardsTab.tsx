@@ -38,7 +38,7 @@ export default function RewardsTab() {
             <p className="mt-1 text-module-body text-text-secondary">
               Estilo CS: pasa todos los premios y frena en el resultado.
             </p>
-            <p className="mt-2 text-xs font-medium text-accent">{mysteryBoxItem.cost} monedas · abrir</p>
+            <p className="mt-2 text-metadata font-medium text-accent">{mysteryBoxItem.cost} monedas · abrir</p>
           </div>
         </div>
       </Card>
@@ -56,7 +56,7 @@ export default function RewardsTab() {
             <p className="mt-1 text-module-body text-text-secondary">
               Cofre clásico: vibración, apertura de tapa y premio.
             </p>
-            <p className="mt-2 text-xs font-medium text-warning">Disponible · abrir</p>
+            <p className="mt-2 text-metadata font-medium text-warning">Disponible · abrir</p>
           </div>
         </div>
       </Card>
@@ -75,7 +75,7 @@ export default function RewardsTab() {
             <p className="mt-1 text-module-body text-text-secondary">
               Giro largo con desaceleración realista — sin freno brusco.
             </p>
-            <p className="mt-2 text-xs font-medium text-accent">100 XP · girar</p>
+            <p className="mt-2 text-metadata font-medium text-accent">100 XP · girar</p>
           </div>
         </div>
       </Card>

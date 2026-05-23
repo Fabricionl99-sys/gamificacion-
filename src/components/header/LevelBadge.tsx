@@ -30,9 +30,9 @@ export function LevelBadge({
         <div className="min-w-0 flex-1">
           <div className="flex flex-wrap items-baseline gap-x-2 gap-y-0.5">
             <span className="truncate text-sm font-semibold text-text-primary">{displayName}</span>
-            <span className="text-xs font-medium text-text-tertiary">· Nivel {level}</span>
+            <span className="text-metadata font-medium text-text-tertiary">· Nivel {level}</span>
           </div>
-          <span className="mt-0.5 block truncate text-xs text-text-tertiary">
+          <span className="mt-0.5 block truncate text-metadata text-text-tertiary">
             {isLoading ? 'sincronizando...' : `${formatNumber(currentXP)} / ${formatNumber(nextLevelXP)} XP`}
           </span>
         </div>

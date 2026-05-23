@@ -23,7 +23,7 @@ export function RecognitionPhase() {
         >
           {headline}
         </motion.p>
-        <p className="mt-2 text-xs text-text-tertiary">
+        <p className="mt-2 text-metadata text-text-tertiary">
           {fromLevel} → {toLevel}
         </p>
       </div>

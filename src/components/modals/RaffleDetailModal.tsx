@@ -120,18 +120,18 @@ export function RaffleDetailModal({ raffle, tenantId, autoFocusBuy = false, onCl
             <div className="rounded-md bg-bg-tertiary p-3">
               <p className="text-text-tertiary">Mis entradas</p>
               <p className="font-semibold">{detail.myEntriesCount}</p>
-              <p className="text-xs text-text-secondary">{ticketRangeLabel(detail.myTicketNumbers)}</p>
+              <p className="text-metadata text-text-secondary">{ticketRangeLabel(detail.myTicketNumbers)}</p>
             </div>
             <div className="rounded-md bg-bg-tertiary p-3">
               <p className="text-text-tertiary">Total / chance</p>
               <p className="font-semibold">{formatNumber(detail.totalEntries)} entradas</p>
-              <p className="text-xs text-accent">{winChancePercent(detail.myEntriesCount, detail.totalEntries)}</p>
+              <p className="text-metadata text-accent">{winChancePercent(detail.myEntriesCount, detail.totalEntries)}</p>
             </div>
           </div>
 
           <p className="text-sm text-text-secondary">Cierra en {detail.closesIn ?? '—'}</p>
 
-          <div className="rounded-lg border border-border-default bg-bg-secondary p-3 text-xs">
+          <div className="rounded-lg border border-border-default bg-bg-secondary p-3 text-metadata">
             <p className="flex items-center gap-1 font-mono text-text-tertiary">
               <Lock className="h-3 w-3" /> Compromiso: {detail.commitment.slice(0, 12)}…
             </p>
@@ -168,7 +168,7 @@ export function RaffleDetailModal({ raffle, tenantId, autoFocusBuy = false, onCl
                   className="mt-1 w-full rounded-md border border-border-default bg-bg-primary px-3 py-2"
                 />
               </label>
-              <p className="text-xs text-text-tertiary">
+              <p className="text-metadata text-text-tertiary">
                 Total: {totalCostLabel} · Saldo: {formatNumber(gemBalance)}
               </p>
               <Button variant="primary" className="w-full" disabled={!canEnter} onClick={() => void handleBuy()}>

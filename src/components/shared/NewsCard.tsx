@@ -37,7 +37,7 @@ export function NewsCard({ news }: NewsCardProps) {
         <h3 className="text-md font-semibold">{news.title}</h3>
         <p className="mt-1 text-sm text-text-secondary">{news.body}</p>
       </div>
-      {news.expiresAt ? <p className="text-xs text-warning">expira {formatDistanceToNow(new Date(news.expiresAt), { locale: es })}</p> : null}
+      {news.expiresAt ? <p className="text-metadata text-warning">expira {formatDistanceToNow(new Date(news.expiresAt), { locale: es })}</p> : null}
       {news.ctaLabel ? (
         <Button className="w-full" size="sm" variant="secondary">
           {news.ctaLabel}

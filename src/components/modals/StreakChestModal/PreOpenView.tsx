@@ -14,7 +14,7 @@ export function PreOpenView({ onOpen }: PreOpenViewProps) {
         <div className="mx-auto mb-3 flex h-20 w-20 items-center justify-center rounded-lg border border-warning/30 bg-warning/10">
           <Unlock className="h-10 w-10 text-warning" />
         </div>
-        <p className="text-xs font-semibold uppercase tracking-widest text-warning">12 dias seguidos</p>
+        <p className="text-metadata font-semibold uppercase tracking-widest text-warning">12 dias seguidos</p>
         <h3 className="mt-2 text-xl font-semibold text-text-primary">Lo lograste</h3>
         <p className="mt-1 text-sm text-text-secondary">Tu cofre de racha esta listo para abrir.</p>
       </Card>
@@ -22,7 +22,7 @@ export function PreOpenView({ onOpen }: PreOpenViewProps) {
         {[7, 14, 100].map((day) => (
           <div key={day} className="rounded-md border border-border-default bg-bg-tertiary p-3">
             <Lock className="mx-auto h-4 w-4 text-text-tertiary" />
-            <p className="mt-1 text-xs text-text-secondary">{day} dias</p>
+            <p className="mt-1 text-metadata text-text-secondary">{day} dias</p>
           </div>
         ))}
       </div>

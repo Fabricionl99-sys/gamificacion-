@@ -28,7 +28,7 @@ export function RewardPhase({ onCollect }: RewardPhaseProps) {
               className="rounded-lg border border-border-default bg-bg-tertiary p-3"
             >
               <Icon className="mx-auto mb-2 h-5 w-5 text-accent" />
-              <p className="text-xs font-semibold text-text-primary">{reward.label}</p>
+              <p className="text-metadata font-semibold text-text-primary">{reward.label}</p>
             </motion.div>
           );
         })}

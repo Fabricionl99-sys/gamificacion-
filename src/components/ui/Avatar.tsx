@@ -29,7 +29,7 @@ export function Avatar({ initials, label, size = 'md', locked = false, status, c
     >
       {initials ? initials : <User aria-hidden className="h-4 w-4 text-text-secondary" />}
       {locked ? (
-        <span className="absolute -bottom-1 -right-1 rounded-full border border-border-default bg-bg-elevated px-1 text-xs text-text-secondary">
+        <span className="absolute -bottom-1 -right-1 rounded-full border border-border-default bg-bg-elevated px-1 text-metadata text-text-secondary">
           lock
         </span>
       ) : null}

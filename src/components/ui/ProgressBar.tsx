@@ -22,7 +22,7 @@ export function ProgressBar({ value, max = 100, label, ariaLabel, className, ton
 
   return (
     <div className={cn('space-y-1', className)}>
-      {label ? <p className="text-xs text-text-tertiary">{label}</p> : null}
+      {label ? <p className="text-metadata text-text-tertiary">{label}</p> : null}
       <div
         className="h-1 overflow-hidden rounded-full bg-bg-tertiary"
         aria-label={ariaLabel ?? label}

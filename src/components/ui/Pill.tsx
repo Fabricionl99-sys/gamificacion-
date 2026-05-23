@@ -21,7 +21,7 @@ export function Pill({ icon, label, tone = 'default', className }: PillProps) {
   return (
     <span
       className={cn(
-        'inline-flex items-center gap-1.5 rounded-full px-2 py-1 text-xs font-semibold leading-none',
+        'inline-flex items-center gap-1.5 rounded-full px-2 py-1 text-metadata font-semibold leading-none',
         tones[tone],
         className,
       )}

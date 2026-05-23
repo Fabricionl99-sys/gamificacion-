@@ -13,7 +13,7 @@ export function SummaryTab() {
         <p className="text-sm font-medium text-text-secondary">progreso al siguiente nivel</p>
         <div className="mt-2 flex items-baseline justify-between">
           <span className="text-2xl font-semibold text-text-primary">Nivel {player.level}</span>
-          <span className="text-xs text-text-tertiary">
+          <span className="text-metadata text-text-tertiary">
             {formatNumber(player.currentXP)} / {formatNumber(player.nextLevelXP)} XP
           </span>
         </div>
@@ -29,7 +29,7 @@ export function SummaryTab() {
           <Card key={stat.label} className="text-center">
             <Icon className="mx-auto mb-2 h-4 w-4 text-text-tertiary" />
             <p className="text-lg font-semibold text-text-primary">{formatNumber(Number(stat.value))}</p>
-            <p className="text-xs text-text-tertiary">{stat.label}</p>
+            <p className="text-metadata text-text-tertiary">{stat.label}</p>
           </Card>
           );
         })}

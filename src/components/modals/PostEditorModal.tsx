@@ -186,10 +186,10 @@ function EditorContent({
 
       {isPublicProfile && mode === 'bet_ticket' && shareablePicks.length > 0 ? (
         <div className="space-y-2">
-          <p className="text-xs font-medium uppercase tracking-wide text-text-tertiary">
+          <p className="text-metadata font-medium uppercase tracking-wide text-text-tertiary">
             selecciones de tu cupón (una o varias)
           </p>
-          <p className="text-xs text-text-secondary">
+          <p className="text-metadata text-text-secondary">
             Cuando apostás en el proveedor y tu perfil es público, el ticket se publica solo. Acá simulamos las
             selecciones recientes para armar el mismo formato.
           </p>
@@ -209,7 +209,7 @@ function EditorContent({
                   )}
                 >
                   <p className="text-sm font-semibold uppercase text-text-primary">{pick.teams}</p>
-                  <p className="text-xs text-text-secondary">
+                  <p className="text-metadata text-text-secondary">
                     {pick.prediction} · cuota {pick.odds}
                   </p>
                 </button>
@@ -219,7 +219,7 @@ function EditorContent({
         </div>
       ) : null}
 
-      <div className="rounded-lg border border-warning/30 bg-warning/10 p-3 text-xs text-text-secondary">
+      <div className="rounded-lg border border-warning/30 bg-warning/10 p-3 text-metadata text-text-secondary">
         <div className="flex items-center gap-2 font-medium text-warning">
           <ShieldAlert className="h-4 w-4" />
           los montos de tus apuestas nunca son visibles
@@ -230,7 +230,7 @@ function EditorContent({
         <Button variant="ghost" leftIcon={<Image className="h-4 w-4" />} disabled>
           imagen
         </Button>
-        <span className="text-xs text-text-tertiary">{remaining} caracteres</span>
+        <span className="text-metadata text-text-tertiary">{remaining} caracteres</span>
       </div>
       <div className="grid grid-cols-2 gap-2">
         <Button variant="secondary" onClick={onCancel}>

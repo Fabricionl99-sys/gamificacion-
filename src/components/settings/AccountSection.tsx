@@ -54,11 +54,11 @@ export function AccountSection({ onOpenAvatarPicker }: AccountSectionProps) {
           aria-describedby="public-profile-hint"
         />
       </label>
-      <p id="public-profile-hint" className="text-xs text-text-tertiary">
+      <p id="public-profile-hint" className="text-metadata text-text-tertiary">
         Con perfil público podés compartir apuestas en social. Los montos nunca se muestran.
       </p>
       <div className="rounded-md bg-bg-tertiary px-3 py-2.5">
-        <p className="mb-2 text-xs font-medium uppercase tracking-wide text-text-tertiary">idioma</p>
+        <p className="mb-2 text-metadata font-medium uppercase tracking-wide text-text-tertiary">idioma</p>
         <div className="flex gap-2">
           {(
             [
@@ -70,7 +70,7 @@ export function AccountSection({ onOpenAvatarPicker }: AccountSectionProps) {
             <button
               key={code}
               type="button"
-              className={`flex-1 rounded-md border px-2 py-1.5 text-center text-xs font-medium transition ${
+              className={`flex-1 rounded-md border px-2 py-1.5 text-center text-metadata font-medium transition ${
                 locale === code
                   ? 'border-accent bg-accent/15 text-accent'
                   : 'border-border-default text-text-secondary hover:border-border-strong hover:text-text-primary'

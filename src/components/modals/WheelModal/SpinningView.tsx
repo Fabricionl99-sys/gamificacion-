@@ -94,7 +94,7 @@ export function SpinningView({ onComplete }: SpinningViewProps) {
       </div>
       <div className="grid grid-cols-4 gap-2">
         {wheelSegments.map((segment) => (
-          <span key={segment} className="rounded-sm bg-bg-tertiary px-2 py-1 text-xs text-text-secondary">
+          <span key={segment} className="rounded-sm bg-bg-tertiary px-2 py-1 text-metadata text-text-secondary">
             {segment}
           </span>
         ))}

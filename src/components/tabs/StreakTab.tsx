@@ -17,7 +17,7 @@ export default function StreakTab() {
         <div className="relative z-10">
           <div className="mb-3 flex items-center gap-2 text-streak">
             <Flame className="h-5 w-5" />
-            <span className="text-xs font-medium uppercase tracking-widest">racha activa</span>
+            <span className="text-metadata font-medium uppercase tracking-widest">racha activa</span>
           </div>
           <p className="text-2xl font-semibold">{player.streak}</p>
           <p className="text-sm text-text-secondary">dias seguidos</p>

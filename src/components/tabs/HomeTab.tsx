@@ -78,7 +78,7 @@ export default function HomeTab() {
       </section>
 
       <Card variant="neon" className="card-gradient-surface-promo scan-effect overflow-hidden">
-        <p className="text-xs font-medium uppercase tracking-widest text-text-tertiary">promo destacada</p>
+        <p className="text-metadata font-medium uppercase tracking-widest text-text-tertiary">promo destacada</p>
         <h2 className="mt-2 text-xl font-semibold text-text-primary">Weekend boost x2 XP</h2>
         <p className="mt-2 text-sm text-text-secondary">Activa el multiplicador desde la tienda y suma doble XP en deportes.</p>
         <Button className="mt-4" variant="primary" onClick={() => navigateToTab('shop')}>
