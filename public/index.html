@@ -39,7 +39,20 @@
     <script>
       window.process = window.process || { env: { NODE_ENV: 'production' } };
       window.process.env = window.process.env || { NODE_ENV: 'production' };
+      // SW kill switch: en prod NO usamos service workers (MSW es solo dev).
+      // Visitors que cargaron el widget cuando MSW estaba activo dejaron
+      // mockServiceWorker.js registrado que sigue interceptando requests con
+      // data mockeada — rompe la entrega de cambios del BO al widget. Limpiamos
+      // inmediatamente al cargar la página, antes de que el bundle haga fetch.
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.getRegistrations().then(function (regs) {
+          regs.forEach(function (r) { r.unregister(); });
+        }).catch(function () { /* no-op */ });
+      }
     </script>
-    <script src="/gamification-widget.iife.js"></script>
+    <!-- Cache buster: bump cuando se publique fix critico para forzar
+         que browsers + intermediaries bypaseen el cache del iife.js
+         (filename no tiene hash, sino lo cachearian para siempre). -->
+    <script src="/gamification-widget.iife.js?v=20260522-shape-fixes"></script>
   </body>
 </html>
