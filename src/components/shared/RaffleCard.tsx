@@ -31,7 +31,7 @@ export function RaffleCard({ raffle, onOpen }: RaffleCardProps) {
           </div>
           <p className="mt-1 line-clamp-2 text-sm text-text-secondary">{raffle.description}</p>
           {raffle.mainPrizeLabel ? (
-            <p className="mt-1 text-xs text-text-tertiary">Premio: {raffle.mainPrizeLabel}</p>
+            <p className="mt-1 text-module-body text-text-tertiary">Premio: {raffle.mainPrizeLabel}</p>
           ) : null}
           <CurrencyCostLine
             currencyId={raffle.entryCostCurrencyId}
@@ -39,7 +39,7 @@ export function RaffleCard({ raffle, onOpen }: RaffleCardProps) {
             currencyName={raffle.entryCostCurrencyName}
             amount={raffle.entryCostAmount}
           />
-          <p className="text-xs text-text-tertiary">Cierra en {raffle.closesIn ?? '—'}</p>
+          <p className="text-module-body text-text-tertiary">Cierra en {raffle.closesIn ?? '—'}</p>
         </div>
       </div>
       <Button className="mt-3 w-full" variant="secondary" disabled={disabled} onClick={() => onOpen(raffle)}>

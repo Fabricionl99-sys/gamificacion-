@@ -35,7 +35,7 @@ export default function RewardsTab() {
           </div>
           <div className="min-w-0 flex-1">
             <p className="font-semibold text-text-primary">Caja misteriosa</p>
-            <p className="mt-1 text-sm text-text-secondary">
+            <p className="mt-1 text-module-body text-text-secondary">
               Estilo CS: pasa todos los premios y frena en el resultado.
             </p>
             <p className="mt-2 text-xs font-medium text-accent">{mysteryBoxItem.cost} monedas · abrir</p>
@@ -53,7 +53,7 @@ export default function RewardsTab() {
           </div>
           <div className="min-w-0 flex-1">
             <p className="font-semibold text-text-primary">Cofre de racha</p>
-            <p className="mt-1 text-sm text-text-secondary">
+            <p className="mt-1 text-module-body text-text-secondary">
               Cofre clásico: vibración, apertura de tapa y premio.
             </p>
             <p className="mt-2 text-xs font-medium text-warning">Disponible · abrir</p>
@@ -72,7 +72,7 @@ export default function RewardsTab() {
           </div>
           <div className="min-w-0 flex-1">
             <p className="font-semibold text-text-primary">Rueda de la fortuna</p>
-            <p className="mt-1 text-sm text-text-secondary">
+            <p className="mt-1 text-module-body text-text-secondary">
               Giro largo con desaceleración realista — sin freno brusco.
             </p>
             <p className="mt-2 text-xs font-medium text-accent">100 XP · girar</p>
@@ -81,7 +81,7 @@ export default function RewardsTab() {
       </Card>
 
       <Card className="border-dashed border-border-default bg-bg-tertiary/50 p-3">
-        <p className="flex items-center gap-2 text-xs text-text-tertiary">
+        <p className="flex items-center gap-2 text-module-body text-text-tertiary">
           <Flame className="h-3.5 w-3.5 shrink-0" />
           También podés canjear cajas desde la pestaña Tienda.
         </p>

@@ -47,7 +47,7 @@ export default function HomeTab() {
           <Gift className="h-5 w-5 text-danger" />
           <span className="flex-1">
             <span className="block text-sm font-semibold text-text-primary">tenes {player.pendingPrizes} premios sin reclamar</span>
-            <span className="text-xs text-text-secondary">tocá para ver tus premios pendientes</span>
+            <span className="text-module-body text-text-secondary">tocá para ver tus premios pendientes</span>
           </span>
         </button>
       ) : null}
@@ -111,7 +111,7 @@ export default function HomeTab() {
             <Newspaper className="h-5 w-5 text-info" />
             <div>
               <p className="text-sm font-semibold">{latestNews.title}</p>
-              <p className="mt-1 text-xs text-text-secondary">{latestNews.body}</p>
+              <p className="mt-1 text-module-body text-text-secondary">{latestNews.body}</p>
             </div>
           </Card>
         ) : null}

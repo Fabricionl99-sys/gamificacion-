@@ -107,7 +107,7 @@ export function MissionCard({ mission, compact = false, boosts = [], onClaimed, 
               ? 'text-xs font-medium text-success'
               : isCompleted
                 ? 'text-xs font-medium text-accent'
-                : 'text-xs text-text-tertiary'
+                : 'text-module-body text-text-tertiary'
           }
         >
           {isLocked ? mission.lockReason : isClaimed ? 'reclamada' : isCompleted ? 'lista para reclamar' : deadline}
@@ -154,7 +154,7 @@ function MissionProgressMeta({
   boosts: import('../../types/boost').XPBoost[];
 }) {
   return (
-    <div className="mb-2 flex justify-between gap-2 text-xs text-text-tertiary">
+    <div className="mb-2 flex justify-between gap-2 text-module-body text-text-tertiary">
       <span>
         {formatNumber(mission.progress)} / {formatNumber(mission.target)}
       </span>

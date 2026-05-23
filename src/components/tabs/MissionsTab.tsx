@@ -125,7 +125,7 @@ export default function MissionsTab() {
           {stats.done} de {stats.total} diarias completadas
         </p>
         <ProgressBar value={getProgressPercent(stats.done, Math.max(stats.total, 1))} />
-        <div className="flex flex-wrap gap-2 text-xs text-text-secondary">
+        <div className="flex flex-wrap gap-2 text-module-body text-text-secondary">
           <span>+{stats.earnedXP} XP ganado</span>
           {stats.claimable > 0 ? (
             <span className="font-medium text-accent">{stats.claimable} listas para reclamar</span>

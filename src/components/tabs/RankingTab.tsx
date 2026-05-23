@@ -87,7 +87,7 @@ function RankingHighlightCard({ ranking, onOpen }: { ranking: PlayerRankingSumma
             <h3 className="font-semibold text-text-primary">{ranking.ranking_name}</h3>
             <ChangeBadge change={ranking.player_change} />
           </div>
-          <p className="mt-1 text-xs text-text-tertiary">
+          <p className="mt-1 text-module-body text-text-tertiary">
             #{ranking.player_position} de {formatNumber(ranking.total_participants)} · cierra en {formatTimeRemaining(ranking.closes_at)}
           </p>
           <p className="mt-2 text-sm text-coins">Premio estimado: {formatNumber(ranking.player_potential_prize)} monedas</p>
@@ -127,7 +127,7 @@ function RankingMiniCard({ ranking, onOpen }: { ranking: PlayerRankingSummary; o
         <span className="text-2xl">{ranking.ranking_icon}</span>
         <span className="flex-1">
           <span className="block font-semibold text-text-primary">{ranking.ranking_name}</span>
-          <span className="text-xs text-text-tertiary">
+          <span className="text-module-body text-text-tertiary">
             tu posición #{ranking.player_position} · {formatTimeRemaining(ranking.closes_at)}
           </span>
         </span>

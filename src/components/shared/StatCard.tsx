@@ -24,7 +24,7 @@ export function StatCard({ label, value, icon, tone = 'default' }: StatCardProps
         {icon}
       </div>
       <p className={cn('text-lg font-semibold tracking-tight', toneClass[tone])}>{value}</p>
-      <p className="text-xs text-text-tertiary">{label}</p>
+      <p className="text-module-body text-text-tertiary">{label}</p>
     </Card>
   );
 }

@@ -18,7 +18,7 @@ export function SectionHeader({ title, eyebrow, description, action, actionLabel
       <div>
         {eyebrow ? <p className="text-xs font-medium uppercase tracking-widest text-text-tertiary">{eyebrow}</p> : null}
         <h2 className="text-sm font-semibold text-text-primary">{title}</h2>
-        {description ? <p className="mt-1 text-xs text-text-tertiary">{description}</p> : null}
+        {description ? <p className="mt-1 text-module-body text-text-tertiary">{description}</p> : null}
       </div>
       {finalActionLabel ? (
         <Button

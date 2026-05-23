@@ -29,7 +29,7 @@ export function NewsCard({ news }: NewsCardProps) {
         </Badge>
         {news.systemCentral ? <Badge variant="neutral">sistema central</Badge> : null}
         {isNew ? <Badge variant="danger">NUEVO</Badge> : null}
-        <span className="ml-auto text-xs text-text-tertiary">
+        <span className="ml-auto text-module-body text-text-tertiary">
           {formatDistanceToNow(new Date(news.createdAt), { addSuffix: true, locale: es })}
         </span>
       </div>
