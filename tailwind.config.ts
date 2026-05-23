@@ -76,6 +76,7 @@ export default {
       },
       fontSize: {
         xs: ['11px', { lineHeight: '1.4' }],
+        submenu: ['var(--text-submenu, 14px)', { lineHeight: '1.45' }],
         sm: ['13px', { lineHeight: '1.5' }],
         base: ['14px', { lineHeight: '1.5' }],
         md: ['16px', { lineHeight: '1.5' }],

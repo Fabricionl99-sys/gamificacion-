@@ -12,7 +12,7 @@ export interface TabsProps {
   onChange: (tab: string) => void;
   ariaLabel?: string;
   className?: string;
-  /** Larger touch targets for primary navigation (e.g. social feed scope). */
+  /** Larger touch targets; label size stays text-submenu (14px). */
   tabSize?: 'default' | 'comfortable';
 }
 
@@ -20,8 +20,8 @@ export function Tabs({ tabs, activeTab, onChange, ariaLabel = 'Tabs', className,
   const selectedTab = activeTab ?? tabs[0]?.id ?? '';
   const sizeClasses =
     tabSize === 'comfortable'
-      ? 'min-h-11 px-4 py-2.5 text-sm font-semibold rounded-lg'
-      : 'min-h-9 px-3 py-2 text-xs font-medium rounded-md';
+      ? 'min-h-11 px-4 py-2.5 text-submenu font-semibold rounded-lg'
+      : 'min-h-9 px-3 py-2 text-submenu font-medium rounded-md';
 
   return (
     <div
@@ -48,7 +48,7 @@ export function Tabs({ tabs, activeTab, onChange, ariaLabel = 'Tabs', className,
           >
             {tab.label}
             {typeof tab.count === 'number' ? (
-              <span className={cn('ml-1 opacity-80', tabSize === 'comfortable' ? 'text-sm' : 'text-xs')}>{tab.count}</span>
+              <span className="ml-1 opacity-80 text-submenu">{tab.count}</span>
             ) : null}
           </button>
         );

@@ -101,7 +101,13 @@ export default function PredictionsTab() {
 
       <div className="grid grid-cols-3 gap-2 rounded-lg bg-bg-secondary p-1">
         {tabs.map((item) => (
-          <Button key={item.id} size="sm" variant={tab === item.id ? 'primary' : 'ghost'} onClick={() => setTab(item.id)}>
+          <Button
+            key={item.id}
+            size="sm"
+            className="text-submenu"
+            variant={tab === item.id ? 'primary' : 'ghost'}
+            onClick={() => setTab(item.id)}
+          >
             {item.label}
           </Button>
         ))}
