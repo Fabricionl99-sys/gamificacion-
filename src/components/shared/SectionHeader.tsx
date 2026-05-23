@@ -23,10 +23,10 @@ export function SectionHeader({ title, eyebrow, description, action, actionLabel
       {finalActionLabel ? (
         <Button
           aria-label={finalActionLabel}
-          className="h-auto px-0 text-xs font-semibold text-accent hover:bg-transparent"
+          className="h-auto px-0 text-sm font-semibold text-accent hover:bg-transparent"
           disabled={!onAction}
           onClick={onAction}
-          rightIcon={<ChevronRight className="h-3 w-3" />}
+          rightIcon={<ChevronRight className="h-3.5 w-3.5" />}
           size="sm"
           variant="ghost"
         >
