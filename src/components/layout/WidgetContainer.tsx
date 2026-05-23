@@ -1,5 +1,4 @@
 import { Suspense, lazy, useEffect, type LazyExoticComponent, type ReactElement } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { Skeleton } from '../ui/Skeleton';
 import { ToastViewport } from '../ui/Toast';
 import { BoostToastTrigger } from '../boost/BoostToast';
@@ -9,7 +8,6 @@ import { WidgetHeader } from './WidgetHeader';
 import { FEATURES } from '../../config/features';
 import { PILOT } from '../../config/pilot';
 import { useWidgetNavigation } from '../../hooks/useWidgetNavigation';
-import { buildTabPath } from '../../routes/widgetPaths';
 import { usePlayerStore } from '../../store/playerStore';
 import { useUiStore } from '../../store/uiStore';
 import { writePublicProfile } from '../../utils/profilePrivacy';
@@ -93,7 +91,6 @@ function MainView() {
 export function WidgetContainer() {
   const { activeTab } = useUiStore();
   const { navigateToTab } = useWidgetNavigation();
-  const navigate = useNavigate();
 
   useEffect(() => {
     const t = localStorage.getItem('wingoat_theme');
@@ -107,10 +104,7 @@ export function WidgetContainer() {
       writePublicProfile(true);
       usePlayerStore.getState().updatePlayer({ isPrivate: false });
     }
-    if (window.location.pathname === '/' || window.location.pathname === '') {
-      navigate(buildTabPath(PILOT.defaultTab), { replace: true });
-    }
-  }, [navigate]);
+  }, []);
 
   return (
     <div className="min-h-dvh bg-bg-primary text-text-primary md:flex md:items-stretch">

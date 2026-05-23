@@ -57,6 +57,7 @@ const FONT_SIZE_PX: Record<string, string> = {
  * no está acá, se asume system / NOT load. Cada URL ya pide los pesos comunes
  * (400/500/600/700) para que el operator no rompa cuando elija pesos no-cargados.
  */
+/** MANTENER SYNC con BRANDING_FONTS del backend (branding.schema.ts). Arial = system font. */
 const GOOGLE_FONT_URLS: Record<string, string> = {
   Inter: 'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap',
   Urbanist: 'https://fonts.googleapis.com/css2?family=Urbanist:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300&display=swap',
@@ -67,7 +68,8 @@ const GOOGLE_FONT_URLS: Record<string, string> = {
   'Open Sans': 'https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600;700;800&display=swap',
   Raleway: 'https://fonts.googleapis.com/css2?family=Raleway:wght@400;500;600;700;800&display=swap',
   Nunito: 'https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&display=swap',
-  'Work Sans': 'https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;500;600;700;800&display=swap',
+  Oswald: 'https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&display=swap',
+  'Playfair Display': 'https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800&display=swap',
 };
 
 let customStyleEl: HTMLStyleElement | null = null;
