@@ -17,6 +17,12 @@ describe('widgetPaths', () => {
     expect(route.action).toBe('buy');
   });
 
+  it('parses player profile route', () => {
+    const route = parseWidgetPath('/perfil/player-123');
+    expect(route.view).toBe('player-profile');
+    expect(route.playerStateId).toBe('player-123');
+  });
+
   it('builds paths', () => {
     expect(buildTabPath('missions')).toBe('/misiones');
     expect(buildDetailPath('sorteos', 'abc', 'buy')).toBe('/sorteos/abc?action=buy');

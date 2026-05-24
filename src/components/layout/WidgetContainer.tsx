@@ -25,8 +25,7 @@ const RafflesTab = lazy(() => import('../tabs/RafflesTab'));
 const FeedTab = lazy(() => import('../tabs/FeedTab'));
 const NewsTab = lazy(() => import('../tabs/NewsTab'));
 const OwnProfile = lazy(() => import('../profile/OwnProfile'));
-const PublicProfile = lazy(() => import('../profile/PublicProfile'));
-const PrivateProfile = lazy(() => import('../profile/PrivateProfile'));
+const PlayerPublicProfile = lazy(() => import('../profile/PlayerPublicProfile'));
 const NotificationCenterModal = lazy(() => import('../modals/NotificationCenterModal'));
 const PurchaseConfirmModal = lazy(() => import('../modals/PurchaseConfirmModal'));
 const ShopItemDetailModal = lazy(() => import('../modals/ShopItemDetailModal'));
@@ -76,8 +75,7 @@ function MainView() {
   }
 
   if (activeView === 'own-profile') return <OwnProfile />;
-  if (activeView === 'public-profile') return <PublicProfile />;
-  if (activeView === 'private-profile') return <PrivateProfile />;
+  if (activeView === 'player-profile') return <PlayerPublicProfile />;
   return (
     <>
       <TabNavigation />

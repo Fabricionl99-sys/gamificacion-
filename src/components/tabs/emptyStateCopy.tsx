@@ -12,12 +12,19 @@ export function RankingEmptyState() {
   );
 }
 
-export function FollowingFeedEmptyState() {
+export function FollowingFeedEmptyState({ onExplore }: { onExplore?: () => void }) {
   return (
     <EmptyState
       icon={<Users className="h-8 w-8" />}
-      title="todavia no seguis a nadie"
-      description="anda a explorar para encontrar gente"
+      title="Seguí gente para ver su actividad"
+      description="Explorá perfiles públicos y empezá a seguir jugadores."
+      action={
+        onExplore ? (
+          <button type="button" className="text-sm font-semibold text-accent" onClick={onExplore}>
+            Ir a explorar
+          </button>
+        ) : undefined
+      }
     />
   );
 }

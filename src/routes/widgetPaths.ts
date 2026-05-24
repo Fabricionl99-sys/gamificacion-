@@ -2,6 +2,8 @@ import type { TabId } from '../types/navigation';
 
 export type WidgetDetailSection = 'sorteos' | 'predicciones' | 'tienda';
 
+export type WidgetView = 'widget' | 'own-profile' | 'player-profile';
+
 export const TAB_PATHS: Record<TabId, string> = {
   home: '/',
   missions: '/misiones',
@@ -36,7 +38,8 @@ const TAB_TO_DETAIL_SECTION: Partial<Record<TabId, WidgetDetailSection>> = {
 
 export interface ParsedWidgetRoute {
   tab: TabId;
-  view: 'widget' | 'own-profile';
+  view: WidgetView;
+  playerStateId?: string;
   detailId?: string;
   action?: string;
 }
@@ -53,6 +56,14 @@ export function parseWidgetPath(pathname: string, search = ''): ParsedWidgetRout
 
   if (path === PROFILE_PATH) {
     return { tab: 'home', view: 'own-profile', action };
+  }
+
+  const profilePrefix = `${PROFILE_PATH}/`;
+  if (path.startsWith(profilePrefix)) {
+    const playerStateId = decodeURIComponent(path.slice(profilePrefix.length));
+    if (playerStateId) {
+      return { tab: 'social', view: 'player-profile', playerStateId, action };
+    }
   }
 
   for (const [section, tab] of Object.entries(DETAIL_SECTION_TO_TAB) as [WidgetDetailSection, TabId][]) {
@@ -79,6 +90,10 @@ export function buildTabPath(tab: TabId): string {
 
 export function buildProfilePath(): string {
   return PROFILE_PATH;
+}
+
+export function buildPlayerProfilePath(playerStateId: string): string {
+  return `${PROFILE_PATH}/${encodeURIComponent(playerStateId)}`;
 }
 
 export function buildDetailPath(section: WidgetDetailSection, id: string, action?: string): string {
