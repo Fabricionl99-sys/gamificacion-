@@ -4,6 +4,7 @@ import { BrowserRouter } from 'react-router-dom';
 import App from './App';
 import { BrandingBootstrap } from './components/BrandingBootstrap';
 import { DemoAuthBootstrap } from './components/DemoAuthBootstrap';
+import { unregisterMockServiceWorkers } from './lib/unregisterMockServiceWorker';
 import './styles/globals.css';
 
 const rootElement = document.getElementById('root');
@@ -16,14 +17,7 @@ async function enableMocking() {
   const useMocks = import.meta.env.VITE_USE_MOCKS !== 'false';
   if (typeof window === 'undefined') return;
   if (!useMocks) {
-    // Defensa: visitors que entraron al widget cuando MSW estaba activo dejan
-    // registrado mockServiceWorker.js, que sigue interceptando requests
-    // aunque el bundle ya no lo inicie. Resultado: el widget muestra datos
-    // mockeados y "no ve" cambios del BO. Des-registrar al boot en prod.
-    if ('serviceWorker' in navigator) {
-      const regs = await navigator.serviceWorker.getRegistrations();
-      await Promise.all(regs.map((r) => r.unregister()));
-    }
+    await unregisterMockServiceWorkers();
     return;
   }
   const { worker } = await import('./mocks/browser');

@@ -42,6 +42,13 @@ for f in gamification-widget.iife.js gamification-widget.css; do
   fi
 done
 
+echo "→ Uploading service-worker.js (no-cache)..."
+if [ -f dist/service-worker.js ]; then
+  aws --region "$AWS_REGION" s3 cp dist/service-worker.js "s3://${S3_BUCKET}/service-worker.js" \
+    --cache-control "public,max-age=0,must-revalidate" \
+    --content-type "application/javascript"
+fi
+
 echo "→ Uploading index.html (no-cache) + robots.txt..."
 aws --region "$AWS_REGION" s3 cp dist/index.html "s3://${S3_BUCKET}/index.html" \
   --cache-control "public,max-age=0,must-revalidate" \

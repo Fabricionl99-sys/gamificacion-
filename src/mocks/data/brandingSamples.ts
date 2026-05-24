@@ -17,6 +17,7 @@ export const BRANDING_SAMPLES: Record<string, PublicBrandingConfig> = {
     favicon_url: null,
     background_image_url: null,
     welcome_text: 'Bienvenido a tu experiencia de gamificación',
+    vapid_public_key: 'BNcRdreALRFXTkOuo_kSib-QyaSYG4cc_a1ZWFM91ftKUxr82isY2X5Rg9Z7XkH-Xp-6e8H20s0g7xU7eEw',
   },
   'tenant-demo': {
     tenant_id: 'tenant-demo',

@@ -28,4 +28,6 @@ export interface PublicBrandingConfig {
   welcome_text: string;
   custom_css?: string | null;
   last_updated_at?: string | null;
+  /** Clave pública VAPID para Web Push (Sprint #9.2). */
+  vapid_public_key?: string | null;
 }

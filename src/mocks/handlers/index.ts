@@ -263,4 +263,25 @@ export const handlers = [
       ticket_numbers: Array.from({ length: n }, (_, i) => 200 + i),
     });
   }),
+
+  http.post('*/v1/player/push-tokens/subscribe', async ({ request }) => {
+    await wait();
+    const body = (await request.json()) as {
+      endpoint?: string;
+      keys?: { p256dh?: string; auth?: string };
+    };
+    if (typeof body.endpoint !== 'string' || !body.keys?.p256dh || !body.keys?.auth) {
+      return HttpResponse.json({ detail: 'Invalid subscription payload' }, { status: 400 });
+    }
+    return HttpResponse.json({ data: { id: crypto.randomUUID() } });
+  }),
+
+  http.delete('*/v1/player/push-tokens/unsubscribe', async ({ request }) => {
+    await wait();
+    const body = (await request.json()) as { endpoint?: string };
+    if (typeof body.endpoint !== 'string') {
+      return HttpResponse.json({ detail: 'endpoint required' }, { status: 400 });
+    }
+    return HttpResponse.json({ data: { removed: true } });
+  }),
 ];
