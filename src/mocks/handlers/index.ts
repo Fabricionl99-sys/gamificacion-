@@ -264,24 +264,31 @@ export const handlers = [
     });
   }),
 
-  http.post('*/v1/player/push-tokens/subscribe', async ({ request }) => {
+  http.post('*/v1/player/notifications/push-subscribe', async ({ request }) => {
     await wait();
     const body = (await request.json()) as {
-      endpoint?: string;
-      keys?: { p256dh?: string; auth?: string };
+      provider?: string;
+      token?: string;
+      device_info?: { user_agent?: string };
     };
-    if (typeof body.endpoint !== 'string' || !body.keys?.p256dh || !body.keys?.auth) {
-      return HttpResponse.json({ detail: 'Invalid subscription payload' }, { status: 400 });
+    if (body.provider !== 'web_push' || typeof body.token !== 'string' || body.token.length < 2) {
+      return HttpResponse.json({ detail: 'provider and token required' }, { status: 400 });
     }
-    return HttpResponse.json({ data: { id: crypto.randomUUID() } });
+    try {
+      const parsed = JSON.parse(body.token) as { endpoint?: string };
+      if (!parsed.endpoint) throw new Error('invalid token json');
+    } catch {
+      return HttpResponse.json({ detail: 'token must be JSON.stringify of PushSubscription' }, { status: 400 });
+    }
+    return HttpResponse.json({ data: { id: crypto.randomUUID(), provider: 'web_push' } });
   }),
 
-  http.delete('*/v1/player/push-tokens/unsubscribe', async ({ request }) => {
+  http.post('*/v1/player/notifications/push-unsubscribe', async ({ request }) => {
     await wait();
-    const body = (await request.json()) as { endpoint?: string };
-    if (typeof body.endpoint !== 'string') {
-      return HttpResponse.json({ detail: 'endpoint required' }, { status: 400 });
+    const body = (await request.json()) as { provider?: string; token?: string };
+    if (body.provider !== 'web_push' || typeof body.token !== 'string') {
+      return HttpResponse.json({ detail: 'provider and token required' }, { status: 400 });
     }
-    return HttpResponse.json({ data: { removed: true } });
+    return HttpResponse.json({ data: { ok: true } });
   }),
 ];

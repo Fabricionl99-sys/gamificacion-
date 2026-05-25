@@ -1,5 +1,8 @@
 import { apiClient } from './api/client';
 
+const PUSH_TOKEN_STORAGE_KEY = 's2g_push_subscription_token';
+const PUSH_PROVIDER = 'web_push' as const;
+
 export type PushEnableResult =
   | { ok: true }
   | { ok: false; reason: string };
@@ -11,6 +14,22 @@ export function urlBase64ToUint8Array(base64: string): Uint8Array {
   const output = new Uint8Array(raw.length);
   for (let i = 0; i < raw.length; ++i) output[i] = raw.charCodeAt(i);
   return output;
+}
+
+export function pushSubscriptionTokenString(subscription: PushSubscription): string {
+  return JSON.stringify(subscription.toJSON());
+}
+
+function storePushToken(token: string): void {
+  sessionStorage.setItem(PUSH_TOKEN_STORAGE_KEY, token);
+}
+
+function getStoredPushToken(): string | null {
+  return sessionStorage.getItem(PUSH_TOKEN_STORAGE_KEY);
+}
+
+function clearStoredPushToken(): void {
+  sessionStorage.removeItem(PUSH_TOKEN_STORAGE_KEY);
 }
 
 export async function getPushSubscriptionState(): Promise<{ subscribed: boolean }> {
@@ -46,15 +65,15 @@ export async function enablePushNotifications(vapidPublicKey: string): Promise<P
     return { ok: false, reason: 'invalid_subscription' };
   }
 
+  const tokenString = pushSubscriptionTokenString(subscription);
+
   try {
-    await apiClient.post('/v1/player/push-tokens/subscribe', {
-      endpoint: subJson.endpoint,
-      keys: {
-        p256dh: subJson.keys.p256dh,
-        auth: subJson.keys.auth,
-      },
-      user_agent: navigator.userAgent,
+    await apiClient.post('/v1/player/notifications/push-subscribe', {
+      provider: PUSH_PROVIDER,
+      token: tokenString,
+      device_info: { user_agent: navigator.userAgent },
     });
+    storePushToken(tokenString);
   } catch (err) {
     const status = (err as { response?: { status?: number } })?.response?.status;
     return { ok: false, reason: status ? `backend_${status}` : 'backend_error' };
@@ -68,17 +87,24 @@ export async function disablePushNotifications(): Promise<void> {
   const registration = await navigator.serviceWorker.getRegistration();
   if (!registration) return;
   const subscription = await registration.pushManager.getSubscription();
-  if (!subscription) return;
+  if (!subscription) {
+    clearStoredPushToken();
+    return;
+  }
+
+  const tokenString = getStoredPushToken() ?? pushSubscriptionTokenString(subscription);
 
   try {
-    await apiClient.delete('/v1/player/push-tokens/unsubscribe', {
-      data: { endpoint: subscription.endpoint },
+    await apiClient.post('/v1/player/notifications/push-unsubscribe', {
+      provider: PUSH_PROVIDER,
+      token: tokenString,
     });
   } catch {
     // Best effort: still unsubscribe locally so the browser stops receiving push.
   }
 
   await subscription.unsubscribe();
+  clearStoredPushToken();
 }
 
 export function resolveVapidPublicKey(
