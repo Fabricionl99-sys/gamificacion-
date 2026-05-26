@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { motion, useAnimation, useReducedMotion } from 'framer-motion';
 
 import {
@@ -7,35 +7,40 @@ import {
   WHEEL_SPIN_POST_STOP_MS,
   computeWheelLandDelta,
 } from '../../../lib/wheelSpin';
+import type { WheelSegmentDisplay, WheelVisualConfig } from '../../../lib/wheelDisplay';
 import { WheelDisc } from './WheelDisc';
-
-const wheelSegments = ['50 XP', 'bono', 'x2', 'coins', 'caja', 'free bet', 'racha', 'misterio'];
-const PRIZE_INDEX = 0;
 
 function wait(ms: number) {
   return new Promise<void>((r) => window.setTimeout(r, ms));
 }
 
 interface SpinningViewProps {
-  onComplete: () => void;
+  config: WheelVisualConfig;
+  prizeIndex: number;
+  onComplete: (won: WheelSegmentDisplay) => void;
 }
 
-export function SpinningView({ onComplete }: SpinningViewProps) {
+export function SpinningView({ config, prizeIndex, onComplete }: SpinningViewProps) {
   const reduceMotion = useReducedMotion();
   const controls = useAnimation();
   const [rotation, setRotation] = useState(0);
   const [done, setDone] = useState(false);
+  const segmentCount = config.segments.length;
+  const won = useMemo(
+    () => config.segments[prizeIndex] ?? config.segments[0]!,
+    [config.segments, prizeIndex],
+  );
 
   useEffect(() => {
     if (reduceMotion) {
-      void wait(400).then(onComplete);
+      void wait(400).then(() => onComplete(won));
       return undefined;
     }
 
     let cancelled = false;
 
     const run = async () => {
-      const landDelta = computeWheelLandDelta(PRIZE_INDEX, rotation);
+      const landDelta = computeWheelLandDelta(prizeIndex, rotation, segmentCount);
       const finalRot = rotation + landDelta;
 
       await controls.start({
@@ -51,7 +56,7 @@ export function SpinningView({ onComplete }: SpinningViewProps) {
       setRotation(finalRot);
       setDone(true);
       await wait(WHEEL_SPIN_POST_STOP_MS);
-      if (!cancelled) onComplete();
+      if (!cancelled) onComplete(won);
     };
 
     void run();
@@ -59,8 +64,7 @@ export function SpinningView({ onComplete }: SpinningViewProps) {
     return () => {
       cancelled = true;
     };
-  // eslint-disable-next-line react-hooks/exhaustive-deps -- single spin on mount
-  }, [controls, onComplete, reduceMotion]);
+  }, [controls, onComplete, prizeIndex, reduceMotion, rotation, segmentCount, won]);
 
   if (reduceMotion) {
     return (
@@ -89,16 +93,15 @@ export function SpinningView({ onComplete }: SpinningViewProps) {
           animate={controls}
           style={{ rotate: rotation }}
         >
-          <WheelDisc size="lg" centerLabel={done ? 'listo' : 'girando'} />
+          <WheelDisc
+            size="lg"
+            segments={config.segments}
+            backgroundImageUrl={config.backgroundImageUrl}
+            centerLogoUrl={config.centerLogoUrl}
+          />
         </motion.div>
       </div>
-      <div className="grid grid-cols-4 gap-2">
-        {wheelSegments.map((segment) => (
-          <span key={segment} className="rounded-sm bg-bg-tertiary px-2 py-1 text-metadata text-text-secondary">
-            {segment}
-          </span>
-        ))}
-      </div>
+      <p className="text-sm text-text-secondary">{done ? '¡Listo!' : 'Girando…'}</p>
     </div>
   );
 }
