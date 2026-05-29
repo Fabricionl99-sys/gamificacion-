@@ -5,6 +5,12 @@ import type { PublicBrandingConfig } from '../types/branding';
  * en sync con la función — clearOperatorBranding las remueve.
  */
 const OVERRIDE_VARS = [
+  // Aliases BO palette (task #138)
+  '--color-primary',
+  '--color-secondary',
+  '--color-accent',
+  '--color-background',
+  '--color-text',
   // Accents
   '--accent-primary',
   '--accent-hover',
@@ -111,18 +117,24 @@ export function clearOperatorBranding(): void {
 export function applyOperatorBranding(config: PublicBrandingConfig): void {
   const c = config.color_palette;
   const root = document.documentElement;
-  const accentRgb = hexToRgb(c.accent_color);
+  const brandColor = c.primary_color || c.accent_color;
+  const accentColor = c.accent_color || c.primary_color;
+  const accentRgb = hexToRgb(accentColor);
   const bgRgb = hexToRgb(c.background_color);
   const textRgb = hexToRgb(c.text_color);
 
-  // ─── Accents ──────────────────────────────────────────────────────
-  root.style.setProperty('--accent-primary', c.accent_color);
-  root.style.setProperty('--accent-hover', darken(c.accent_color, 0.1));
-  root.style.setProperty('--accent-active', darken(c.accent_color, 0.2));
-  root.style.setProperty('--border-accent-strong', c.accent_color);
-  // Texto que va ENCIMA del accent (botones primary). Si accent es claro →
-  // texto oscuro; si accent es oscuro → texto claro.
-  const accentTextColor = isLight(c.accent_color) ? '#0A0E13' : '#FFFFFF';
+  root.style.setProperty('--color-primary', c.primary_color);
+  root.style.setProperty('--color-secondary', c.secondary_color);
+  root.style.setProperty('--color-accent', accentColor);
+  root.style.setProperty('--color-background', c.background_color);
+  root.style.setProperty('--color-text', c.text_color);
+
+  // ─── Accents (primary_color drives the main brand surface) ───────
+  root.style.setProperty('--accent-primary', brandColor);
+  root.style.setProperty('--accent-hover', darken(brandColor, 0.1));
+  root.style.setProperty('--accent-active', darken(brandColor, 0.2));
+  root.style.setProperty('--border-accent-strong', brandColor);
+  const accentTextColor = isLight(brandColor) ? '#0A0E13' : '#FFFFFF';
   root.style.setProperty('--accent-text', accentTextColor);
   root.style.setProperty('--text-on-accent', accentTextColor);
   if (accentRgb) {
