@@ -24,8 +24,8 @@
     min-height: 100vh;
     margin: 0;
     background:
-      radial-gradient(circle at 80% 0%, var(--accent-subtle), transparent 28rem),
-      radial-gradient(circle at 10% 10%, var(--info-faint), transparent 24rem),
+      radial-gradient(circle at 15% 0%, var(--accent-subtle), transparent 28rem),
+      radial-gradient(circle at 90% 10%, var(--info-faint), transparent 24rem),
       var(--bg-primary);
     color: var(--text-primary);
     font-family: var(--font-family, 'Urbanist', system-ui, sans-serif);
@@ -37,6 +37,7 @@
 
   /* Headings respetan font_weight_heading que el operator setea en branding. */
   h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-heading-family, var(--font-family, 'Urbanist', system-ui, sans-serif));
     font-weight: var(--font-weight-heading, 700);
   }
 
@@ -107,21 +108,33 @@
     pointer-events: none;
   }
 
-  /** Fondos de tarjetas: brillo a la derecha, zona de texto más limpia a la izquierda */
+  /** Fondos de tarjetas: brillo a la izquierda, texto legible a la derecha */
   .card-gradient-surface-missions {
-    background: linear-gradient(270deg, var(--accent-subtle), var(--color-info-soft));
+    background: linear-gradient(90deg, var(--accent-subtle), var(--color-info-soft));
   }
 
   .card-gradient-surface-tournaments {
-    background: linear-gradient(270deg, var(--bg-secondary), var(--accent-subtle));
+    background: linear-gradient(90deg, var(--accent-subtle), var(--bg-secondary));
   }
 
   .card-gradient-surface-streak {
-    background: linear-gradient(270deg, var(--bg-secondary), var(--warning-glow));
+    background: linear-gradient(90deg, var(--warning-glow), var(--bg-secondary));
   }
 
   .card-gradient-surface-promo {
-    background: linear-gradient(270deg, var(--bg-secondary), var(--accent-subtle));
+    background: linear-gradient(90deg, var(--accent-subtle), var(--bg-secondary));
+  }
+
+  html[data-animations='none'] *,
+  html[data-animations='none'] *::before,
+  html[data-animations='none'] *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+
+  html[data-animations='playful'] .scan-effect::after {
+    animation-duration: 2.5s;
   }
 
   /** Barra de tabs móvil: scroll horizontal con inercia, sin cambiar de tab al deslizar */

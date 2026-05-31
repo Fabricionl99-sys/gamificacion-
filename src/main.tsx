@@ -2,6 +2,7 @@ import { StrictMode } from 'react';
 import ReactDOM from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
 import App from './App';
+import { BrandingPreviewBridge } from './components/BrandingPreviewBridge';
 import { BrandingBootstrap } from './components/BrandingBootstrap';
 import { DemoAuthBootstrap } from './components/DemoAuthBootstrap';
 import { unregisterMockServiceWorkers } from './lib/unregisterMockServiceWorker';
@@ -30,6 +31,7 @@ enableMocking().then(() => {
       <BrowserRouter>
         <DemoAuthBootstrap>
           <BrandingBootstrap>
+            <BrandingPreviewBridge />
             <App />
           </BrandingBootstrap>
         </DemoAuthBootstrap>

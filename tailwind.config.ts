@@ -54,9 +54,9 @@ export default {
         // Status colors fijos (significado semántico — NO customizables por
         // el operador). Si el operador necesita cambiar success/danger/etc,
         // arme un módulo separado de palette extendida.
-        success: '#0AF784',
-        warning: '#FFB020',
-        danger: '#FF4D6D',
+        success: 'var(--color-success, #0AF784)',
+        warning: 'var(--color-warning, #FFB020)',
+        danger: 'var(--color-danger, #FF4D6D)',
         info: '#4D9FFF',
         streak: '#FF6B35',
         coins: '#FFB020',

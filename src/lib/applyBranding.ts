@@ -1,3 +1,7 @@
+import {
+  RADIUS_BY_SCALE,
+  resolvePublicBrandingConfig,
+} from './brandingDefaults';
 import type { PublicBrandingConfig } from '../types/branding';
 
 /**
@@ -48,6 +52,22 @@ const OVERRIDE_VARS = [
   '--font-size-base',
   '--font-weight-heading',
   '--font-weight-body',
+  '--font-heading-family',
+  '--profile-card-bg',
+  '--progress-fill',
+  '--progress-track',
+  '--color-success',
+  '--color-warning',
+  '--color-danger',
+  '--badge-color',
+  '--chest-common',
+  '--chest-rare',
+  '--chest-epic',
+  '--chest-legendary',
+  '--radius-sm',
+  '--radius-md',
+  '--radius-lg',
+  '--radius-xl',
 ] as const;
 
 /** Mapping de font_size_base categórico → píxeles base del widget. */
@@ -112,10 +132,12 @@ export function clearOperatorBranding(): void {
   }
   delete root.dataset.brandingTenant;
   delete root.dataset.theme;
+  delete root.dataset.animations;
 }
 
 export function applyOperatorBranding(config: PublicBrandingConfig): void {
-  const c = config.color_palette;
+  const resolved = resolvePublicBrandingConfig(config);
+  const c = resolved.color_palette;
   const root = document.documentElement;
   const brandColor = c.primary_color || c.accent_color;
   const accentColor = c.accent_color || c.primary_color;
@@ -168,26 +190,56 @@ export function applyOperatorBranding(config: PublicBrandingConfig): void {
     root.style.setProperty('--avatar-surface-glow', `rgba(${s}, 0.9)`);
   }
 
-  // ─── Texts (deriva 3 niveles a partir del text color) ─────────────
+  // ─── Texts (operador puede override text_secondary vía branding) ──
   root.style.setProperty('--text-primary', c.text_color);
-  root.style.setProperty('--text-secondary', withAlpha(c.text_color, 0.65));
+  root.style.setProperty('--text-secondary', resolved.text_secondary_color);
   root.style.setProperty('--text-tertiary', withAlpha(c.text_color, 0.42));
   root.style.setProperty('--text-disabled', withAlpha(c.text_color, 0.24));
 
-  // ─── Borders (deriva del text color) ──────────────────────────────
+  // ─── Borders ──────────────────────────────────────────────────────
+  root.style.setProperty('--border-subtle', withAlpha(resolved.border_color, 0.5));
+  root.style.setProperty('--border-default', resolved.border_color);
+  root.style.setProperty('--border-strong', withAlpha(c.text_color, 0.2));
   if (textRgb) {
     const t = `${textRgb.r}, ${textRgb.g}, ${textRgb.b}`;
-    root.style.setProperty('--border-subtle', `rgba(${t}, 0.06)`);
-    root.style.setProperty('--border-default', `rgba(${t}, 0.10)`);
-    root.style.setProperty('--border-strong', `rgba(${t}, 0.20)`);
+    if (!resolved.border_color) {
+      root.style.setProperty('--border-subtle', `rgba(${t}, 0.06)`);
+      root.style.setProperty('--border-default', `rgba(${t}, 0.10)`);
+    }
   }
 
+  // ─── Extended tokens (granular colors + cofres) ───────────────────
+  root.style.setProperty('--profile-card-bg', resolved.profile_card_color);
+  root.style.setProperty('--progress-fill', resolved.progress_bar_fill_color);
+  root.style.setProperty('--progress-track', resolved.progress_bar_track_color);
+  root.style.setProperty('--color-success', resolved.success_color);
+  root.style.setProperty('--color-warning', resolved.warning_color);
+  root.style.setProperty('--color-danger', resolved.error_color);
+  root.style.setProperty('--badge-color', resolved.badge_color);
+  root.style.setProperty('--chest-common', resolved.chest_rarity_common_color);
+  root.style.setProperty('--chest-rare', resolved.chest_rarity_rare_color);
+  root.style.setProperty('--chest-epic', resolved.chest_rarity_epic_color);
+  root.style.setProperty('--chest-legendary', resolved.chest_rarity_legendary_color);
+
+  const radii = RADIUS_BY_SCALE[resolved.border_radius_scale ?? 'rounded'];
+  root.style.setProperty('--radius-sm', radii.sm);
+  root.style.setProperty('--radius-md', radii.md);
+  root.style.setProperty('--radius-lg', radii.lg);
+  root.style.setProperty('--radius-xl', radii.xl);
+
   // ─── Tipografía (Sub-etapa Operator-Branding-v2) ────────────────
-  const t = config.typography;
+  const t = resolved.typography;
+  const headingFont = t.heading_font_family ?? t.font_family;
   if (t?.font_family) {
     loadFontStylesheet(t.font_family);
     const fallback = t.font_family === 'Arial' ? 'sans-serif' : `'${t.font_family}', system-ui, sans-serif`;
     root.style.setProperty('--font-family', fallback);
+  }
+  if (headingFont) {
+    loadFontStylesheet(headingFont);
+    const headingFallback =
+      headingFont === 'Arial' ? 'sans-serif' : `'${headingFont}', system-ui, sans-serif`;
+    root.style.setProperty('--font-heading-family', headingFallback);
   }
   if (t?.font_size_base) {
     const px = FONT_SIZE_PX[t.font_size_base] ?? FONT_SIZE_PX.md;
@@ -201,45 +253,46 @@ export function applyOperatorBranding(config: PublicBrandingConfig): void {
   }
 
   // ─── Theme mode (light | dark | auto) ────────────────────────────
-  if (config.theme_mode) {
-    if (config.theme_mode === 'auto') {
+  if (resolved.theme_mode) {
+    if (resolved.theme_mode === 'auto') {
       const prefersLight = window.matchMedia('(prefers-color-scheme: light)').matches;
       root.dataset.theme = prefersLight ? 'light' : 'dark';
     } else {
-      root.dataset.theme = config.theme_mode;
+      root.dataset.theme = resolved.theme_mode;
     }
   }
 
+  root.dataset.animations = resolved.animations_intensity ?? 'subtle';
+
   // ─── Background image custom ─────────────────────────────────────
-  if (config.background_image_url) {
+  if (resolved.background_image_url) {
     root.style.setProperty(
       'background-image',
-      `url(${config.background_image_url}), radial-gradient(circle at 20% 0%, var(--accent-subtle), transparent 28rem), var(--bg-primary)`,
+      `url(${resolved.background_image_url}), radial-gradient(circle at 15% 0%, var(--accent-subtle), transparent 28rem), var(--bg-primary)`,
     );
   }
 
-  // ─── Custom CSS (futuro — hoy backend no lo expone vía public-branding) ──
-  if (config.custom_css?.trim()) {
+  if (resolved.custom_css?.trim()) {
     if (!customStyleEl) {
       customStyleEl = document.createElement('style');
       customStyleEl.setAttribute('data-branding-custom', 'true');
       document.head.appendChild(customStyleEl);
     }
-    customStyleEl.textContent = config.custom_css;
+    customStyleEl.textContent = resolved.custom_css;
   }
 
-  // ─── Favicon ──────────────────────────────────────────────────────
-  if (config.favicon_url) {
+  if (resolved.favicon_url) {
     let link = document.querySelector<HTMLLinkElement>('link[rel="icon"]');
     if (!link) {
       link = document.createElement('link');
       link.rel = 'icon';
       document.head.appendChild(link);
     }
-    link.href = config.favicon_url;
+    link.href = resolved.favicon_url;
   }
 
-  root.dataset.brandingTenant = config.tenant_id;
+  root.dataset.brandingTenant = resolved.tenant_id;
+  root.dataset.levelLabel = resolved.level_label ?? 'Nivel';
 }
 
 /**

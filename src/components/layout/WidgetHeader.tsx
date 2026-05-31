@@ -10,6 +10,7 @@ import { resolveLevelDisplayName } from '../../utils/levelDisplay';
 import { getPlayerInitials } from '../../utils/playerInitials';
 import { resolveXpSegment } from '../../utils/xpLevelSegment';
 import { DemoResetButton } from '../DemoResetButton';
+import { useBrandingStore } from '../../store/brandingStore';
 
 function formatMultiplierLabel(m: number): string {
   if (Number.isInteger(m)) return `x${m}`;
@@ -62,7 +63,8 @@ export function WidgetHeader() {
 
   const tiers = player.levelDefinitions ?? [];
   const levelName = resolveLevelDisplayName(player.level, tiers);
-  const levelTitle = `${levelName.toUpperCase()} · NIVEL ${player.level}`;
+  const levelLabel = useBrandingStore((s) => s.config?.level_label) ?? document.documentElement.dataset.levelLabel ?? 'Nivel';
+  const levelTitle = `${levelName.toUpperCase()} · ${levelLabel.toUpperCase()} ${player.level}`;
 
   const initials = (player.avatar?.trim() || getPlayerInitials(player.name)).slice(0, 2);
   const avatarBg = getAvatarBackgroundFromName(player.name);
@@ -83,7 +85,8 @@ export function WidgetHeader() {
 
   return (
     <header
-      className="relative rounded-2xl border border-border-default/80 bg-gradient-to-b from-bg-secondary/95 to-bg-primary/90 px-4 py-3 shadow-card md:px-5 md:py-4"
+      className="relative rounded-2xl border border-border-default/80 px-4 py-3 shadow-card md:px-5 md:py-4"
+      style={{ background: 'var(--profile-card-bg, var(--bg-secondary))' }}
       aria-label="Estado del jugador"
     >
       <div className="absolute right-3 top-2 z-10 flex items-center gap-0.5 md:right-4 md:top-2.5">
@@ -155,7 +158,8 @@ export function WidgetHeader() {
 
           <div className="mt-1.5">
             <div
-              className="h-2 overflow-hidden rounded-full bg-white/[0.1] md:h-2.5"
+              className="h-2 overflow-hidden rounded-full md:h-2.5"
+              style={{ background: 'var(--progress-track, rgba(255,255,255,0.1))' }}
               role="progressbar"
               aria-valuemin={0}
               aria-valuemax={100}
@@ -163,8 +167,11 @@ export function WidgetHeader() {
               aria-label="Progreso de XP al siguiente nivel"
             >
               <div
-                className="h-full rounded-full bg-gradient-to-r from-accent via-[#2cff9c] to-[#7dffc4] transition-[width] duration-300 ease-out"
-                style={{ width: `${progressPercent}%` }}
+                className="h-full rounded-full transition-[width] duration-300 ease-out"
+                style={{
+                  width: `${progressPercent}%`,
+                  background: 'var(--progress-fill, var(--accent-primary))',
+                }}
               />
             </div>
             <div className="mt-1.5 flex justify-end pr-0.5">

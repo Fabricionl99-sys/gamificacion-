@@ -33,7 +33,7 @@ export const BRANDING_SAMPLES: Record<string, PublicBrandingConfig> = {
     logo_url: null,
     favicon_url: null,
     background_image_url: null,
-    welcome_text: 'WINGOAT · Widget jugador demo',
+    welcome_text: 'Social2Game · Widget jugador demo',
   },
   op_casino_astral: {
     tenant_id: 'op_casino_astral',

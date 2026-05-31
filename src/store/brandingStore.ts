@@ -39,7 +39,7 @@ export const useBrandingStore = create<BrandingState>((set, get) => ({
         logo_url: null,
         favicon_url: null,
         background_image_url: null,
-        welcome_text: 'WINGOAT',
+        welcome_text: 'Social2Game',
       });
       set({
         status: 'error',
