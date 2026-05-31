@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 
-import { mockPlayer } from '../mocks';
+import { EMPTY_PLAYER } from '../lib/emptyPlayer';
 import type { Player } from '../types/player';
 
 interface PlayerStore {
@@ -11,7 +11,7 @@ interface PlayerStore {
 }
 
 export const usePlayerStore = create<PlayerStore>((set) => ({
-  player: mockPlayer,
+  player: { ...EMPTY_PLAYER },
   claimPrize: () =>
     set((state) => ({
       player: {
@@ -19,7 +19,7 @@ export const usePlayerStore = create<PlayerStore>((set) => ({
         pendingPrizes: Math.max(0, state.player.pendingPrizes - 1),
       },
     })),
-  resetPlayer: () => set({ player: mockPlayer }),
+  resetPlayer: () => set({ player: { ...EMPTY_PLAYER } }),
   updatePlayer: (partial) =>
     set((state) => ({
       player: { ...state.player, ...partial },

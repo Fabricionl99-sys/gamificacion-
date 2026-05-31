@@ -17,6 +17,7 @@ export interface PredictionItem {
   prize_amount: number;
   player_prediction?: string;
   result?: string;
+  options?: PredictionMarketOption[];
 }
 
 export interface PredictionEvent {

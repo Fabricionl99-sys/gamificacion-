@@ -386,6 +386,7 @@ export const mockLeaderboards: Record<string, LeaderboardFull> = Object.fromEntr
 export const mockTournaments: Tournament[] = [
   {
     id: 'tour-001',
+    code: 'tour-001',
     name: 'Liga Champions Weekend',
     description: 'Competi por XP durante los partidos del fin de semana.',
     status: 'live',
@@ -398,6 +399,7 @@ export const mockTournaments: Tournament[] = [
   },
   {
     id: 'tour-002',
+    code: 'tour-002',
     name: 'Sprint Slots Nocturno',
     description: 'Inscripciones abiertas para una ventana competitiva corta.',
     status: 'open',
@@ -408,6 +410,7 @@ export const mockTournaments: Tournament[] = [
   },
   {
     id: 'tour-003',
+    code: 'tour-003',
     name: 'Mesa Alta VIP',
     description: 'Evento reservado para jugadores plata o superior.',
     status: 'vip',

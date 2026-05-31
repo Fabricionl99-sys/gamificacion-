@@ -86,9 +86,9 @@ export default function PredictionsTab() {
   }, [detailId, events, isLoading, closeDetail]);
 
   const tabs = [
-    { id: 'active', label: `Activos · ${tab === 'active' ? events.length : 4}` },
-    { id: 'my', label: `Mis predicciones · ${tab === 'my' ? events.length : 2}` },
-    { id: 'past', label: `Pasados · ${tab === 'past' ? events.length : 12}` },
+    { id: 'active', label: `Activos · ${tab === 'active' ? events.length : '—'}` },
+    { id: 'my', label: `Mis predicciones · ${tab === 'my' ? events.length : '—'}` },
+    { id: 'past', label: `Pasados · ${tab === 'past' ? events.length : '—'}` },
   ] as const;
 
   return (
@@ -140,7 +140,8 @@ function EventCard({ event, mode, onOpen }: { event: PredictionEvent; mode: Tab;
   // viven en el detail endpoint. Si items es undefined/[], renderizamos card
   // sin la lógica de "predicho/aciertos" en vez de crashear con .every().
   const items = event.items ?? [];
-  const predicted = items.length > 0 && items.every((item) => item.player_prediction);
+  const predicted =
+    event.already_predicted || (items.length > 0 && items.every((item) => item.player_prediction));
   const hits = items.filter((item) => item.result && item.player_prediction === item.result).length;
   const emoji = sportEmoji[event.sport] ?? sportEmoji.other;
 
@@ -272,7 +273,7 @@ function PredictionItemCard({
         ) : null}
       </div>
       <div className="grid grid-cols-2 gap-2">
-        {optionLabels[item.market].map((option) => {
+        {(item.options?.length ? item.options : optionLabels[item.market]).map((option) => {
           const active = selected === option.value;
           return (
             <button

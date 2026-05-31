@@ -10,7 +10,8 @@
   VITE_DEMO_TENANT_ID = "6b67e761-b833-402b-8d59-81c478ac782b"
   VITE_USE_MOCKS = "false"
   # Piloto social: abre en Social, perfil público, banner
-  VITE_PILOT_SOCIAL = "true"
+  VITE_PILOT_SOCIAL = "false"
+  VITE_FEATURE_SOCIAL = "false"
 
 # React Router (BrowserRouter) + rutas como /demo
 [[redirects]]

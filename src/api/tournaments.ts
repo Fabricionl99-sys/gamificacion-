@@ -1,11 +1,6 @@
 import type { Tournament, TournamentStatus } from '../types/tournament';
-import { apiClient } from './client';
+import { getJson } from './fetchJson';
 
-/**
- * Backend shape de `/v1/player/tournaments` (sub-set de TournamentRow).
- * El backend solo expone torneos visibles con status `'active' | 'finished'`
- * (ver `tournament.service.ts:listVisibleTournaments`).
- */
 interface BackendTournament {
   id: string;
   code: string;
@@ -17,18 +12,14 @@ interface BackendTournament {
   period_ends_at: string;
   is_visible_to_players: boolean;
   max_visible_positions: number;
-}
-
-/**
- * Backend usa `'active' | 'finished' | 'draft' | 'cancelled'` mientras que el
- * widget categoriza por estado visual `'live' | 'open' | 'vip' | 'almostFull'
- * | 'finished'`. Mapeo simple: `'finished'` y `'cancelled'` → `'finished'`,
- * todo lo demás → `'open'`. `'live' | 'vip' | 'almostFull'` requieren data
- * que el backend no expone aún (start time vs now, capacity %, restrictions).
- */
-function mapStatus(status: BackendTournament['status']): TournamentStatus {
-  if (status === 'finished' || status === 'cancelled') return 'finished';
-  return 'open';
+  registrations_count?: number;
+  is_registered?: boolean;
+  prizes?: Array<{
+    position_from: number;
+    position_to: number;
+    reward_type: string;
+    reward_config?: { amount?: number; currency_code?: string };
+  }>;
 }
 
 function formatTimeDelta(iso: string, now: Date = new Date()): string {
@@ -43,26 +34,52 @@ function formatTimeDelta(iso: string, now: Date = new Date()): string {
   return `${minutes}m`;
 }
 
+function mapStatus(status: BackendTournament['status'], startsAt: string, endsAt: string): TournamentStatus {
+  if (status === 'finished' || status === 'cancelled') return 'finished';
+  const now = Date.now();
+  const start = new Date(startsAt).getTime();
+  const end = new Date(endsAt).getTime();
+  if (now >= start && now <= end) return 'live';
+  if (now < start) return 'open';
+  return 'open';
+}
+
+function formatPrizePool(prizes?: BackendTournament['prizes']): string {
+  const first = prizes?.find((p) => p.position_from === 1) ?? prizes?.[0];
+  const amount = first?.reward_config?.amount;
+  if (amount == null) return '—';
+  const code = first?.reward_config?.currency_code;
+  return code ? `${amount} ${code}` : String(amount);
+}
+
 function adapt(t: BackendTournament): Tournament {
   const now = new Date();
   const started = new Date(t.period_starts_at).getTime() <= now.getTime();
   return {
     id: t.id,
+    code: t.code,
     name: t.name,
     description: t.description || '',
-    status: mapStatus(t.status),
-    // Prize pool, participants, capacity no están en /v1/player/tournaments
-    // (require GET /v1/player/tournaments/:code para detail + leaderboard).
-    // Stubs visualmente neutros hasta que el widget fetchee el detail.
-    prizePool: '—',
-    participants: 0,
-    capacity: 0,
+    status: mapStatus(t.status, t.period_starts_at, t.period_ends_at),
+    prizePool: formatPrizePool(t.prizes),
+    participants: t.registrations_count ?? 0,
+    capacity: t.max_visible_positions ?? 0,
     startsIn: started ? undefined : formatTimeDelta(t.period_starts_at, now),
     endsIn: started ? formatTimeDelta(t.period_ends_at, now) : undefined,
+    isRegistered: t.is_registered,
   };
 }
 
 export async function getTournaments(): Promise<Tournament[]> {
-  const { data } = await apiClient.get<BackendTournament[]>('/v1/player/tournaments');
-  return data.map(adapt);
+  const rows = await getJson<BackendTournament[]>('/v1/player/tournaments');
+  return rows.filter((t) => t.is_visible_to_players && t.status !== 'draft').map(adapt);
+}
+
+export async function getTournamentDetail(code: string): Promise<Tournament | null> {
+  try {
+    const row = await getJson<BackendTournament>(`/v1/player/tournaments/${code}`);
+    return adapt(row);
+  } catch {
+    return null;
+  }
 }

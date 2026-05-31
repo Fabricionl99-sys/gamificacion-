@@ -12,6 +12,8 @@ import { Card } from '../../ui/Card';
 import { Modal } from '../../ui/Modal';
 import { Tabs } from '../../ui/Tabs';
 import { usePlayer } from '../../../hooks/usePlayer';
+import { useAsyncData } from '../../../hooks/useAsyncData';
+import { getAvatars } from '../../../api/avatars';
 import { usePlayerStore } from '../../../store/playerStore';
 import { useWidgetNavigation } from '../../../hooks/useWidgetNavigation';
 import { getAvatarBackgroundFromName } from '../../../utils/avatarHashColor';
@@ -25,15 +27,13 @@ type OwnProfileTab = 'summary' | 'prizes' | 'history' | 'social';
 const isOwnProfileTab = (tab: string): tab is OwnProfileTab =>
   ['summary', 'prizes', 'history', 'social'].includes(tab);
 
-/** Opciones visuales de avatar hasta que exista galería por API. */
-const AVATAR_OPTIONS = ['JM', 'LA', 'RK', 'MX', 'CP', 'ZD'] as const;
-
 export default function OwnProfile() {
   const [activeTab, setActiveTab] = useState<OwnProfileTab>('summary');
   const [avatarPickerOpen, setAvatarPickerOpen] = useState(false);
   const { navigateBackFromProfile } = useWidgetNavigation();
   const { player } = usePlayer();
   const updatePlayer = usePlayerStore((state) => state.updatePlayer);
+  const { data: avatars = [] } = useAsyncData(getAvatars, []);
 
   const tabs = useMemo(
     (): Array<{ id: OwnProfileTab; label: string }> => [
@@ -111,26 +111,35 @@ export default function OwnProfile() {
       <p className="pb-2 text-center text-metadata text-text-tertiary">widget de gamificacion · v1.0.0</p>
 
       <Modal isOpen={avatarPickerOpen} title="Elegí tu avatar" onClose={() => setAvatarPickerOpen(false)}>
-        <p className="mb-3 text-sm text-text-secondary">Opciones de ejemplo. Con el backend se cargarán las imágenes del operador.</p>
-        <div className="grid grid-cols-3 gap-3">
-          {AVATAR_OPTIONS.map((code) => (
-            <button
-              key={code}
-              type="button"
-              className="flex aspect-square flex-col items-center justify-center rounded-xl border border-border-default transition hover:border-accent"
-              style={{
-                background: getAvatarBackgroundFromName(`avatar-${code}`),
-                boxShadow: '0 0 0 1px rgba(10, 247, 132, 0.2)',
-              }}
-              onClick={() => {
-                updatePlayer({ avatar: code });
-                setAvatarPickerOpen(false);
-              }}
-            >
-              <span className="font-mono text-lg font-bold text-white">{code}</span>
-            </button>
-          ))}
-        </div>
+        {avatars.length === 0 ? (
+          <p className="text-sm text-text-secondary">El operador no configuró avatares todavía.</p>
+        ) : (
+          <div className="grid grid-cols-3 gap-3">
+            {avatars.map((avatar) => (
+              <button
+                key={avatar.id}
+                type="button"
+                className="flex aspect-square flex-col items-center justify-center overflow-hidden rounded-xl border border-border-default transition hover:border-accent"
+                style={
+                  avatar.image_url
+                    ? { backgroundImage: `url(${avatar.image_url})`, backgroundSize: 'cover' }
+                    : {
+                        background: getAvatarBackgroundFromName(avatar.code),
+                        boxShadow: '0 0 0 1px rgba(10, 247, 132, 0.2)',
+                      }
+                }
+                onClick={() => {
+                  updatePlayer({ avatar: avatar.code });
+                  setAvatarPickerOpen(false);
+                }}
+              >
+                {!avatar.image_url ? (
+                  <span className="font-mono text-lg font-bold text-white">{avatar.code.slice(0, 2).toUpperCase()}</span>
+                ) : null}
+              </button>
+            ))}
+          </div>
+        )}
       </Modal>
     </div>
   );

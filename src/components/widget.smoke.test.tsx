@@ -4,12 +4,13 @@ import { describe, expect, it } from 'vitest';
 
 import App from '../App';
 import { useModalsStore } from '../store/modalsStore';
+import { useRewardsInventoryStore } from '../store/rewardsInventoryStore';
 import { useShopStore } from '../store/shopStore';
 import { mockShopItems } from '../mocks/index';
 import { useUiStore } from '../store/uiStore';
 import { renderWithRouter } from '../test/render';
 
-const tabLabels = ['inicio', 'misiones', 'tienda', 'social', 'racha', 'ranking', 'torneos', 'predicciones', 'noticias'] as const;
+const tabLabels = ['inicio', 'misiones', 'cofres', 'tienda', 'social', 'racha', 'ranking', 'torneos', 'predicciones', 'noticias'] as const;
 
 describe('widget smoke', () => {
   it('renders WidgetContainer shell', async () => {
@@ -36,9 +37,8 @@ describe('widget smoke', () => {
 
     const modals = [
       ['levelUp', /level up/i],
-      ['mysteryBox', /caja misteriosa/i],
       ['wheel', /rueda de la fortuna/i],
-      ['streakChest', /cofre de racha/i],
+      ['streakChest', /cofre/i],
       ['scratchCard', /raspadita/i],
       ['purchase', /confirmar canje/i],
       ['notifications', /notificaciones/i],
@@ -48,6 +48,12 @@ describe('widget smoke', () => {
       act(() => {
         if (modal === 'purchase') {
           useShopStore.getState().setSelectedItem(mockShopItems[1]);
+        }
+        if (modal === 'wheel') {
+          useRewardsInventoryStore.getState().setSelectedWheel({ id: 'wheel-mock-1', name: 'Rueda de la fortuna' });
+        }
+        if (modal === 'streakChest') {
+          useRewardsInventoryStore.getState().setSelectedChest({ id: 'chest-mock-1', name: 'Cofre de racha' });
         }
         useModalsStore.getState().openModal(modal);
       });
@@ -63,14 +69,15 @@ describe('widget smoke', () => {
     await screen.findByLabelText('Estado del jugador', {}, { timeout: 15000 });
 
     act(() => useUiStore.getState().setActiveTab('missions'));
+    await user.click(screen.getAllByRole('button', { name: /misiones/i })[0]);
     expect((await screen.findAllByRole('button', { name: /reclamar/i })).length).toBeGreaterThan(0);
     expect(await screen.findAllByText(/\+100 con x2 activo/i)).toHaveLength(1);
 
-    act(() => useUiStore.getState().setActiveTab('shop'));
+    await user.click(screen.getAllByRole('button', { name: /tienda/i })[0]);
     expect(await screen.findByRole('button', { name: /agotado/i })).toBeDisabled();
     expect(screen.getAllByText(/quedan 8/i).length).toBeGreaterThan(0);
 
-    act(() => useUiStore.getState().setActiveTab('ranking'));
+    await user.click(screen.getAllByRole('button', { name: /ranking/i })[0]);
     expect(await screen.findByText(/competí con otros jugadores/i)).toBeInTheDocument();
     await user.click(screen.getAllByRole('button', { name: /Ver leaderboard completo/i })[0]);
     expect(await screen.findByRole('dialog', { name: /Mejores en XP/i })).toBeInTheDocument();

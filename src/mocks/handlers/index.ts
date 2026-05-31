@@ -15,6 +15,13 @@ import {
 } from '../index';
 import { feedState } from '../feedState';
 import { missionState } from '../missionState';
+import {
+  toBackendPredictionDetail,
+  toBackendPredictionList,
+  toBackendRankingRows,
+  toBackendShopProducts,
+  toBackendTournaments,
+} from '../backendShapes';
 import type { CreatePostInput, FeedScope } from '../../types/social';
 
 const wait = () => delay(180 + Math.random() * 320);
@@ -66,17 +73,38 @@ export const handlers = [
       return HttpResponse.json({ code: 'UNKNOWN' }, { status: 400 });
     }
   }),
+  http.get('*/v1/player/shop/products', async () => {
+    await wait();
+    return HttpResponse.json(toBackendShopProducts(mockShopItems));
+  }),
   http.get('*/v1/player/shop-products', async () => {
     await wait();
-    return HttpResponse.json(mockShopItems);
+    return HttpResponse.json(toBackendShopProducts(mockShopItems));
   }),
   http.get('*/v1/player/rankings', async () => {
     await wait();
-    return HttpResponse.json(mockPlayerRankings);
+    return HttpResponse.json(toBackendRankingRows(mockPlayerRankings));
   }),
   http.get('*/v1/player/rankings/:id/leaderboard', async ({ params }) => {
     await wait();
-    return HttpResponse.json(mockLeaderboards[String(params.id)] ?? mockLeaderboards.best_xp);
+    const rankingId = String(params.id);
+    const lb = mockLeaderboards[rankingId] ?? mockLeaderboards.best_xp;
+    const summary = mockPlayerRankings.find((r) => r.ranking_id === rankingId);
+    return HttpResponse.json({
+      ranking_code: rankingId,
+      participants_count: summary?.total_participants ?? lb.entries.length,
+      entries: lb.entries.map((entry) => ({
+        position: entry.position,
+        player_handle: entry.handle,
+        metric_value: entry.metric_value,
+        verified: entry.verified,
+        vip_tier: entry.vip_tier,
+        level_badge_url: entry.level_badge_url,
+        is_self: entry.is_self,
+      })),
+      my_position: lb.player_position,
+      period_end: lb.closes_at,
+    });
   }),
   http.get('*/v1/player/ranking', async () => {
     await wait();
@@ -84,7 +112,13 @@ export const handlers = [
   }),
   http.get('*/v1/player/tournaments', async () => {
     await wait();
-    return HttpResponse.json(mockTournaments);
+    return HttpResponse.json(toBackendTournaments(mockTournaments));
+  }),
+  http.get('*/v1/player/tournaments/:code', async ({ params }) => {
+    await wait();
+    const code = String(params.code);
+    const tournament = mockTournaments.find((t) => (t.code ?? t.id) === code) ?? mockTournaments[0];
+    return HttpResponse.json(toBackendTournaments([tournament])[0]);
   }),
   http.get('*/v1/player/feed', async ({ request }) => {
     await wait();
@@ -156,6 +190,28 @@ export const handlers = [
   http.get('*/v1/player/active-boosts', async () => {
     await wait();
     return HttpResponse.json(mockActiveBoosts);
+  }),
+  http.get('*/v1/player/predictions', async () => {
+    await wait();
+    return HttpResponse.json(mockPredictionEvents.map(toBackendPredictionList));
+  }),
+  http.get('*/v1/player/predictions/:code', async ({ params }) => {
+    await wait();
+    const code = String(params.code);
+    const event = mockPredictionEvents.find((entry) => entry.id === code) ?? mockPredictionEvents[0];
+    return HttpResponse.json(toBackendPredictionDetail(event));
+  }),
+  http.post('*/v1/player/predictions/predictions', async ({ request }) => {
+    await wait();
+    const body = (await request.json()) as { event_id: string; option_id: string };
+    for (const event of mockPredictionEvents) {
+      const item = event.items.find((entry) => entry.id === body.event_id);
+      if (item) {
+        item.player_prediction = body.option_id;
+        break;
+      }
+    }
+    return HttpResponse.json({ ok: true });
   }),
   http.get('*/v1/player/predictions/events', async ({ request }) => {
     await wait();
@@ -262,6 +318,50 @@ export const handlers = [
       gems_balance_after: 42,
       ticket_numbers: Array.from({ length: n }, (_, i) => 200 + i),
     });
+  }),
+
+  http.get('*/v1/player/chests/inventory', async () => {
+    await wait();
+    return HttpResponse.json([
+      {
+        id: 'chest-mock-1',
+        name: 'Caja misteriosa',
+        description: 'Estilo CS: pasa todos los premios y frena en el resultado.',
+        quantity: 1,
+      },
+    ]);
+  }),
+  http.get('*/v1/player/wheels/inventory', async () => {
+    await wait();
+    return HttpResponse.json([
+      {
+        id: 'wheel-mock-1',
+        name: 'Rueda de la fortuna',
+        description: 'Giro largo con desaceleración realista.',
+        cost_label: '100 XP · girar',
+        spins_remaining: 1,
+      },
+    ]);
+  }),
+  http.get('*/v1/player/streaks', async () => {
+    await wait();
+    return HttpResponse.json({
+      programs: [
+        { id: 'streak-1', name: 'Cofre corto', description: 'bono neutral + XP', next_reward_at_day: 3 },
+        { id: 'streak-2', name: 'Cofre medio', description: 'bono neutral + XP', next_reward_at_day: 18 },
+        { id: 'streak-3', name: 'Cofre legendario', description: 'a la distancia', next_reward_at_day: 88 },
+      ],
+      current_streak: mockPlayer.streak,
+      best_streak: mockPlayer.bestStreak,
+    });
+  }),
+  http.get('*/v1/player/avatars', async () => {
+    await wait();
+    return HttpResponse.json([
+      { id: 'av-1', code: 'JM', name: 'Avatar JM' },
+      { id: 'av-2', code: 'LA', name: 'Avatar LA' },
+      { id: 'av-3', code: 'RK', name: 'Avatar RK' },
+    ]);
   }),
 
   http.post('*/v1/player/notifications/push-subscribe', async ({ request }) => {

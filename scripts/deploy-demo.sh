@@ -14,7 +14,8 @@ echo "→ Building widget (prod env)..."
 VITE_API_BASE_URL=https://api.social2game.com \
 VITE_DEMO_TENANT_ID=6b67e761-b833-402b-8d59-81c478ac782b \
 VITE_USE_MOCKS=false \
-VITE_PILOT_SOCIAL=true \
+VITE_PILOT_SOCIAL=false \
+VITE_FEATURE_SOCIAL=false \
 npm run build
 
 echo "→ Syncing hashed assets (long-cache: 1 año immutable) to s3://${S3_BUCKET}..."

@@ -1,14 +1,6 @@
 import type { VipTier } from './player';
 
-export type RankingId =
-  | 'best_xp'
-  | 'best_casino'
-  | 'best_live_casino'
-  | 'best_sports'
-  | 'best_virtuals'
-  | 'best_poker'
-  | 'best_depositors'
-  | 'best_vip';
+export type RankingId = string;
 
 export interface RankingTopEntry {
   handle: string;
