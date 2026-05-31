@@ -23,6 +23,12 @@ describe('widgetPaths', () => {
     expect(route.playerStateId).toBe('player-123');
   });
 
+  it('parses tournament detail routes', () => {
+    const route = parseWidgetPath('/torneos/summer-cup');
+    expect(route.tab).toBe('tournaments');
+    expect(route.detailId).toBe('summer-cup');
+  });
+
   it('builds paths', () => {
     expect(buildTabPath('missions')).toBe('/misiones');
     expect(buildDetailPath('sorteos', 'abc', 'buy')).toBe('/sorteos/abc?action=buy');

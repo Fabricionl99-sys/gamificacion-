@@ -2,6 +2,7 @@ export type TournamentStatus = 'live' | 'open' | 'vip' | 'almostFull' | 'finishe
 
 export interface Tournament {
   id: string;
+  code: string;
   name: string;
   description: string;
   status: TournamentStatus;
@@ -13,4 +14,5 @@ export interface Tournament {
   myPosition?: number;
   xp?: number;
   vipRequired?: string;
+  isRegistered?: boolean;
 }

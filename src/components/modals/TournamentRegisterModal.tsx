@@ -1,13 +1,13 @@
 import { Trophy } from 'lucide-react';
 
-import { mockTournaments } from '../../mocks';
 import { useModalsStore } from '../../store/modalsStore';
+import { useTournamentsStore } from '../../store/tournamentsStore';
 import { Button } from '../ui/Button';
 import { Modal } from '../ui/Modal';
 
 export default function TournamentRegisterModal() {
   const { activeModal, closeModal } = useModalsStore();
-  const tournament = mockTournaments[1] ?? mockTournaments[0];
+  const tournament = useTournamentsStore((state) => state.selected);
 
   if (!tournament) {
     return null;
@@ -21,9 +21,21 @@ export default function TournamentRegisterModal() {
           <h3 className="text-lg font-semibold">{tournament.name}</h3>
           <p className="mt-1 text-sm text-text-secondary">{tournament.description}</p>
           <div className="mt-3 grid grid-cols-3 gap-2 text-center text-metadata text-text-secondary">
-            <span>{tournament.prizePool}<br />premio</span>
-            <span>{tournament.participants}<br />inscritos</span>
-            <span>{tournament.startsIn}<br />inicio</span>
+            <span>
+              {tournament.prizePool}
+              <br />
+              premio
+            </span>
+            <span>
+              {tournament.participants}
+              <br />
+              inscritos
+            </span>
+            <span>
+              {tournament.startsIn ?? tournament.endsIn ?? '—'}
+              <br />
+              {tournament.startsIn ? 'inicio' : 'restante'}
+            </span>
           </div>
         </div>
         <p className="rounded-md bg-bg-tertiary p-3 text-sm text-text-secondary">

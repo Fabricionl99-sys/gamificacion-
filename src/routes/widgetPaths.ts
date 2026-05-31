@@ -1,6 +1,6 @@
 import type { TabId } from '../types/navigation';
 
-export type WidgetDetailSection = 'sorteos' | 'predicciones' | 'tienda';
+export type WidgetDetailSection = 'sorteos' | 'predicciones' | 'tienda' | 'torneos';
 
 export type WidgetView = 'widget' | 'own-profile' | 'player-profile';
 
@@ -28,12 +28,14 @@ const DETAIL_SECTION_TO_TAB: Record<WidgetDetailSection, TabId> = {
   sorteos: 'raffles',
   predicciones: 'predictions',
   tienda: 'shop',
+  torneos: 'tournaments',
 };
 
 const TAB_TO_DETAIL_SECTION: Partial<Record<TabId, WidgetDetailSection>> = {
   raffles: 'sorteos',
   predictions: 'predicciones',
   shop: 'tienda',
+  tournaments: 'torneos',
 };
 
 export interface ParsedWidgetRoute {
