@@ -5,6 +5,7 @@ import { getWheelsInventory } from '../../api/wheels';
 import { useAsyncData } from '../../hooks/useAsyncData';
 import { useModalsStore } from '../../store/modalsStore';
 import { useRewardsInventoryStore } from '../../store/rewardsInventoryStore';
+import { formatExpiryLabel } from '../../utils/format';
 import { Card } from '../ui/Card';
 import { EmptyState } from '../ui/EmptyState';
 import { Skeleton } from '../ui/Skeleton';
@@ -81,7 +82,8 @@ export default function RewardsTab() {
               ) : null}
               <p className="mt-2 text-metadata font-medium text-accent">
                 {chest.quantity != null && chest.quantity > 1 ? `${chest.quantity} disponibles · ` : ''}
-                abrir
+                {formatExpiryLabel(chest.expires_at)}
+                {' · abrir'}
               </p>
             </div>
           </div>
@@ -105,7 +107,9 @@ export default function RewardsTab() {
                 <p className="mt-1 text-module-body text-text-secondary">{wheel.description}</p>
               ) : null}
               <p className="mt-2 text-metadata font-medium text-accent">
-                {wheel.cost_label ?? (wheel.spins_remaining != null ? `${wheel.spins_remaining} giros · girar` : 'girar')}
+                {wheel.cost_label ?? (wheel.spins_remaining != null ? `${wheel.spins_remaining} giros · ` : '')}
+                {formatExpiryLabel(wheel.expires_at)}
+                {' · girar'}
               </p>
             </div>
           </div>

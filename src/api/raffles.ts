@@ -1,4 +1,5 @@
 import type { EnterRaffleResult, Raffle, RaffleDetail, RafflePrize, RaffleWin } from '../types/raffle';
+import { safeFormatTimeDelta } from '../utils/date';
 import { apiClient } from './client';
 
 interface BackendPrize {
@@ -21,7 +22,8 @@ interface BackendRaffleRow {
   entry_cost_currency_name?: string | null;
   entry_cost_amount: number;
   total_entries: number;
-  deadline: string;
+  deadline: string | null;
+  drawn_at?: string | null;
   vip_only: boolean;
   max_entries_per_player: number;
   server_seed_commitment: string;
@@ -46,16 +48,6 @@ interface BackendWin {
   raffle_code?: string;
   prize_physical_name?: string | null;
   prize_type?: 'bonus' | 'physical';
-}
-
-function formatTimeDelta(iso: string, now = new Date()): string {
-  const diffMs = new Date(iso).getTime() - now.getTime();
-  if (diffMs <= 0) return 'cerrado';
-  const days = Math.floor(diffMs / 86400000);
-  const hours = Math.floor((diffMs % 86400000) / 3600000);
-  if (days > 0) return `${days}d ${hours}h`;
-  const minutes = Math.floor((diffMs % 3600000) / 60000);
-  return hours > 0 ? `${hours}h ${minutes}m` : `${minutes}m`;
 }
 
 function adaptPrize(p: BackendPrize): RafflePrize {
@@ -83,8 +75,9 @@ function adaptRow(r: BackendRaffleRow): Raffle {
     entryCostCurrencyName: r.entry_cost_currency_name ?? null,
     entryCostLabel: `${r.entry_cost_amount} gema${r.entry_cost_amount === 1 ? '' : 's'}`,
     totalEntries: r.total_entries,
-    deadline: r.deadline,
-    closesIn: formatTimeDelta(r.deadline),
+    deadline: r.deadline ?? null,
+    drawnAt: r.drawn_at ?? null,
+    closesIn: safeFormatTimeDelta(r.deadline),
     vipOnly: r.vip_only,
     mainPrizeLabel: first ? adaptPrize(first).label : undefined,
   };

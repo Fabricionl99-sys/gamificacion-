@@ -12,6 +12,10 @@ import { usePlayerStore } from '../../store/playerStore';
 import { useUiStore } from '../../store/uiStore';
 import { writePublicProfile } from '../../utils/profilePrivacy';
 import type { TabId } from '../../types/navigation';
+import { SectionErrorBoundary } from '../ui/SectionErrorBoundary';
+import { tabs } from './navigation';
+
+const tabSectionLabels = Object.fromEntries(tabs.map((tab) => [tab.id, tab.label])) as Record<TabId, string>;
 
 const HomeTab = lazy(() => import('../tabs/HomeTab'));
 const MissionsTab = lazy(() => import('../tabs/MissionsTab'));
@@ -74,13 +78,27 @@ function MainView() {
     setTimeout(() => navigateToTab(safeActiveTab), 0);
   }
 
-  if (activeView === 'own-profile') return <OwnProfile />;
-  if (activeView === 'player-profile') return <PlayerPublicProfile />;
+  if (activeView === 'own-profile') {
+    return (
+      <SectionErrorBoundary section="Mi perfil">
+        <OwnProfile />
+      </SectionErrorBoundary>
+    );
+  }
+  if (activeView === 'player-profile') {
+    return (
+      <SectionErrorBoundary section="Perfil del jugador">
+        <PlayerPublicProfile />
+      </SectionErrorBoundary>
+    );
+  }
   return (
     <>
       <TabNavigation />
       <div key={safeActiveTab} className="animate-[tab-enter_180ms_ease-out] pt-4 md:pt-0">
-        <ActiveTab />
+        <SectionErrorBoundary section={tabSectionLabels[safeActiveTab] ?? safeActiveTab}>
+          <ActiveTab />
+        </SectionErrorBoundary>
       </div>
     </>
   );
@@ -109,7 +127,9 @@ export function WidgetContainer() {
       <DesktopSidebar activeTab={activeTab} onSelect={navigateToTab} />
       <main className="mx-auto flex min-h-dvh w-full max-w-[460px] flex-col border-x border-border-subtle bg-[radial-gradient(circle_at_12%_0%,var(--accent-subtle),transparent_34%),var(--bg-primary)] md:max-w-none md:flex-1 md:border-x-0">
         <div className="sticky top-0 z-30 border-b border-border-subtle bg-bg-primary/85 px-4 pb-3 pt-4 backdrop-blur-xl md:px-6">
-          <WidgetHeader />
+          <SectionErrorBoundary section="Cabecera">
+            <WidgetHeader />
+          </SectionErrorBoundary>
         </div>
         <section className="flex-1 px-4 pb-8 pt-2 md:px-6 md:pt-4">
           <Suspense fallback={<LoadingPanel />}>

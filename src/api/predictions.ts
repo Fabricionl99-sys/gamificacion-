@@ -18,9 +18,9 @@ interface BackendPredictionTournament {
     reward_config: { amount?: number; currency_code?: string };
   }>;
   status: 'draft' | 'open' | 'in_progress' | 'closed' | 'archived';
-  entry_deadline: string;
-  starts_at: string;
-  ends_at: string;
+  entry_deadline: string | null;
+  starts_at: string | null;
+  ends_at: string | null;
   events?: BackendPredictionEvent[];
   my_entry?: unknown | null;
 }
@@ -51,7 +51,7 @@ function adaptList(t: BackendPredictionTournament): PredictionEvent {
     description: t.description ?? '',
     sport: 'other',
     status: mapStatus(t.status),
-    closes_at: t.entry_deadline,
+    closes_at: t.entry_deadline ?? t.ends_at ?? null,
     entry_cost: Number(t.entry_cost_amount) || 0,
     grand_prize_amount: grand,
     items: [],

@@ -1,5 +1,3 @@
-import { formatDistanceToNow } from 'date-fns';
-import { es } from 'date-fns/locale';
 import { Bell, CheckCheck } from 'lucide-react';
 
 import { useActiveBoosts } from '../../hooks/useActiveBoosts';
@@ -7,6 +5,7 @@ import { fetchNotifications } from '../../api/notifications';
 import { useAsyncData } from '../../hooks/useAsyncData';
 import { useModalsStore } from '../../store/modalsStore';
 import { useNotificationsStore } from '../../store/notificationsStore';
+import { safeFormatDistanceToNow } from '../../utils/date';
 import { Modal } from '../ui/Modal';
 import { Button } from '../ui/Button';
 import { NotificationsEmptyState } from '../tabs/emptyStateCopy';
@@ -21,7 +20,7 @@ export default function NotificationCenterModal() {
       id: `boost-start-${boost.rule_id}`,
       kind: 'system_event' as const,
       title: `🚀 ¡XP x${boost.multiplier} activado!`,
-      detail: `vence ${formatDistanceToNow(new Date(boost.ends_at), { addSuffix: true, locale: es })}`,
+      detail: `vence ${safeFormatDistanceToNow(boost.ends_at, { addSuffix: true }, 'pronto')}`,
       createdAt: boost.starts_at,
       read: false,
     },
@@ -69,7 +68,7 @@ export default function NotificationCenterModal() {
                       <span className="block text-sm font-semibold text-text-primary">{notification.title}</span>
                       <span className="block text-metadata text-text-secondary">{notification.detail}</span>
                       <span className="text-metadata text-text-tertiary">
-                        {formatDistanceToNow(new Date(notification.createdAt), { addSuffix: true, locale: es })}
+                        {safeFormatDistanceToNow(notification.createdAt, { addSuffix: true })}
                       </span>
                     </span>
                     {!notification.read ? <span className="h-2 w-2 rounded-full bg-accent" aria-label="no leida" /> : null}

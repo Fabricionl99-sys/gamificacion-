@@ -9,6 +9,7 @@ export type WheelInventoryItem = {
   cost_label?: string;
   spins_remaining?: number;
   image_url?: string | null;
+  expires_at?: string | null;
 };
 
 export async function getWheelsInventory(): Promise<WheelInventoryItem[]> {

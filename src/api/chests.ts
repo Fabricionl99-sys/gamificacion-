@@ -11,6 +11,9 @@ export type ChestInventoryItem = {
   image_url?: string | null;
   quantity?: number;
   status?: string;
+  expires_at?: string | null;
+  opened_at?: string | null;
+  expired_at?: string | null;
 };
 
 /** GET /v1/player/chests/inventory — cofres del jugador listos para abrir. */

@@ -17,6 +17,12 @@ import { SectionHeader } from '../shared/SectionHeader';
 type Tab = 'active' | 'my' | 'past';
 type Picks = Record<string, string>;
 
+function formatClosesLabel(closesAt: string | null): string {
+  if (!closesAt) return 'sin plazo de cierre';
+  const remaining = formatTimeRemaining(closesAt);
+  return remaining ? `cierra en ${remaining}` : 'sin plazo de cierre';
+}
+
 const sportEmoji: Record<PredictionEvent['sport'], string> = {
   football: '⚽',
   tennis: '🎾',
@@ -163,7 +169,7 @@ function EventCard({ event, mode, onOpen }: { event: PredictionEvent; mode: Tab;
       <div className="mt-4 flex items-center justify-between gap-3">
         <Badge tone={event.status === 'past' ? 'neutral' : 'info'}>
           <Clock className="h-3 w-3" />
-          {event.status === 'past' ? `${hits}/${event.items.length} aciertos` : `cierra en ${formatTimeRemaining(event.closes_at)}`}
+          {event.status === 'past' ? `${hits}/${items.length} aciertos` : formatClosesLabel(event.closes_at)}
         </Badge>
         <Button size="sm" variant="primary" onClick={onOpen}>
           {mode === 'past' ? 'ver detalle' : predicted ? 'Ver mis predicciones' : 'Predecir →'}
@@ -201,7 +207,7 @@ function PredictionDetailModal({
   };
 
   return (
-    <Modal isOpen onClose={onClose} title={event.name} description={`${event.items.length} items · cierra en ${formatTimeRemaining(event.closes_at)}`}>
+    <Modal isOpen onClose={onClose} title={event.name} description={`${event.items.length} items · ${formatClosesLabel(event.closes_at)}`}>
       <div className="space-y-4">
         <div className="grid grid-cols-3 gap-2">
           <Stat label="items" value={`${event.items.length}/15`} />

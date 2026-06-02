@@ -21,7 +21,8 @@ export interface Raffle {
   entryCostCurrencyName?: string | null;
   entryCostLabel: string;
   totalEntries: number;
-  deadline: string;
+  deadline: string | null;
+  drawnAt?: string | null;
   closesIn?: string;
   vipOnly: boolean;
   mainPrizeLabel?: string;

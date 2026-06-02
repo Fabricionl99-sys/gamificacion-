@@ -26,7 +26,7 @@ export interface PredictionEvent {
   description: string;
   sport: PredictionSport;
   status: PredictionStatus;
-  closes_at: string;
+  closes_at: string | null;
   entry_cost: number;
   grand_prize_amount: number;
   items: PredictionItem[];

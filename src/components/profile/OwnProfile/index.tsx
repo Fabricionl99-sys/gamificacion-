@@ -108,7 +108,7 @@ export default function OwnProfile() {
         {activeTab === 'social' ? <SocialTab /> : null}
       </div>
 
-      <p className="pb-2 text-center text-metadata text-text-tertiary">widget de gamificacion · v1.0.0</p>
+      <p className="pb-2 text-center text-metadata text-text-tertiary">widget de gamificacion · v1.0.1</p>
 
       <Modal isOpen={avatarPickerOpen} title="Elegí tu avatar" onClose={() => setAvatarPickerOpen(false)}>
         {avatars.length === 0 ? (

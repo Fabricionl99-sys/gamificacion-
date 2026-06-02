@@ -1,4 +1,5 @@
 import type { Tournament, TournamentStatus } from '../types/tournament';
+import { parseSafeDate, safeFormatTimeDelta } from '../utils/date';
 import { getJson } from './fetchJson';
 
 interface BackendTournament {
@@ -8,8 +9,8 @@ interface BackendTournament {
   description: string;
   image_url: string | null;
   status: 'draft' | 'active' | 'finished' | 'cancelled';
-  period_starts_at: string;
-  period_ends_at: string;
+  period_starts_at: string | null;
+  period_ends_at: string | null;
   is_visible_to_players: boolean;
   max_visible_positions: number;
   registrations_count?: number;
@@ -22,23 +23,16 @@ interface BackendTournament {
   }>;
 }
 
-function formatTimeDelta(iso: string, now: Date = new Date()): string {
-  const ts = new Date(iso).getTime();
-  const diffMs = ts - now.getTime();
-  if (diffMs <= 0) return 'finalizado';
-  const days = Math.floor(diffMs / (1000 * 60 * 60 * 24));
-  const hours = Math.floor((diffMs / (1000 * 60 * 60)) % 24);
-  if (days > 0) return `${days}d ${hours}h`;
-  const minutes = Math.floor((diffMs / (1000 * 60)) % 60);
-  if (hours > 0) return `${hours}h ${minutes}m`;
-  return `${minutes}m`;
-}
-
-function mapStatus(status: BackendTournament['status'], startsAt: string, endsAt: string): TournamentStatus {
+function mapStatus(
+  status: BackendTournament['status'],
+  startsAt: string | null,
+  endsAt: string | null,
+): TournamentStatus {
   if (status === 'finished' || status === 'cancelled') return 'finished';
+  const start = parseSafeDate(startsAt)?.getTime();
+  const end = parseSafeDate(endsAt)?.getTime();
+  if (start == null || end == null) return 'open';
   const now = Date.now();
-  const start = new Date(startsAt).getTime();
-  const end = new Date(endsAt).getTime();
   if (now >= start && now <= end) return 'live';
   if (now < start) return 'open';
   return 'open';
@@ -54,7 +48,8 @@ function formatPrizePool(prizes?: BackendTournament['prizes']): string {
 
 function adapt(t: BackendTournament): Tournament {
   const now = new Date();
-  const started = new Date(t.period_starts_at).getTime() <= now.getTime();
+  const start = parseSafeDate(t.period_starts_at);
+  const started = start != null && start.getTime() <= now.getTime();
   return {
     id: t.id,
     code: t.code,
@@ -64,8 +59,8 @@ function adapt(t: BackendTournament): Tournament {
     prizePool: formatPrizePool(t.prizes),
     participants: t.registrations_count ?? 0,
     capacity: t.max_visible_positions ?? 0,
-    startsIn: started ? undefined : formatTimeDelta(t.period_starts_at, now),
-    endsIn: started ? formatTimeDelta(t.period_ends_at, now) : undefined,
+    startsIn: started ? undefined : safeFormatTimeDelta(t.period_starts_at, now),
+    endsIn: started ? safeFormatTimeDelta(t.period_ends_at, now) : undefined,
     isRegistered: t.is_registered,
   };
 }
