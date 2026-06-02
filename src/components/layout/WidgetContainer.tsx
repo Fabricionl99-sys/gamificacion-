@@ -28,6 +28,7 @@ const PredictionsTab = lazy(() => import('../tabs/PredictionsTab'));
 const RafflesTab = lazy(() => import('../tabs/RafflesTab'));
 const FeedTab = lazy(() => import('../tabs/FeedTab'));
 const NewsTab = lazy(() => import('../tabs/NewsTab'));
+const AvatarsTab = lazy(() => import('../tabs/AvatarsTab'));
 const OwnProfile = lazy(() => import('../profile/OwnProfile'));
 const PlayerPublicProfile = lazy(() => import('../profile/PlayerPublicProfile'));
 const NotificationCenterModal = lazy(() => import('../modals/NotificationCenterModal'));
@@ -56,6 +57,8 @@ const tabComponents: Record<TabId, LazyExoticComponent<() => ReactElement>> = {
   raffles: RafflesTab,
   social: FeedTab,
   news: NewsTab,
+  avatars: AvatarsTab,
+  profile: HomeTab,
 };
 
 function LoadingPanel() {
@@ -134,7 +137,9 @@ export function WidgetContainer() {
         <section className="flex-1 px-4 pb-8 pt-2 md:px-6 md:pt-4">
           <Suspense fallback={<LoadingPanel />}>
             <MainView />
-            <NotificationCenterModal />
+            <SectionErrorBoundary section="Notificaciones">
+              <NotificationCenterModal />
+            </SectionErrorBoundary>
             <PurchaseConfirmModal />
             <ShopItemDetailModal />
             <MissionDetailModal />

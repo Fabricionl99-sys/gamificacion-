@@ -2,7 +2,7 @@ import type { TabId } from '../types/navigation';
 
 const PILOT_CONFIG = {
   /** Activar piloto Social por defecto. Desactivar en `false` al terminar la demo. */
-  enabled: true,
+  enabled: false,
   defaultTab: 'social' as TabId,
   /** Perfil público al iniciar para poder publicar sin ir a ajustes. */
   ensurePublicProfile: true,

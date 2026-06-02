@@ -1,25 +1,145 @@
-import { Flame, Lock, Trophy } from 'lucide-react';
+import { Flame, Gift, Lock, Trophy } from 'lucide-react';
+import { useState } from 'react';
 
-import { getStreaks } from '../../api/streaks';
+import { claimStreak, getStreaks, type StreakProgram } from '../../api/streaks';
 import { useAsyncData } from '../../hooks/useAsyncData';
-import { usePlayer } from '../../hooks/usePlayer';
+import { useToast } from '../../hooks/useToast';
 import { cn } from '../../utils/classnames';
+import { formatNumber } from '../../utils/format';
 import { Badge } from '../ui/Badge';
 import { Button } from '../ui/Button';
 import { Card } from '../ui/Card';
 import { EmptyState } from '../ui/EmptyState';
 import { Skeleton } from '../ui/Skeleton';
-import { SectionHeader } from '../shared/SectionHeader';
+import { tabEmptyStates } from './emptyStateConfig';
 
-const days = Array.from({ length: 14 }, (_, index) => index + 1);
+function milestoneLabel(milestone: StreakProgram['milestones'][number]): string {
+  const cfg = milestone.reward_config ?? {};
+  const kind = String(cfg.kind ?? cfg.type ?? 'reward');
+  if (kind === 'coins') return `+${cfg.amount ?? 0} ${cfg.currency_code ?? 'monedas'}`;
+  if (kind === 'xp') return `+${cfg.amount ?? cfg.xp ?? 0} XP`;
+  return String(cfg.description ?? cfg.label ?? 'Premio');
+}
+
+function StreakProgramCard({
+  program,
+  onClaimed,
+}: {
+  program: StreakProgram;
+  onClaimed: () => void;
+}) {
+  const toast = useToast();
+  const [claiming, setClaiming] = useState(false);
+  const currentDay = program.player_state?.current_day ?? 0;
+  const nextDay = program.next_reward?.next_day_number ?? currentDay + 1;
+  const canClaimLogin = program.activity_type === 'login';
+
+  const handleClaim = async () => {
+    if (!canClaimLogin || claiming) return;
+    setClaiming(true);
+    try {
+      await claimStreak(program.streak_program_id);
+      toast.success('Asistencia marcada');
+      onClaimed();
+    } catch {
+      toast.danger('No pudimos marcar la asistencia');
+    } finally {
+      setClaiming(false);
+    }
+  };
+
+  const maxDay = program.milestones.length
+    ? Math.max(...program.milestones.map((m) => m.day_number))
+    : Math.max(nextDay, currentDay, 7);
+
+  return (
+    <Card className="space-y-4">
+      <div className="flex items-start justify-between gap-3">
+        <div>
+          <p className="text-lg font-semibold text-text-primary">{program.name}</p>
+          {program.description ? (
+            <p className="mt-1 text-sm text-text-secondary">{program.description}</p>
+          ) : null}
+          <p className="mt-2 text-sm text-text-tertiary">
+            Día actual: <span className="font-semibold text-streak">{currentDay}</span>
+            {' · '}
+            Siguiente: <span className="font-semibold text-text-primary">{nextDay}</span>
+          </p>
+        </div>
+        <Badge variant="warning">{program.activity_type}</Badge>
+      </div>
+
+      {program.milestones.length > 0 ? (
+        <div className="space-y-2">
+          <p className="text-metadata font-medium uppercase tracking-wide text-text-tertiary">Hitos</p>
+          <div className="flex gap-2 overflow-x-auto pb-1">
+            {program.milestones.map((milestone) => {
+              const reached = currentDay >= milestone.day_number;
+              return (
+                <div
+                  key={milestone.day_number}
+                  className={cn(
+                    'min-w-[88px] shrink-0 rounded-lg border p-2 text-center text-xs',
+                    reached
+                      ? 'border-streak/40 bg-streak/10 text-streak'
+                      : 'border-border-default bg-bg-tertiary text-text-tertiary',
+                  )}
+                >
+                  <div className="mb-1 flex justify-center">
+                    {reached ? <Trophy className="h-4 w-4" /> : <Lock className="h-3.5 w-3.5" />}
+                  </div>
+                  <p className="font-semibold">Día {milestone.day_number}</p>
+                  <p className="mt-1 line-clamp-2 text-[10px] leading-tight">{milestoneLabel(milestone)}</p>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      ) : maxDay > 0 ? (
+        <div className="grid grid-cols-7 gap-1.5">
+          {Array.from({ length: Math.min(maxDay, 14) }, (_, i) => i + 1).map((day) => {
+            const reached = day <= currentDay;
+            return (
+              <div
+                key={day}
+                className={cn(
+                  'grid aspect-square place-items-center rounded-md border text-xs font-semibold',
+                  reached
+                    ? 'border-streak/40 bg-streak/15 text-streak'
+                    : 'border-dashed border-border-default bg-bg-tertiary text-text-tertiary',
+                )}
+              >
+                {reached ? <Flame className="h-3.5 w-3.5" /> : day}
+              </div>
+            );
+          })}
+        </div>
+      ) : null}
+
+      {canClaimLogin ? (
+        <Button variant="primary" className="w-full" isLoading={claiming} onClick={handleClaim}>
+          Marcar asistencia hoy
+        </Button>
+      ) : (
+        <p className="text-sm text-text-tertiary">
+          Este programa se completa con actividad de tipo {program.activity_type}.
+        </p>
+      )}
+
+      {program.next_reward?.milestone ? (
+        <div className="flex items-center gap-2 rounded-md border border-border-subtle bg-bg-tertiary p-3 text-sm text-text-secondary">
+          <Gift className="h-4 w-4 shrink-0 text-warning" />
+          Próximo hito (día {program.next_reward.next_day_number}):{' '}
+          {milestoneLabel(program.next_reward.milestone)}
+        </div>
+      ) : null}
+    </Card>
+  );
+}
 
 export default function StreakTab() {
-  const { player } = usePlayer();
-  const { data: streaks, isLoading, error } = useAsyncData(getStreaks, undefined);
-
-  const currentStreak = streaks?.current_streak ?? player.streak;
-  const bestStreak = streaks?.best_streak ?? player.bestStreak;
-  const programs = streaks?.programs ?? [];
+  const [refreshKey, setRefreshKey] = useState(0);
+  const { data: streaks, isLoading, error } = useAsyncData(getStreaks, undefined, [refreshKey]);
 
   if (isLoading) {
     return (
@@ -34,21 +154,23 @@ export default function StreakTab() {
     return (
       <EmptyState
         icon={<Flame className="h-8 w-8" />}
-        title="No pudimos cargar tu racha"
+        title="No pudimos cargar tu asistencia"
         description="Intentá de nuevo en unos segundos."
       />
     );
   }
 
-  if (programs.length === 0 && currentStreak === 0) {
+  const programs = streaks?.programs ?? [];
+  const currentStreak = streaks?.current_streak ?? 0;
+  const bestStreak = streaks?.best_streak ?? 0;
+
+  if (programs.length === 0) {
     return (
-      <div className="space-y-4">
-        <EmptyState
-          icon={<Flame className="h-8 w-8" />}
-          title="Aún no hay programas de racha"
-          description="El operador no configuró asistencia diaria todavía."
-        />
-      </div>
+      <EmptyState
+        icon={tabEmptyStates.streak.icon}
+        title={tabEmptyStates.streak.title}
+        description={tabEmptyStates.streak.description}
+      />
     );
   }
 
@@ -60,63 +182,15 @@ export default function StreakTab() {
             <Flame className="h-5 w-5" />
             <span className="text-metadata font-medium uppercase tracking-widest">racha activa</span>
           </div>
-          <p className="text-2xl font-semibold">{currentStreak}</p>
-          <p className="text-sm text-text-secondary">dias seguidos</p>
-          <p className="mt-2 text-sm font-light italic text-text-tertiary">tu mejor racha: {bestStreak} dias</p>
+          <p className="text-2xl font-semibold">{formatNumber(currentStreak)}</p>
+          <p className="text-sm text-text-secondary">días seguidos</p>
+          <p className="mt-2 text-sm font-light italic text-text-tertiary">tu mejor racha: {formatNumber(bestStreak)} días</p>
         </div>
       </Card>
 
-      <Card className="space-y-3">
-        <SectionHeader title="ultimos 14 dias" description="el dia actual queda marcado con borde verde" />
-        <div className="grid grid-cols-7 gap-2">
-          {days.map((day) => {
-            const completed = day <= currentStreak;
-            const today = day === currentStreak;
-            return (
-              <div
-                key={day}
-                className={cn(
-                  'grid aspect-square place-items-center rounded-md border text-xs font-semibold',
-                  completed
-                    ? 'border-streak/40 bg-streak/15 text-streak'
-                    : 'border-dashed border-border-default bg-bg-tertiary text-text-tertiary',
-                  today && 'outline outline-2 outline-accent',
-                )}
-              >
-                {completed ? <Flame className="h-4 w-4" /> : day}
-              </div>
-            );
-          })}
-        </div>
-        <Button variant="ghost" className="w-full justify-between">
-          ver mes completo
-          <span aria-hidden="true">→</span>
-        </Button>
-      </Card>
-
-      {programs.length > 0 ? (
-        <section className="space-y-3">
-          <SectionHeader title="programas de racha" description="recompensas por sostener asistencia diaria" />
-          {programs.map((program, index) => (
-            <Card key={program.id} className={index === programs.length - 1 ? 'bg-legendary-chest' : undefined}>
-              <div className="flex items-center gap-3">
-                <div className="grid h-10 w-10 place-items-center rounded-md bg-bg-tertiary text-warning">
-                  {program.next_reward_at_day ? <Trophy className="h-5 w-5" /> : <Lock className="h-5 w-5" />}
-                </div>
-                <div className="flex-1">
-                  <p className="font-medium">{program.name}</p>
-                  {program.description ? (
-                    <p className="text-sm text-text-tertiary">{program.description}</p>
-                  ) : null}
-                </div>
-                {program.next_reward_at_day ? (
-                  <Badge variant="warning">en {program.next_reward_at_day} dias</Badge>
-                ) : null}
-              </div>
-            </Card>
-          ))}
-        </section>
-      ) : null}
+      {programs.map((program) => (
+        <StreakProgramCard key={program.streak_program_id} program={program} onClaimed={() => setRefreshKey((k) => k + 1)} />
+      ))}
     </div>
   );
 }

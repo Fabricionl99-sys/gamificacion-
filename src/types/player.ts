@@ -8,6 +8,8 @@ export interface Player {
   name: string;
   username: string;
   avatar: string;
+  /** CDN URL del avatar activo (image_urls.original o image_url del backend). */
+  avatarImageUrl?: string | null;
   level: number;
   currentXP: number;
   nextLevelXP: number;

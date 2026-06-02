@@ -19,4 +19,6 @@ export function persistDemoSession(playerId: string, accessToken: string): void 
 export function clearDemoSession(): void {
   sessionStorage.removeItem(PLAYER_KEY);
   sessionStorage.removeItem(TOKEN_KEY);
+  localStorage.removeItem(PLAYER_KEY);
+  localStorage.removeItem(TOKEN_KEY);
 }

@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react';
 import { ArrowLeft, Shield } from 'lucide-react';
 
 import { AccountSection } from '../../settings/AccountSection';
+import { DemoSessionControls } from '../../DemoSessionControls';
 import { AppearanceSection } from '../../settings/AppearanceSection';
 import { NotificationsSection } from '../../settings/NotificationsSection';
 import { OperatorPlatformCard, SupportSection } from '../../settings/SupportSection';
@@ -12,8 +13,9 @@ import { Card } from '../../ui/Card';
 import { Modal } from '../../ui/Modal';
 import { Tabs } from '../../ui/Tabs';
 import { usePlayer } from '../../../hooks/usePlayer';
+import { usePlayerAvatarDisplay } from '../../../hooks/usePlayerAvatarDisplay';
 import { useAsyncData } from '../../../hooks/useAsyncData';
-import { getAvatars } from '../../../api/avatars';
+import { getAvatarInventory } from '../../../api/avatars';
 import { usePlayerStore } from '../../../store/playerStore';
 import { useWidgetNavigation } from '../../../hooks/useWidgetNavigation';
 import { getAvatarBackgroundFromName } from '../../../utils/avatarHashColor';
@@ -32,8 +34,9 @@ export default function OwnProfile() {
   const [avatarPickerOpen, setAvatarPickerOpen] = useState(false);
   const { navigateBackFromProfile } = useWidgetNavigation();
   const { player } = usePlayer();
+  const { imageUrl: activeAvatarUrl, initials: activeAvatarInitials } = usePlayerAvatarDisplay();
   const updatePlayer = usePlayerStore((state) => state.updatePlayer);
-  const { data: avatars = [] } = useAsyncData(getAvatars, []);
+  const { data: avatars = [] } = useAsyncData(getAvatarInventory, []);
 
   const tabs = useMemo(
     (): Array<{ id: OwnProfileTab; label: string }> => [
@@ -73,7 +76,13 @@ export default function OwnProfile() {
             aria-label="Elegir avatar"
             onClick={() => setAvatarPickerOpen(true)}
           >
-            <Avatar initials={player.avatar} size="lg" status="online" />
+            <Avatar
+              initials={activeAvatarInitials}
+              imageUrl={activeAvatarUrl}
+              label={player.name ? `Avatar de ${player.name}` : 'Avatar del jugador'}
+              size="lg"
+              status="online"
+            />
           </button>
           <div className="min-w-0 flex-1">
             <div className="flex flex-wrap items-center gap-2">
@@ -87,6 +96,7 @@ export default function OwnProfile() {
       </div>
 
       <AccountSection onOpenAvatarPicker={() => setAvatarPickerOpen(true)} />
+      <DemoSessionControls />
       <NotificationsSection />
       <AppearanceSection />
       <SupportSection />
@@ -108,7 +118,7 @@ export default function OwnProfile() {
         {activeTab === 'social' ? <SocialTab /> : null}
       </div>
 
-      <p className="pb-2 text-center text-metadata text-text-tertiary">widget de gamificacion · v1.0.1</p>
+      <p className="pb-2 text-center text-metadata text-text-tertiary">widget de gamificacion · v1.0.5</p>
 
       <Modal isOpen={avatarPickerOpen} title="Elegí tu avatar" onClose={() => setAvatarPickerOpen(false)}>
         {avatars.length === 0 ? (
@@ -122,20 +132,35 @@ export default function OwnProfile() {
                 className="flex aspect-square flex-col items-center justify-center overflow-hidden rounded-xl border border-border-default transition hover:border-accent"
                 style={
                   avatar.image_url
-                    ? { backgroundImage: `url(${avatar.image_url})`, backgroundSize: 'cover' }
+                    ? undefined
                     : {
                         background: getAvatarBackgroundFromName(avatar.code),
                         boxShadow: '0 0 0 1px rgba(10, 247, 132, 0.2)',
                       }
                 }
+                aria-label={avatar.name}
                 onClick={() => {
-                  updatePlayer({ avatar: avatar.code });
+                  updatePlayer({ avatar: avatar.code, avatarImageUrl: avatar.image_url ?? null });
                   setAvatarPickerOpen(false);
                 }}
               >
-                {!avatar.image_url ? (
-                  <span className="font-mono text-lg font-bold text-white">{avatar.code.slice(0, 2).toUpperCase()}</span>
+                {avatar.image_url ? (
+                  <img
+                    alt={avatar.name}
+                    className="h-full w-full object-cover"
+                    src={avatar.image_url}
+                    onError={(event) => {
+                      event.currentTarget.style.display = 'none';
+                      const fallback = event.currentTarget.nextElementSibling;
+                      if (fallback instanceof HTMLElement) fallback.classList.remove('hidden');
+                    }}
+                  />
                 ) : null}
+                <span
+                  className={`font-mono text-lg font-bold text-white ${avatar.image_url ? 'hidden' : ''}`}
+                >
+                  {avatar.code.slice(0, 2).toUpperCase()}
+                </span>
               </button>
             ))}
           </div>

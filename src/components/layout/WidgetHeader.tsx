@@ -1,16 +1,19 @@
 import { Bell, ChevronRight, Coins, Gift, User, Zap } from 'lucide-react';
-import { motion } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
 
 import { useActiveBoosts } from '../../hooks/useActiveBoosts';
 import { usePlayer } from '../../hooks/usePlayer';
+import { usePlayerAvatarDisplay } from '../../hooks/usePlayerAvatarDisplay';
 import { useWidgetNavigation } from '../../hooks/useWidgetNavigation';
 import { getAvatarBackgroundFromName } from '../../utils/avatarHashColor';
 import { formatBoostEndClock, formatNumber } from '../../utils/format';
 import { resolveLevelDisplayName } from '../../utils/levelDisplay';
-import { getPlayerInitials } from '../../utils/playerInitials';
 import { resolveXpSegment } from '../../utils/xpLevelSegment';
 import { DemoResetButton } from '../DemoResetButton';
 import { useBrandingStore } from '../../store/brandingStore';
+import { useModalsStore } from '../../store/modalsStore';
+import { usePlayerNotificationsSync } from '../../hooks/usePlayerNotifications';
+import { selectUnreadNotificationCount, useNotificationsStore } from '../../store/notificationsStore';
 
 function formatMultiplierLabel(m: number): string {
   if (Number.isInteger(m)) return `x${m}`;
@@ -22,9 +25,20 @@ function handlePendingPrizesClick(): void {
   /* intentionally empty */
 }
 
-/** Placeholder: conectar con centro de notificaciones. */
-function handleNotificationsClick(): void {
-  /* intentionally empty */
+/** Abre el centro de notificaciones in-app. */
+function useNotificationHeaderActions() {
+  const openModal = useModalsStore((state) => state.openModal);
+  const refresh = useNotificationsStore((state) => state.refresh);
+  const unreadCount = useNotificationsStore(selectUnreadNotificationCount);
+  usePlayerNotificationsSync();
+
+  return {
+    unreadCount,
+    openNotifications: () => {
+      openModal('notifications');
+      void refresh();
+    },
+  };
 }
 
 
@@ -47,26 +61,36 @@ function HeaderIconWithBadge({
       onClick={onPress}
     >
       <Icon className="h-4 w-4" strokeWidth={2} aria-hidden />
-      {count > 0 ? (
-        <span className="pointer-events-none absolute -right-0.5 -top-0.5 grid min-h-4 min-w-4 place-items-center rounded-full bg-[#EF4444] px-1 text-[9px] font-bold leading-none text-white shadow-sm">
-          {count > 99 ? '99+' : count}
-        </span>
-      ) : null}
+      <AnimatePresence>
+        {count > 0 ? (
+          <motion.span
+            key="notification-badge"
+            initial={{ scale: 0.4, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            exit={{ scale: 0.4, opacity: 0 }}
+            transition={{ type: 'spring', stiffness: 520, damping: 28 }}
+            className="pointer-events-none absolute -right-0.5 -top-0.5 grid min-h-4 min-w-4 place-items-center rounded-full bg-[#EF4444] px-1 text-[9px] font-bold leading-none text-white shadow-sm"
+          >
+            {count > 9 ? '9+' : count}
+          </motion.span>
+        ) : null}
+      </AnimatePresence>
     </button>
   );
 }
 
 export function WidgetHeader() {
   const { player, isLoading } = usePlayer();
+  const { imageUrl: avatarImageUrl, initials } = usePlayerAvatarDisplay();
   const { boosts } = useActiveBoosts();
   const { navigateToProfile } = useWidgetNavigation();
+  const { unreadCount, openNotifications } = useNotificationHeaderActions();
 
   const tiers = player.levelDefinitions ?? [];
   const levelName = resolveLevelDisplayName(player.level, tiers);
   const levelLabel = useBrandingStore((s) => s.config?.level_label) ?? document.documentElement.dataset.levelLabel ?? 'Nivel';
   const levelTitle = `${levelName.toUpperCase()} · ${levelLabel.toUpperCase()} ${player.level}`;
 
-  const initials = (player.avatar?.trim() || getPlayerInitials(player.name)).slice(0, 2);
   const avatarBg = getAvatarBackgroundFromName(player.name);
 
   const { progressPercent, displayCurrent, displayNext } = resolveXpSegment(player);
@@ -98,9 +122,9 @@ export function WidgetHeader() {
         />
         <HeaderIconWithBadge
           icon={Bell}
-          count={player.unreadNotifications}
-          ariaLabel={`Notificaciones sin leer (${player.unreadNotifications})`}
-          onPress={handleNotificationsClick}
+          count={unreadCount}
+          ariaLabel={`Notificaciones sin leer (${unreadCount})`}
+          onPress={openNotifications}
         />
       </div>
 
@@ -114,13 +138,28 @@ export function WidgetHeader() {
             }}
             aria-label={player.name ? `Avatar de ${player.name}` : 'Avatar del jugador'}
           >
-            {initials ? (
-              <span className="font-mono text-lg font-bold leading-none tracking-tight text-white md:text-xl">
-                {initials}
-              </span>
-            ) : (
+            {avatarImageUrl ? (
+              <img
+                alt={player.name ? `Avatar de ${player.name}` : 'Avatar del jugador'}
+                className="h-full w-full rounded-full object-cover"
+                src={avatarImageUrl}
+                onError={(event) => {
+                  event.currentTarget.style.display = 'none';
+                  event.currentTarget.parentElement
+                    ?.querySelector('[data-avatar-fallback]')
+                    ?.classList.remove('hidden');
+                }}
+              />
+            ) : null}
+            <span
+              data-avatar-fallback
+              className={`font-mono text-lg font-bold leading-none tracking-tight text-white md:text-xl ${avatarImageUrl ? 'hidden' : ''}`}
+            >
+              {initials || null}
+            </span>
+            {!initials && !avatarImageUrl ? (
               <User className="h-8 w-8 text-white/80" strokeWidth={1.75} aria-hidden />
-            )}
+            ) : null}
           </div>
           <button
             type="button"

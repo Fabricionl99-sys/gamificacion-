@@ -566,15 +566,18 @@ export const mockShareablePicks: ShareablePick[] = [
 export const mockNews: NewsItem[] = [
   {
     id: 'news-001',
+    code: 'news-001',
     category: 'promo',
     title: 'Free spins para liga oro',
     body: 'Reclama el pack semanal antes del cierre del domingo.',
     createdAt: subHours(now, 3).toISOString(),
     expiresAt: addDays(now, 2).toISOString(),
     ctaLabel: 'ver promo',
+    ctaUrl: 'https://example.com/promo',
   },
   {
     id: 'news-002',
+    code: 'news-002',
     category: 'sistema',
     title: 'Mejoras en ranking semanal',
     body: 'Ahora las zonas de ascenso y descenso se actualizan en tiempo real.',
@@ -582,6 +585,7 @@ export const mockNews: NewsItem[] = [
   },
   {
     id: 'news-003',
+    code: 'news-003',
     category: 'evento',
     title: 'Torneo relampago este viernes',
     body: 'Cupos limitados y premios para el top 20.',
@@ -590,48 +594,7 @@ export const mockNews: NewsItem[] = [
   },
 ];
 
-export const mockNotifications: AppNotification[] = [
-  {
-    id: 'notif-001',
-    title: 'Premio pendiente',
-    detail: 'Tu caja misteriosa vence pronto.',
-    createdAt: subHours(now, 1).toISOString(),
-    read: false,
-    kind: 'reward',
-  },
-  {
-    id: 'notif-002',
-    title: 'Subiste al top 5',
-    detail: 'Estas en zona de ascenso de liga oro.',
-    createdAt: subHours(now, 4).toISOString(),
-    read: false,
-    kind: 'tournament',
-  },
-  {
-    id: 'notif-003',
-    title: 'Sofia R. comento tu post',
-    detail: 'Buen analisis del partido.',
-    createdAt: subHours(now, 27).toISOString(),
-    read: true,
-    kind: 'social',
-  },
-  {
-    id: 'notif-boost-start',
-    title: '🚀 ¡XP x2 activado!',
-    detail: 'vence en 2 días',
-    createdAt: subHours(now, 1).toISOString(),
-    read: false,
-    kind: 'system_event',
-  },
-  {
-    id: 'notif-boost-end',
-    title: 'Se terminó el x2',
-    detail: 'tu XP volvió al ritmo normal · ¡seguí ganando!',
-    createdAt: subHours(now, 30).toISOString(),
-    read: true,
-    kind: 'system_event',
-  },
-];
+export { mockNotifications } from './notificationState';
 
 export const mockPendingPrizes: ProfilePrize[] = [
   {

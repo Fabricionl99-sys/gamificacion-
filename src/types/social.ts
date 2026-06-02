@@ -108,11 +108,14 @@ export interface CopyPickResponse {
 
 export interface NewsItem {
   id: string;
+  code: string;
   category: NewsCategory;
   title: string;
   body: string;
   createdAt: string;
   expiresAt?: string;
+  imageUrl?: string;
+  ctaUrl?: string;
   ctaLabel?: string;
   systemCentral?: boolean;
 }

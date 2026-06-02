@@ -1,7 +1,7 @@
 import { Gift, Newspaper, Trophy } from 'lucide-react';
 
 import { getMissions } from '../../api/missions';
-import { getNews } from '../../api/feed';
+import { getNews } from '../../api/news';
 import { getPlayerRankings } from '../../api/ranking';
 import { getTournaments } from '../../api/tournaments';
 import { useActiveBoosts } from '../../hooks/useActiveBoosts';

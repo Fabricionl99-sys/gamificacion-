@@ -43,8 +43,8 @@ export function NotificationsEmptyState() {
   return (
     <EmptyState
       icon={<Bell className="h-8 w-8" />}
-      title="todavia no tenes notificaciones"
-      description="vamos a avisarte cuando suba algo"
+      title="No tenés notificaciones aún"
+      description="Te avisaremos cuando haya premios, niveles u otras novedades."
     />
   );
 }

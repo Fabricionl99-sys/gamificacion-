@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 
-import { createDemoSession } from '../api/demoSession';
+import { createDemoSession, resetDemoSession, type DemoSession } from '../api/demoSession';
 import {
   clearDemoSession,
   getStoredDemoAccessToken,
@@ -15,6 +15,7 @@ interface AuthState {
   error: string | null;
   ensureSession: () => Promise<void>;
   clearSession: () => void;
+  startNewDemoPlayer: () => Promise<DemoSession>;
 }
 
 export const useAuthStore = create<AuthState>((set) => ({
@@ -45,6 +46,19 @@ export const useAuthStore = create<AuthState>((set) => ({
   clearSession: () => {
     clearDemoSession();
     set({ status: 'idle', playerId: null, tenantId: null, error: null });
+  },
+  startNewDemoPlayer: async () => {
+    clearDemoSession();
+    set({ status: 'loading', error: null, playerId: null, tenantId: null });
+    const session = await resetDemoSession();
+    persistDemoSession(session.player_id, session.access_token);
+    set({
+      status: 'ready',
+      playerId: session.player_id,
+      tenantId: session.tenant_id ?? null,
+      error: null,
+    });
+    return session;
   },
 }));
 

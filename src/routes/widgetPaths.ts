@@ -4,6 +4,8 @@ export type WidgetDetailSection = 'sorteos' | 'predicciones' | 'tienda' | 'torne
 
 export type WidgetView = 'widget' | 'own-profile' | 'player-profile';
 
+export const PROFILE_PATH = '/perfil';
+
 export const TAB_PATHS: Record<TabId, string> = {
   home: '/',
   missions: '/misiones',
@@ -16,9 +18,9 @@ export const TAB_PATHS: Record<TabId, string> = {
   predictions: '/predicciones',
   raffles: '/sorteos',
   news: '/noticias',
+  avatars: '/avatares',
+  profile: PROFILE_PATH,
 };
-
-export const PROFILE_PATH = '/perfil';
 
 const PATH_TO_TAB = new Map<string, TabId>(
   Object.entries(TAB_PATHS).map(([tabId, path]) => [path, tabId as TabId]),

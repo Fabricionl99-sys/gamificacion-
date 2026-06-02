@@ -14,6 +14,7 @@ export const usePlayer = () => {
   const player = {
     ...base,
     avatar: storedPlayer.avatar || base.avatar,
+    avatarImageUrl: storedPlayer.avatarImageUrl ?? base.avatarImageUrl,
     pendingPrizes: storedPlayer.pendingPrizes ?? base.pendingPrizes,
     unreadNotifications: storedPlayer.unreadNotifications ?? base.unreadNotifications,
     wallet: storedPlayer.wallet?.length ? storedPlayer.wallet : base.wallet,

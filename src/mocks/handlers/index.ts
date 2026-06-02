@@ -3,7 +3,6 @@ import { delay, http, HttpResponse } from 'msw';
 import { resolveBrandingSample } from '../data/brandingSamples';
 import {
   mockNews,
-  mockNotifications,
   mockPlayer,
   mockPredictionEvents,
   mockPredictionMarkets,
@@ -23,6 +22,7 @@ import {
   toBackendTournaments,
 } from '../backendShapes';
 import type { CreatePostInput, FeedScope } from '../../types/social';
+import { notificationState } from '../notificationState';
 
 const wait = () => delay(180 + Math.random() * 320);
 
@@ -42,7 +42,13 @@ export const handlers = [
 
   http.post('*/v1/public/demo/session/reset', async () => {
     await wait();
-    return HttpResponse.json({ data: { ok: true } });
+    const externalPlayerId = `demo_${crypto.randomUUID().slice(0, 8)}`;
+    return HttpResponse.json({
+      data: {
+        jwt: `mock_${externalPlayerId}`,
+        external_player_id: externalPlayerId,
+      },
+    });
   }),
 
   http.get('*/v1/public/branding/:tenantId', async ({ params }) => {
@@ -185,7 +191,18 @@ export const handlers = [
   }),
   http.get('*/v1/player/notifications', async () => {
     await wait();
-    return HttpResponse.json(mockNotifications);
+    return HttpResponse.json(notificationState.list());
+  }),
+  http.post('*/v1/player/notifications/:id/open', async ({ params }) => {
+    await wait();
+    notificationState.open(String(params.id));
+    return HttpResponse.json({ data: { ok: true } });
+  }),
+  http.post('*/v1/player/notifications/bulk-mark-seen', async ({ request }) => {
+    await wait();
+    const body = (await request.json()) as { ids?: string[] };
+    notificationState.bulkSeen(Array.isArray(body.ids) ? body.ids : []);
+    return HttpResponse.json({ data: { ok: true } });
   }),
   http.get('*/v1/player/active-boosts', async () => {
     await wait();
@@ -347,19 +364,81 @@ export const handlers = [
     await wait();
     return HttpResponse.json({
       programs: [
-        { id: 'streak-1', name: 'Cofre corto', description: 'bono neutral + XP', next_reward_at_day: 3 },
-        { id: 'streak-2', name: 'Cofre medio', description: 'bono neutral + XP', next_reward_at_day: 18 },
-        { id: 'streak-3', name: 'Cofre legendario', description: 'a la distancia', next_reward_at_day: 88 },
+        {
+          streak_program_id: 'streak-prueba10',
+          name: 'prueba10',
+          activity_type: 'login',
+          description: 'Programa demo de asistencia diaria',
+          milestones: [
+            { day_number: 1, reward_config: { kind: 'coins', amount: 50, currency_code: 'GOLD' } },
+            { day_number: 3, reward_config: { kind: 'xp', amount: 100 } },
+            { day_number: 7, reward_config: { kind: 'coins', amount: 200, currency_code: 'GOLD' } },
+          ],
+          player_state: { current_day: 0, status: 'active', last_claim_at: null },
+          next_reward: { next_day_number: 1, milestone: { day_number: 1, reward_config: { kind: 'coins', amount: 50 } } },
+        },
+        {
+          streak_program_id: 'streak-2',
+          name: 'Cofre medio',
+          activity_type: 'deposit',
+          description: 'bono neutral + XP',
+          milestones: [{ day_number: 18, reward_config: { kind: 'xp', amount: 500 } }],
+          player_state: null,
+          next_reward: { next_day_number: 18 },
+        },
       ],
       current_streak: mockPlayer.streak,
       best_streak: mockPlayer.bestStreak,
     });
   }),
+  http.post('*/v1/player/streaks/:id/claim', async ({ params }) => {
+    await wait();
+    return HttpResponse.json({ ok: true, streak_program_id: params.id });
+  }),
+  http.post('*/v1/player/shop/products/:id/purchase', async ({ request }) => {
+    await wait();
+    const body = (await request.json()) as { purchase_request_id?: string };
+    if (!body.purchase_request_id) {
+      return HttpResponse.json({ detail: 'purchase_request_id required' }, { status: 400 });
+    }
+    return HttpResponse.json({ ok: true, new_balance: Math.max(0, mockPlayer.coins - 100) });
+  }),
+  http.post('*/v1/player/news/:code/view', async () => {
+    await wait();
+    return HttpResponse.json({ ok: true });
+  }),
+  http.post('*/v1/player/news/:code/click', async () => {
+    await wait();
+    return HttpResponse.json({ ok: true });
+  }),
+  http.get('*/v1/player/avatars/inventory', async () => {
+    await wait();
+    return HttpResponse.json([
+      {
+        id: 'av-1',
+        code: 'JM',
+        name: 'Avatar JM',
+        is_active: true,
+        image_urls: { original: 'https://cdn.social2game.com/mock/avatars/jm.png' },
+      },
+      {
+        id: 'av-2',
+        code: 'LA',
+        name: 'Avatar LA',
+        image_urls: { original: 'https://cdn.social2game.com/mock/avatars/la.png' },
+      },
+      {
+        id: 'av-3',
+        code: 'RK',
+        name: 'Avatar RK',
+      },
+    ]);
+  }),
   http.get('*/v1/player/avatars', async () => {
     await wait();
     return HttpResponse.json([
-      { id: 'av-1', code: 'JM', name: 'Avatar JM' },
-      { id: 'av-2', code: 'LA', name: 'Avatar LA' },
+      { id: 'av-1', code: 'JM', name: 'Avatar JM', image_urls: { original: 'https://cdn.social2game.com/mock/avatars/jm.png' } },
+      { id: 'av-2', code: 'LA', name: 'Avatar LA', image_urls: { original: 'https://cdn.social2game.com/mock/avatars/la.png' } },
       { id: 'av-3', code: 'RK', name: 'Avatar RK' },
     ]);
   }),

@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import { User } from 'lucide-react';
 import { cn } from '../../utils/classnames';
 
@@ -19,6 +20,14 @@ const sizeClass: Record<NonNullable<AvatarProps['size']>, string> = {
 };
 
 export function Avatar({ initials, imageUrl, label, size = 'md', locked = false, status, className }: AvatarProps) {
+  const [imageFailed, setImageFailed] = useState(false);
+
+  useEffect(() => {
+    setImageFailed(false);
+  }, [imageUrl]);
+
+  const showImage = Boolean(imageUrl) && !imageFailed;
+
   return (
     <div
       aria-label={label ?? initials ?? 'avatar'}
@@ -28,8 +37,13 @@ export function Avatar({ initials, imageUrl, label, size = 'md', locked = false,
         className,
       )}
     >
-      {imageUrl ? (
-        <img alt="" className="h-full w-full object-cover" src={imageUrl} />
+      {showImage ? (
+        <img
+          alt={label ?? initials ?? ''}
+          className="h-full w-full object-cover"
+          src={imageUrl ?? undefined}
+          onError={() => setImageFailed(true)}
+        />
       ) : initials ? (
         initials
       ) : (

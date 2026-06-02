@@ -10,7 +10,20 @@ import { mockShopItems } from '../mocks/index';
 import { useUiStore } from '../store/uiStore';
 import { renderWithRouter } from '../test/render';
 
-const tabLabels = ['inicio', 'misiones', 'cofres', 'tienda', 'social', 'racha', 'ranking', 'torneos', 'predicciones', 'noticias'] as const;
+const tabLabels = [
+  'inicio',
+  'misiones',
+  'asistencia',
+  'cofres',
+  'tienda',
+  'sorteos',
+  'predicciones',
+  'torneos',
+  'ranking',
+  'noticias',
+  'avatares',
+  'perfil',
+] as const;
 
 describe('widget smoke', () => {
   it('renders WidgetContainer shell', async () => {

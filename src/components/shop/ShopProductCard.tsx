@@ -103,7 +103,10 @@ export function ShopProductCard({ item, player, onDetail, onRedeem, onNotify, on
         </div>
       </div>
       <div className="mt-3 flex items-center justify-between gap-2 border-t border-border-subtle pt-3">
-        <span className="text-sm font-semibold text-coins">{formatNumber(item.cost)}</span>
+        <span className="text-sm font-semibold text-coins">
+          {formatNumber(item.cost)}
+          {item.currencyCode ? ` ${item.currencyCode}` : ' monedas'}
+        </span>
         <ProductActions
           item={item}
           soldOut={soldOut}

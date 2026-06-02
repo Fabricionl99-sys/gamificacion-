@@ -1,6 +1,7 @@
 import type { Player, VipTier } from '../types/player';
 import type { LevelDefinition } from '../types/levels';
 import type { WalletCurrency } from '../types/currency';
+import { getAvatarImageUrl } from '../utils/avatarImageUrl';
 
 function normalizeWalletEntry(raw: Record<string, unknown>): WalletCurrency {
   const code = typeof raw.code === 'string' ? raw.code : undefined;
@@ -46,12 +47,32 @@ export function normalizePlayer(raw: Record<string, unknown>): Player {
     ? walletSource.map((row) => normalizeWalletEntry(row as Record<string, unknown>))
     : undefined;
   const primaryCoinBalance = wallet?.[0]?.balance;
+  const activeAvatar =
+    raw.active_avatar && typeof raw.active_avatar === 'object'
+      ? (raw.active_avatar as Record<string, unknown>)
+      : null;
+  const avatarImageUrl = getAvatarImageUrl({
+    image_urls:
+      raw.image_urls && typeof raw.image_urls === 'object'
+        ? (raw.image_urls as Record<string, string | null | undefined>)
+        : activeAvatar?.image_urls && typeof activeAvatar.image_urls === 'object'
+          ? (activeAvatar.image_urls as Record<string, string | null | undefined>)
+          : null,
+    image_url:
+      typeof raw.avatar_image_url === 'string'
+        ? raw.avatar_image_url
+        : typeof activeAvatar?.image_url === 'string'
+          ? activeAvatar.image_url
+          : null,
+    avatar_image_url: typeof raw.avatar_image_url === 'string' ? raw.avatar_image_url : null,
+  });
 
   return {
     id: asString(raw.id ?? raw.player_id),
     name: asString(raw.name ?? raw.display_name, 'Jugador'),
     username: asString(raw.username ?? raw.handle ?? raw.external_player_id),
-    avatar: asString(raw.avatar ?? raw.avatar_url),
+    avatar: asString(raw.avatar ?? raw.avatar_code ?? activeAvatar?.code),
+    avatarImageUrl: avatarImageUrl ?? undefined,
     level: asNumber(raw.level ?? raw.current_level, 1),
     currentXP: asNumber(raw.currentXP ?? raw.current_xp ?? raw.total_xp),
     nextLevelXP: asNumber(raw.nextLevelXP ?? raw.next_level_xp ?? raw.xp_to_next_level, 1),

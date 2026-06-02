@@ -1,6 +1,7 @@
 import { AlertTriangle, Clock } from 'lucide-react';
 import { useState } from 'react';
 
+import { purchaseShopProduct } from '../../api/shop';
 import { usePlayer } from '../../hooks/usePlayer';
 import { useToast } from '../../hooks/useToast';
 import { useModalsStore } from '../../store/modalsStore';
@@ -33,10 +34,17 @@ export default function PurchaseConfirmModal() {
     if (disabled || isSubmitting) return;
     setIsSubmitting(true);
     try {
-      updatePlayer({ coins: Math.max(0, player.coins - selectedItem.cost) });
+      const result = await purchaseShopProduct(selectedItem.id, crypto.randomUUID());
+      if (typeof result.new_balance === 'number') {
+        updatePlayer({ coins: result.new_balance });
+      } else {
+        updatePlayer({ coins: Math.max(0, player.coins - selectedItem.cost) });
+      }
       toast.success(`Canjeaste ${selectedItem.name}`);
       setSelectedItem(null);
       closeModal();
+    } catch {
+      toast.danger('No pudimos completar el canje');
     } finally {
       setIsSubmitting(false);
     }

@@ -27,4 +27,7 @@ export interface ShopItem {
   vipRequired: Exclude<VipTier, 'none'> | null;
   endsAt: string | null;
   disabledReason?: string;
+  currencyCode?: string;
+  code?: string;
+  minLevel?: number | null;
 }

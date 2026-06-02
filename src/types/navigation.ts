@@ -9,7 +9,9 @@ export type WidgetTabId =
   | 'tournaments'
   | 'predictions'
   | 'raffles'
-  | 'news';
+  | 'news'
+  | 'avatars'
+  | 'profile';
 
 export type TabId = WidgetTabId;
 

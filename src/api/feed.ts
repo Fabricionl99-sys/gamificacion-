@@ -31,4 +31,7 @@ export const feedApi = {
       .then((response) => response.data as CopyPickResponse),
 };
 
-export const getNews = async () => apiClient.get('/v1/player/news').then((response) => response.data as NewsItem[]);
+export const getNews = async () => {
+  const { getNews: fetchNews } = await import('./news');
+  return fetchNews();
+};

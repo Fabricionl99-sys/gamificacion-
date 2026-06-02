@@ -1,11 +1,21 @@
-import { describe, expect, it } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { useModalsStore } from './modalsStore';
 import { useNotificationsStore } from './notificationsStore';
 import { usePlayerStore } from './playerStore';
 import { useUiStore } from './uiStore';
+import * as notificationsApi from '../api/notifications';
 
 describe('stores', () => {
+  beforeEach(() => {
+    useNotificationsStore.setState({
+      notifications: [],
+      isLoading: false,
+      error: null,
+    });
+    vi.restoreAllMocks();
+  });
+
   it('opens and closes modals', () => {
     useModalsStore.getState().openModal('levelUp');
     expect(useModalsStore.getState().activeModal).toBe('levelUp');
@@ -26,8 +36,51 @@ describe('stores', () => {
     expect(usePlayerStore.getState().player.pendingPrizes).toBe(Math.max(0, before - 1));
   });
 
-  it('marks notifications as read', () => {
-    useNotificationsStore.getState().markAllRead();
-    expect(useNotificationsStore.getState().unreadCount).toBe(0);
+  it('marks all notifications as seen', async () => {
+    vi.spyOn(notificationsApi, 'bulkMarkNotificationsSeen').mockResolvedValue(undefined);
+    useNotificationsStore.setState({
+      notifications: [
+        {
+          id: 'n1',
+          trigger_event: 'manual',
+          title: 'Test',
+          body: 'Body',
+          icon: null,
+          cta_label: null,
+          cta_url: null,
+          image_url: null,
+          created_at: new Date().toISOString(),
+          opened: false,
+        },
+      ],
+      error: null,
+      isLoading: false,
+    });
+    await useNotificationsStore.getState().markAllSeen();
+    expect(useNotificationsStore.getState().notifications.every((n) => n.opened)).toBe(true);
+  });
+
+  it('rolls back markOpened when API fails', async () => {
+    vi.spyOn(notificationsApi, 'openPlayerNotification').mockRejectedValue(new Error('network'));
+    useNotificationsStore.setState({
+      notifications: [
+        {
+          id: 'n1',
+          trigger_event: 'manual',
+          title: 'Test',
+          body: 'Body',
+          icon: null,
+          cta_label: null,
+          cta_url: null,
+          image_url: null,
+          created_at: new Date().toISOString(),
+          opened: false,
+        },
+      ],
+      error: null,
+      isLoading: false,
+    });
+    await expect(useNotificationsStore.getState().markOpened('n1')).rejects.toThrow('network');
+    expect(useNotificationsStore.getState().notifications[0]?.opened).toBe(false);
   });
 });
