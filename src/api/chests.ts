@@ -23,20 +23,23 @@ export type ChestInventoryItem = {
 /** GET /v1/player/chests/inventory — cofres del jugador listos para abrir. */
 export async function getChestInventory(): Promise<ChestInventoryItem[]> {
   try {
-    const data = await getJson<ChestInventoryItem[] | { items?: ChestInventoryItem[] }>(
-      '/v1/player/chests/inventory',
-    );
-    if (Array.isArray(data)) return data;
-    return data.items ?? [];
-  } catch (e) {
-    if (isNotFound(e)) return [];
-    throw e;
+    const data = await getJson<unknown>('/v1/player/chests/inventory');
+    return extractChestInventoryItems(data);
+  } catch {
+    return [];
   }
 }
 
-function isNotFound(error: unknown): boolean {
-  return typeof error === 'object' && error !== null && 'response' in error &&
-    (error as { response?: { status?: number } }).response?.status === 404;
+function extractChestInventoryItems(data: unknown): ChestInventoryItem[] {
+  if (Array.isArray(data)) return data as ChestInventoryItem[];
+  if (data && typeof data === 'object') {
+    const raw = data as Record<string, unknown>;
+    for (const key of ['items', 'inventory', 'chests'] as const) {
+      const value = raw[key];
+      if (Array.isArray(value)) return value as ChestInventoryItem[];
+    }
+  }
+  return [];
 }
 
 /** POST /v1/player/chests/:id/open — el server elige el premio antes de animar. */
