@@ -166,10 +166,10 @@ export function FuturisticChest({ style, phase, className = '', compact = false 
           <GoldBand d="M134 84 L142 84 L142 142 L134 142 Z" frame={design.frameHighlight} highlight={design.frame} />
 
           {/* Esquinas con diamantes */}
-          <Diamond cx="50" cy="88" r={3} fill="#F8FAFC" />
-          <Diamond cx="150" cy="88" r={3} fill="#F8FAFC" />
-          <Diamond cx="50" cy="138" r={3} fill="#F8FAFC" />
-          <Diamond cx="150" cy="138" r={3} fill="#F8FAFC" />
+          <Diamond cx={50} cy={88} r={3} fill="#F8FAFC" />
+          <Diamond cx={150} cy={88} r={3} fill="#F8FAFC" />
+          <Diamond cx={50} cy={138} r={3} fill="#F8FAFC" />
+          <Diamond cx={150} cy={138} r={3} fill="#F8FAFC" />
 
           {/* Brillo interno al abrir */}
           {showInnerGlow ? (
@@ -215,7 +215,7 @@ export function FuturisticChest({ style, phase, className = '', compact = false 
               <circle cx="100" cy="78" r="9" fill={design.lockRing} stroke={design.frameHighlight} strokeWidth="0.5" />
               <circle cx="100" cy="78" r="5.5" fill={design.lockGem} filter="url(#chestGlow)" />
               <path d="M94 68 Q100 58 106 68" fill="none" stroke={design.frameHighlight} strokeWidth="2.5" strokeLinecap="round" />
-              <Diamond cx="100" cy="68" r={2} fill="#FFF" />
+              <Diamond cx={100} cy={68} r={2} fill="#FFF" />
             </motion.g>
           ) : null}
         </svg>
