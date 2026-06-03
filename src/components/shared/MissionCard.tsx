@@ -3,6 +3,7 @@ import { useState } from 'react';
 
 import { claimMission } from '../../api/missions';
 import { getBestMissionBoost } from '../../features/missions/components/missionBoost';
+import { MissionRequirementsChecklist } from '../../features/missions/components/MissionRequirementsChecklist';
 import { MissionRewardWithBoost } from '../../features/missions/components/MissionRewardWithBoost';
 import { useToast } from '../../hooks/useToast';
 import { usePlayerStore } from '../../store/playerStore';
@@ -40,8 +41,8 @@ export function MissionCard({ mission, compact = false, boosts = [], onClaimed, 
   const [isClaiming, setIsClaiming] = useState(false);
 
   const isLocked = mission.status === 'locked';
-  const isCompleted = mission.status === 'completed';
-  const isClaimed = mission.status === 'claimed';
+  const isCompleted = mission.status === 'completed' && !mission.claimedAt;
+  const isClaimed = mission.status === 'claimed' || Boolean(mission.claimedAt);
   const boost = getBestMissionBoost(mission, boosts);
   const deadline = mission.expiresIn ?? formatRelativeShort(mission.expiresAt);
   const hasBoost = Boolean(boost && !isLocked && !isClaimed);
@@ -93,6 +94,7 @@ export function MissionCard({ mission, compact = false, boosts = [], onClaimed, 
         <div className="min-w-0">
           <h3 className="text-sm font-medium text-text-primary">{mission.title}</h3>
           <p className="mt-1 line-clamp-2 text-module-body leading-relaxed text-text-secondary">{mission.description}</p>
+          <MissionRequirementsChecklist requirements={mission.requirements} />
         </div>
         <Badge variant={isClaimed ? 'success' : mission.group === 'event' ? 'warning' : 'default'}>{mission.category}</Badge>
       </div>

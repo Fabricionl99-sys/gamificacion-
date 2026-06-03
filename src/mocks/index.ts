@@ -84,6 +84,16 @@ export const mockMissions: Mission[] = [
     rewardCoins: 20,
     expiresAt: addDays(now, 1).toISOString(),
     status: 'pending',
+    requirements: [
+      {
+        id: 'req-001',
+        label: '3 apuestas en deportes',
+        currentValue: 2,
+        targetValue: 3,
+        isComplete: false,
+        showProgress: true,
+      },
+    ],
   },
   {
     id: 'mission-002',
@@ -98,6 +108,16 @@ export const mockMissions: Mission[] = [
     rewardCoins: 15,
     expiresAt: addDays(now, 1).toISOString(),
     status: 'completed',
+    requirements: [
+      {
+        id: 'req-002',
+        label: '30 minutos en casino',
+        currentValue: 30,
+        targetValue: 30,
+        isComplete: true,
+        showProgress: true,
+      },
+    ],
   },
   {
     id: 'mission-003',
@@ -111,6 +131,7 @@ export const mockMissions: Mission[] = [
     rewardXP: 80,
     expiresAt: addDays(now, 4).toISOString(),
     status: 'pending',
+    requirements: [],
   },
   {
     id: 'mission-004',
@@ -125,6 +146,7 @@ export const mockMissions: Mission[] = [
     rewardCoins: 60,
     expiresAt: addDays(now, 2).toISOString(),
     status: 'completed',
+    requirements: [],
   },
   {
     id: 'mission-005',
@@ -138,6 +160,7 @@ export const mockMissions: Mission[] = [
     rewardXP: 200,
     status: 'locked',
     lockReason: 'requiere VIP plata',
+    requirements: [],
   },
 ];
 

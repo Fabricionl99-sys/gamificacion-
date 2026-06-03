@@ -3,6 +3,7 @@ import { useState } from 'react';
 
 import { claimMission } from '../../api/missions';
 import { getBestMissionBoost } from '../../features/missions/components/missionBoost';
+import { MissionRequirementsChecklist } from '../../features/missions/components/MissionRequirementsChecklist';
 import { MissionRewardWithBoost } from '../../features/missions/components/MissionRewardWithBoost';
 import { useActiveBoosts } from '../../hooks/useActiveBoosts';
 import { useToast } from '../../hooks/useToast';
@@ -46,8 +47,8 @@ export default function MissionDetailModal() {
   if (!mission) return null;
 
   const isLocked = mission.status === 'locked';
-  const isCompleted = mission.status === 'completed';
-  const isClaimed = mission.status === 'claimed';
+  const isCompleted = mission.status === 'completed' && !mission.claimedAt;
+  const isClaimed = mission.status === 'claimed' || Boolean(mission.claimedAt);
   const boost = getBestMissionBoost(mission, boosts);
   const deadline = mission.expiresIn ?? formatRelativeShort(mission.expiresAt);
 
@@ -102,6 +103,7 @@ export default function MissionDetailModal() {
     >
       <Card className="space-y-4">
         <p className="text-sm leading-relaxed text-text-secondary">{mission.description}</p>
+        <MissionRequirementsChecklist requirements={mission.requirements} />
         <div className="rounded-md bg-bg-tertiary p-3 text-sm text-text-secondary">
           progreso:{' '}
           <span className="font-semibold text-text-primary">
