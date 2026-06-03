@@ -13,7 +13,7 @@ export function buildCaseReelKeyframes(
   options?: { minFullLoops?: number; viewportCenterPx?: number },
 ): { x: number[]; times: number[]; durationS: number } {
   const stride = caseItemStride();
-  const loops = options?.minFullLoops ?? 2;
+  const loops = options?.minFullLoops ?? 3;
   const center = options?.viewportCenterPx ?? 160;
 
   const oneLoop = itemCount * stride;
@@ -25,6 +25,6 @@ export function buildCaseReelKeyframes(
   return {
     x: [0, afterFullPass, midDecel, finalX + stride * 0.08, finalX],
     times: [0, 0.22, 0.72, 0.94, 1],
-    durationS: 5.2,
+    durationS: 5.8,
   };
 }

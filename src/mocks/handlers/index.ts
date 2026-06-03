@@ -366,11 +366,36 @@ export const handlers = [
     return HttpResponse.json([
       {
         id: 'chest-mock-1',
-        name: 'Caja misteriosa',
-        description: 'Estilo CS: pasa todos los premios y frena en el resultado.',
+        name: 'Caja cuántica',
+        description: 'Cofre futurista con giro horizontal estilo CS.',
         quantity: 1,
+        visual_style: 'quantum',
+      },
+      {
+        id: 'chest-mock-2',
+        name: 'Plasma crate',
+        description: 'Energía plasma — skin naranja.',
+        quantity: 1,
+        visual_style: 'plasma',
       },
     ]);
+  }),
+  http.post('*/v1/player/chests/:id/open', async () => {
+    await wait();
+    const prizes = [
+      { id: 'p1', label: '+100 XP', emoji: '⚡', is_rare: false },
+      { id: 'p2', label: '50 monedas', emoji: '🪙', is_rare: false },
+      { id: 'p3', label: '15 free spins', emoji: '🎰', is_rare: false },
+      { id: 'p4', label: 'Bono legendario', emoji: '🎁', is_rare: true },
+      { id: 'p5', label: 'x2 XP 1h', emoji: '🔥', is_rare: false },
+      { id: 'p6', label: '+250 XP', emoji: '⭐', is_rare: false },
+    ];
+    const prize_index = 3;
+    return HttpResponse.json({
+      prize_index,
+      prize: prizes[prize_index],
+      prizes,
+    });
   }),
   http.get('*/v1/player/wheels/inventory', async () => {
     await wait();

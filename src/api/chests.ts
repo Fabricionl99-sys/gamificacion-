@@ -1,4 +1,6 @@
-import { getJson } from './fetchJson';
+import { getJson, postJson } from './fetchJson';
+import type { ChestVisualStyle } from '../lib/chestDesigns';
+import { normalizeChestOpenResult, type ChestOpenResult } from '../lib/chestPrizes';
 
 export type ChestInventoryItem = {
   id: string;
@@ -8,6 +10,8 @@ export type ChestInventoryItem = {
   title?: string;
   description?: string;
   rarity?: 'common' | 'rare' | 'epic' | 'legendary' | string;
+  /** Skin futurista — neon | quantum | obsidian | holo | plasma */
+  visual_style?: ChestVisualStyle | string | null;
   image_url?: string | null;
   quantity?: number;
   status?: string;
@@ -33,4 +37,10 @@ export async function getChestInventory(): Promise<ChestInventoryItem[]> {
 function isNotFound(error: unknown): boolean {
   return typeof error === 'object' && error !== null && 'response' in error &&
     (error as { response?: { status?: number } }).response?.status === 404;
+}
+
+/** POST /v1/player/chests/:id/open — el server elige el premio antes de animar. */
+export async function openChestInventoryItem(chestId: string): Promise<ChestOpenResult> {
+  const data = await postJson<unknown>(`/v1/player/chests/${chestId}/open`, {});
+  return normalizeChestOpenResult(data);
 }

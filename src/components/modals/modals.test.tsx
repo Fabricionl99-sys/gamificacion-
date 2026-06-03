@@ -11,6 +11,7 @@ import ScratchCardModal from './ScratchCardModal';
 import StreakChestModal from './StreakChestModal';
 import WheelModal from './WheelModal';
 import { useModalsStore } from '../../store/modalsStore';
+import { useRewardsInventoryStore } from '../../store/rewardsInventoryStore';
 import { useShopStore } from '../../store/shopStore';
 import { mockShopItems } from '../../mocks/index';
 import { renderWithProviders } from '../../test/render';
@@ -31,6 +32,9 @@ describe('critical modals', () => {
     act(() => {
       if (modal === 'purchase') {
         useShopStore.getState().setSelectedItem(mockShopItems[1]);
+      }
+      if (modal === 'streakChest') {
+        useRewardsInventoryStore.getState().setSelectedChest({ id: 'chest-mock-1', name: 'Cofre de racha' });
       }
       useModalsStore.getState().openModal(modal);
     });
