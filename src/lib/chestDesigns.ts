@@ -3,15 +3,26 @@ export const CHEST_VISUAL_STYLES = ['neon', 'quantum', 'obsidian', 'holo', 'plas
 
 export type ChestVisualStyle = (typeof CHEST_VISUAL_STYLES)[number];
 
+/** Paleta para el cofre SVG — sin clases Tailwind dinámicas. */
 export interface ChestDesignTokens {
   id: ChestVisualStyle;
   label: string;
-  body: string;
-  lid: string;
-  trim: string;
+  /** Marco metálico dorado / bronce */
+  frame: string;
+  frameHighlight: string;
+  frameShadow: string;
+  /** Panel principal (cristal o madera) */
+  panelTop: string;
+  panelBottom: string;
+  panelStroke: string;
+  /** Variante holo usa madera en lugar de cristal */
+  panelMode: 'crystal' | 'wood';
+  woodGrain?: string;
+  /** Brillo interno y ambient */
   glow: string;
-  lock: string;
-  inner: string;
+  glowStrong: string;
+  lockGem: string;
+  lockRing: string;
   accent: string;
 }
 
@@ -19,56 +30,82 @@ export const CHEST_DESIGNS: Record<ChestVisualStyle, ChestDesignTokens> = {
   neon: {
     id: 'neon',
     label: 'Neón',
-    body: 'from-slate-950 via-slate-900 to-emerald-950',
-    lid: 'from-emerald-400/90 via-cyan-500/80 to-emerald-600/90',
-    trim: 'border-cyan-400/70 shadow-[0_0_24px_rgba(34,211,238,0.45)]',
-    glow: 'rgba(34,211,238,0.35)',
-    lock: 'text-cyan-300',
-    inner: 'from-cyan-500/20 to-emerald-500/10',
+    frame: '#C9A227',
+    frameHighlight: '#FFE566',
+    frameShadow: '#7A5A12',
+    panelTop: '#22D3EE',
+    panelBottom: '#059669',
+    panelStroke: '#67E8F9',
+    panelMode: 'crystal',
+    glow: 'rgba(34,211,238,0.45)',
+    glowStrong: 'rgba(16,185,129,0.65)',
+    lockGem: '#22D3EE',
+    lockRing: '#FFD700',
     accent: '#22d3ee',
   },
   quantum: {
     id: 'quantum',
     label: 'Quantum',
-    body: 'from-indigo-950 via-violet-950 to-slate-950',
-    lid: 'from-violet-400/90 via-fuchsia-500/75 to-indigo-600/90',
-    trim: 'border-violet-400/60 shadow-[0_0_28px_rgba(167,139,250,0.4)]',
-    glow: 'rgba(167,139,250,0.38)',
-    lock: 'text-violet-200',
-    inner: 'from-violet-500/25 to-fuchsia-500/10',
+    frame: '#D4AF37',
+    frameHighlight: '#FFF0A0',
+    frameShadow: '#8B6914',
+    panelTop: '#38BDF8',
+    panelBottom: '#7C3AED',
+    panelStroke: '#BAE6FD',
+    panelMode: 'crystal',
+    glow: 'rgba(56,189,248,0.5)',
+    glowStrong: 'rgba(124,58,237,0.55)',
+    lockGem: '#60A5FA',
+    lockRing: '#FDE68A',
     accent: '#a78bfa',
   },
   obsidian: {
     id: 'obsidian',
     label: 'Obsidiana',
-    body: 'from-zinc-950 via-neutral-900 to-stone-950',
-    lid: 'from-amber-500/85 via-yellow-600/70 to-amber-700/90',
-    trim: 'border-amber-400/55 shadow-[0_0_22px_rgba(251,191,36,0.35)]',
-    glow: 'rgba(251,191,36,0.28)',
-    lock: 'text-amber-200',
-    inner: 'from-amber-500/15 to-yellow-600/10',
+    frame: '#B8860B',
+    frameHighlight: '#FFD700',
+    frameShadow: '#5C4A0E',
+    panelTop: '#1C1917',
+    panelBottom: '#44403C',
+    panelStroke: '#FBBF24',
+    panelMode: 'crystal',
+    glow: 'rgba(251,191,36,0.35)',
+    glowStrong: 'rgba(245,158,11,0.45)',
+    lockGem: '#FCD34D',
+    lockRing: '#D97706',
     accent: '#fbbf24',
   },
   holo: {
     id: 'holo',
     label: 'Holográfico',
-    body: 'from-slate-900 via-slate-800 to-sky-950',
-    lid: 'from-sky-300/80 via-teal-300/70 to-pink-400/75',
-    trim: 'border-sky-300/50 shadow-[0_0_26px_rgba(125,211,252,0.35)]',
-    glow: 'rgba(125,211,252,0.32)',
-    lock: 'text-sky-200',
-    inner: 'from-sky-400/20 via-teal-400/15 to-pink-400/15',
+    frame: '#C9A227',
+    frameHighlight: '#FFE08A',
+    frameShadow: '#7A5A12',
+    panelTop: '#14B8A6',
+    panelBottom: '#0F766E',
+    panelStroke: '#5EEAD4',
+    panelMode: 'wood',
+    woodGrain: '#115E59',
+    glow: 'rgba(20,184,166,0.38)',
+    glowStrong: 'rgba(94,234,212,0.42)',
+    lockGem: '#2DD4BF',
+    lockRing: '#FFD700',
     accent: '#7dd3fc',
   },
   plasma: {
     id: 'plasma',
     label: 'Plasma',
-    body: 'from-rose-950 via-orange-950 to-slate-950',
-    lid: 'from-orange-400/90 via-rose-500/80 to-red-600/85',
-    trim: 'border-orange-400/60 shadow-[0_0_30px_rgba(251,146,60,0.42)]',
-    glow: 'rgba(251,146,60,0.36)',
-    lock: 'text-orange-200',
-    inner: 'from-orange-500/22 to-rose-600/12',
+    frame: '#E07A2D',
+    frameHighlight: '#FFB366',
+    frameShadow: '#9A3412',
+    panelTop: '#FB923C',
+    panelBottom: '#E11D48',
+    panelStroke: '#FDBA74',
+    panelMode: 'crystal',
+    glow: 'rgba(251,146,60,0.48)',
+    glowStrong: 'rgba(225,29,72,0.5)',
+    lockGem: '#FB7185',
+    lockRing: '#F97316',
     accent: '#fb923c',
   },
 };

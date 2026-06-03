@@ -1,7 +1,9 @@
-import { Box, Flame, Gift, RotateCw } from 'lucide-react';
+import { Box, Flame, RotateCw } from 'lucide-react';
 
 import { getChestInventory } from '../../api/chests';
 import { getWheelsInventory } from '../../api/wheels';
+import { FuturisticChest } from '../chest/FuturisticChest';
+import { resolveChestVisualStyle } from '../../lib/chestDesigns';
 import { useAsyncData } from '../../hooks/useAsyncData';
 import { useModalsStore } from '../../store/modalsStore';
 import { useRewardsInventoryStore } from '../../store/rewardsInventoryStore';
@@ -72,8 +74,12 @@ export default function RewardsTab() {
           onClick={() => openChest(chest)}
         >
           <div className="flex items-start gap-3">
-            <div className="grid h-12 w-12 place-items-center rounded-lg bg-accent/15 text-accent">
-              <Gift className="h-6 w-6" />
+            <div className="grid h-16 w-16 shrink-0 place-items-center rounded-xl border border-border-default bg-bg-tertiary/80">
+              <FuturisticChest
+                style={resolveChestVisualStyle(chest.visual_style)}
+                phase="closed"
+                compact
+              />
             </div>
             <div className="min-w-0 flex-1">
               <p className="font-semibold text-text-primary">{chest.name ?? chest.title ?? 'Cofre'}</p>

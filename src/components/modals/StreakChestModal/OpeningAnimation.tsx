@@ -51,16 +51,14 @@ export function OpeningAnimation({ visualStyle, openResult, onCollect }: Opening
 
   return (
     <div className="space-y-4">
-      {phase !== 'spinning' && phase !== 'result' ? (
+      {phase !== 'spinning' && phase !== 'result' && phase !== 'ready' ? (
         <>
           <FuturisticChest style={style} phase={chestPhase} />
-          {phase === 'ready' ? null : (
-            <p className="text-center text-metadata text-text-tertiary">
-              {phase === 'shake' ? 'El cofre vibra con energía…' : null}
-              {phase === 'lockBreak' ? 'Rompiendo candado…' : null}
-              {phase === 'open' ? '¡Cofre abierto!' : null}
-            </p>
-          )}
+          <p className="text-center text-metadata text-text-tertiary">
+            {phase === 'shake' ? 'El cofre vibra con energía…' : null}
+            {phase === 'lockBreak' ? 'Rompiendo candado…' : null}
+            {phase === 'open' ? '¡Cofre abierto!' : null}
+          </p>
         </>
       ) : null}
 
@@ -80,6 +78,7 @@ export function OpeningAnimation({ visualStyle, openResult, onCollect }: Opening
             prizes={openResult.prizes}
             winIndex={openResult.prize_index}
             spinning={phase === 'spinning'}
+            frozen={phase === 'result'}
             onSpinComplete={() => setPhase('result')}
           />
 

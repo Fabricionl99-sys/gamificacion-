@@ -2,7 +2,6 @@ import { Sparkles } from 'lucide-react';
 
 import { FuturisticChest } from '../../chest/FuturisticChest';
 import { Button } from '../../ui/Button';
-import { Card } from '../../ui/Card';
 import { resolveChestVisualStyle } from '../../../lib/chestDesigns';
 
 interface PreOpenViewProps {
@@ -17,12 +16,13 @@ export function PreOpenView({ title, description, visualStyle, loading, onOpen }
   const style = resolveChestVisualStyle(visualStyle);
 
   return (
-    <div className="space-y-4 text-center">
-      <Card className="overflow-hidden bg-[radial-gradient(circle_at_top,var(--accent-glow),var(--bg-secondary))]">
-        <FuturisticChest style={style} phase="closed" className="min-h-[200px]" />
-        <h3 className="mt-2 text-xl font-semibold text-text-primary">{title}</h3>
+    <div className="space-y-5 text-center">
+      <div className="relative overflow-hidden rounded-2xl border border-border-default bg-[radial-gradient(circle_at_50%_0%,rgba(255,255,255,0.06),transparent_55%),var(--bg-secondary)] px-4 pb-5 pt-6">
+        <div className="pointer-events-none absolute inset-x-8 top-0 h-24 rounded-full blur-3xl opacity-40" style={{ background: 'var(--accent-subtle)' }} />
+        <FuturisticChest style={style} phase="closed" className="mx-auto min-h-[210px] w-full max-w-[260px]" />
+        <h3 className="mt-1 text-xl font-semibold text-text-primary">{title}</h3>
         <p className="mt-1 text-sm text-text-secondary">{description}</p>
-      </Card>
+      </div>
       <Button
         variant="primary"
         className="w-full"
