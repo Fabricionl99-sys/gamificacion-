@@ -16,6 +16,8 @@ export interface Player {
   streak: number;
   bestStreak: number;
   coins: number;
+  /** Moneda de juego asignada al jugador (demo / currency-aware missions). */
+  currencyCode?: string | null;
   vipTier: VipTier;
   bio: string;
   pendingPrizes: number;

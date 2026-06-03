@@ -10,7 +10,9 @@ import { formatBoostEndClock, formatNumber } from '../../utils/format';
 import { resolveLevelDisplayName } from '../../utils/levelDisplay';
 import { resolveXpSegment } from '../../utils/xpLevelSegment';
 import { DemoResetButton } from '../DemoResetButton';
+import { PlayerGameCurrencyBadge } from '../header/PlayerGameCurrencyBadge';
 import { useBrandingStore } from '../../store/brandingStore';
+import { useAuthStore } from '../../store/authStore';
 import { useModalsStore } from '../../store/modalsStore';
 import { usePlayerNotificationsSync } from '../../hooks/usePlayerNotifications';
 import { selectUnreadNotificationCount, useNotificationsStore } from '../../store/notificationsStore';
@@ -81,6 +83,7 @@ function HeaderIconWithBadge({
 
 export function WidgetHeader() {
   const { player, isLoading } = usePlayer();
+  const sessionCurrencyCode = useAuthStore((s) => s.currencyCode);
   const { imageUrl: avatarImageUrl, initials } = usePlayerAvatarDisplay();
   const { boosts } = useActiveBoosts();
   const { navigateToProfile } = useWidgetNavigation();
@@ -106,6 +109,7 @@ export function WidgetHeader() {
   const wallet = player.wallet;
   const primaryCoin = wallet && wallet.length > 0 ? wallet[0] : null;
   const coinAmount = primaryCoin?.balance ?? player.coins ?? 0;
+  const gameCurrencyCode = player.currencyCode ?? sessionCurrencyCode ?? null;
 
   return (
     <header
@@ -194,6 +198,11 @@ export function WidgetHeader() {
           </div>
 
           <p className="mt-1 font-mono text-[13px] text-text-primary/70 md:text-sm">{xpLine}</p>
+          {gameCurrencyCode ? (
+            <div className="mt-1.5">
+              <PlayerGameCurrencyBadge currencyCode={gameCurrencyCode} />
+            </div>
+          ) : null}
 
           <div className="mt-1.5">
             <div

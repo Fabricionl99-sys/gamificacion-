@@ -14,6 +14,23 @@ describe('normalizeDemoSession', () => {
       player_id: 'ext_demo_42',
       external_player_id: 'ext_demo_42',
       tenant_id: null,
+      currency_code: null,
+    });
+  });
+
+  it('reads currency_code from session payload', () => {
+    expect(
+      normalizeDemoSession({
+        access_token: 'tok_1',
+        player_id: 'pl_1',
+        currency_code: 'rd',
+      }),
+    ).toEqual({
+      access_token: 'tok_1',
+      player_id: 'pl_1',
+      external_player_id: 'pl_1',
+      tenant_id: null,
+      currency_code: 'RD',
     });
   });
 
@@ -29,6 +46,7 @@ describe('normalizeDemoSession', () => {
       player_id: 'pl_1',
       external_player_id: 'pl_1',
       tenant_id: 'tenant-uuid',
+      currency_code: null,
     });
   });
 });

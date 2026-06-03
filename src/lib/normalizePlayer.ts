@@ -79,6 +79,12 @@ export function normalizePlayer(raw: Record<string, unknown>): Player {
     streak: asNumber(raw.streak ?? raw.current_streak),
     bestStreak: asNumber(raw.bestStreak ?? raw.best_streak),
     coins: typeof raw.coins === 'number' ? asNumber(raw.coins) : (primaryCoinBalance ?? 0),
+    currencyCode:
+      typeof raw.currency_code === 'string'
+        ? raw.currency_code.trim().toUpperCase()
+        : typeof raw.currencyCode === 'string'
+          ? raw.currencyCode.trim().toUpperCase()
+          : null,
     vipTier: asVipTier(raw.vipTier ?? raw.vip_tier),
     bio: asString(raw.bio),
     pendingPrizes: asNumber(raw.pendingPrizes ?? raw.pending_prizes),

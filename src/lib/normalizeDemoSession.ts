@@ -3,6 +3,7 @@ export interface DemoSession {
   player_id: string;
   external_player_id: string;
   tenant_id?: string | null;
+  currency_code?: string | null;
 }
 
 /** Accepts legacy `{ access_token, player_id }` and td reset `{ jwt, external_player_id }`. */
@@ -30,5 +31,9 @@ export function normalizeDemoSession(raw: Record<string, unknown>): DemoSession 
     player_id: playerId,
     external_player_id: externalPlayerId || playerId,
     tenant_id: typeof raw.tenant_id === 'string' ? raw.tenant_id : null,
+    currency_code:
+      typeof raw.currency_code === 'string'
+        ? raw.currency_code.trim().toUpperCase()
+        : null,
   };
 }

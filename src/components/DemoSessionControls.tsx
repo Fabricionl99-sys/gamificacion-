@@ -56,6 +56,10 @@ export function DemoSessionControls({ compact = false }: { compact?: boolean }) 
           <p className="text-sm text-text-secondary">
             Cambiá de jugador para probar distintos external_player_id en pruebas E2E.
           </p>
+          {/* TODO: demo currency selector — GET /v1/public/demo/currencies + reload ?currency= */}
+          <p className="text-[12px] text-text-tertiary">
+            Moneda: agregá <span className="font-mono">?currency=CODE</span> a la URL del demo.
+          </p>
         </div>
       </div>
       <Button

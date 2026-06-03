@@ -29,24 +29,45 @@ const wait = () => delay(180 + Math.random() * 320);
 export const handlers = [
   http.post('*/v1/public/demo/session', async ({ request }) => {
     await wait();
-    const body = (await request.json().catch(() => ({}))) as { existing_player_id?: string };
+    const body = (await request.json().catch(() => ({}))) as {
+      existing_player_id?: string;
+      tenant_id?: string;
+      currency_code?: string;
+    };
     const playerId = body.existing_player_id ?? `demo_${crypto.randomUUID().slice(0, 8)}`;
+    const activeCurrencies = ['RD', 'USD', 'CLP', 'BOB', 'PYG', 'GOLD'];
+    const requested = body.currency_code?.trim().toUpperCase();
+    const currency_code =
+      requested && activeCurrencies.includes(requested) ? requested : 'RD';
     return HttpResponse.json({
       data: {
         access_token: `mock_${playerId}`,
         player_id: playerId,
-        tenant_id: '6b67e761-b833-402b-8d59-81c478ac782b',
+        external_player_id: playerId,
+        tenant_id: body.tenant_id ?? '6b67e761-b833-402b-8d59-81c478ac782b',
+        currency_code,
       },
     });
   }),
 
-  http.post('*/v1/public/demo/session/reset', async () => {
+  http.post('*/v1/public/demo/session/reset', async ({ request }) => {
     await wait();
+    const body = (await request.json().catch(() => ({}))) as {
+      tenant_id?: string;
+      currency_code?: string;
+    };
     const externalPlayerId = `demo_${crypto.randomUUID().slice(0, 8)}`;
+    const activeCurrencies = ['RD', 'USD', 'CLP', 'BOB', 'PYG', 'GOLD'];
+    const requested = body.currency_code?.trim().toUpperCase();
+    const currency_code =
+      requested && activeCurrencies.includes(requested) ? requested : 'RD';
     return HttpResponse.json({
       data: {
         jwt: `mock_${externalPlayerId}`,
         external_player_id: externalPlayerId,
+        player_id: externalPlayerId,
+        tenant_id: body.tenant_id ?? '6b67e761-b833-402b-8d59-81c478ac782b',
+        currency_code,
       },
     });
   }),
@@ -59,7 +80,10 @@ export const handlers = [
 
   http.get('*/v1/player/me', async () => {
     await wait();
-    return HttpResponse.json(mockPlayer);
+    return HttpResponse.json({
+      ...mockPlayer,
+      currency_code: 'RD',
+    });
   }),
   http.get('*/v1/player/missions', async () => {
     await wait();
