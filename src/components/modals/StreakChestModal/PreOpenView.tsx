@@ -26,7 +26,7 @@ export function PreOpenView({ title, description, visualStyle, loading, onOpen }
       <Button
         variant="primary"
         className="w-full"
-        loading={loading}
+        isLoading={loading}
         onClick={onOpen}
         leftIcon={<Sparkles className="h-4 w-4" />}
       >
